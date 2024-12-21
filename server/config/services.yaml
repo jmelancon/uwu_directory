@@ -76,6 +76,6 @@ services:
 
     App\Service\Mailer:
         arguments:
-            $administratorAddress: "%env(ADMIN_EMAIL)"
+            $administratorAddress: "%env(ADMIN_EMAIL)%"
             $emailSuffix: "%env(EMAIL_SUFFIX)%"
             $senderAddress: "%env(SENDER_EMAIL)%"

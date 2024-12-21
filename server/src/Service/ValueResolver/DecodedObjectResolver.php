@@ -2,7 +2,7 @@
 
 namespace App\Service\ValueResolver;
 
-use App\Exception\TokenMissingException;
+use App\Exception\Exception\TokenMissingException;
 use App\Service\Tokenizer;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpKernel\Attribute\AsTargetedValueResolver;

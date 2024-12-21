@@ -2,8 +2,10 @@
 
 namespace App\EventListener;
 
+use App\Entity\Response\HandledResponse;
 use App\Entity\Response\ListResponse;
-use App\Exception\TokenMissingException;
+use App\Exception\Exception\PasswordRejectedException;
+use App\Exception\Exception\TokenMissingException;
 use ParagonIE\Paseto\Exception\PasetoException;
 use ParagonIE\Paseto\Exception\RuleViolation;
 use Symfony\Component\EventDispatcher\Attribute\AsEventListener;
@@ -49,6 +51,18 @@ class ExceptionListener
                             },
                             iterator_to_array($previous->getViolations())
                         )
+                    )
+                )
+            );
+        }
+
+        // CASE: User submits a password but is rejected by the LDAP server
+        if ($exception instanceof PasswordRejectedException && $method === Request::METHOD_POST){
+            $event->setResponse(
+                new JsonResponse(
+                    new HandledResponse(
+                        title: "Uh oh!",
+                        message: "The server rejected your password for an unknown reason. Please try a different password. "
                     )
                 )
             );

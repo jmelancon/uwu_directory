@@ -1,0 +1,36 @@
+name: infra
+services:
+  php:
+    build: ../server
+    env_file: "../config/.env.symfony.prod"
+    volumes:
+      - "php_socket:/var/run"
+      - "web_data:/var/www/project"
+      - "../config/project.fpm.conf:/usr/local/etc/php-fpm.d/zz-docker.conf"
+
+  web:
+    image: nginx:latest
+    ports:
+     - "8018:80"
+    volumes:
+      - "php_socket:/var/run"
+      - "web_data:/var/www/project"
+      - "../config/project.nginx.conf:/etc/nginx/conf.d/default.conf"
+
+  directory:
+    hostname: "dc1"
+    image: smblds/smblds:latest
+    env_file: "../config/.env.smblds.prod"
+    ports:
+      - "636:636"
+    volumes:
+      - "../smblds/var/lib/samba:/var/lib/samba"
+      - "../smblds/etc/samba:/etc/samba"
+
+volumes:
+  php_socket:
+  web_data:
+
+networks:
+  backend:
+    driver: bridge

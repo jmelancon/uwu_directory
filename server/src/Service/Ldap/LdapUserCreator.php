@@ -2,22 +2,21 @@
 
 namespace App\Service\Ldap;
 
+use App\Entity\Form\PasswordReset;
 use App\Entity\Form\RegistrationAuthorization;
+use App\Exception\Exception\PasswordRejectedException;
 
 readonly class LdapUserCreator
 {
     public function __construct(
         private LdapAggregator $ldapAggregator,
+        private LdapResetPassword $resetter,
         private string $userDn,
         private string $baseDn,
         private string $accountSuffix,
         private string $emailSuffix,
         private string $principalSuffix
     ){}
-
-    private function adifyPassword(string $password): string{
-        return iconv("UTF-8", "UTF-16LE", '"' . $password . '"');
-    }
 
     public function create(RegistrationAuthorization $authorization, string $password): void
     {
@@ -52,22 +51,24 @@ readonly class LdapUserCreator
             ]
         );
 
-        // Set password
-        ldap_modify_batch(
-            ldap: $this->ldapAggregator->getStockProvider(),
-            dn: $calculatedDn,
-            modifications_info: [
-                [
-                    "attrib"  => "unicodePwd",
-                    "modtype" => LDAP_MODIFY_BATCH_REMOVE_ALL,
-                ],
-                [
-                    "attrib"  => "unicodePwd",
-                    "modtype" => LDAP_MODIFY_BATCH_ADD,
-                    "values"  => [$this->adifyPassword($password)],
-                ]
-            ]
-        );
+        // Attempt a password reset. If it fails, we've gotta remove the user entry and get a new
+        // password from the user.
+        try{
+            $rq = new PasswordReset();
+            $rq->setIdentifier($username);
+
+            $this->resetter->reset(
+                $rq,
+                $password
+            );
+        }
+        catch (\Throwable) {
+            ldap_delete(
+                ldap: $this->ldapAggregator->getStockProvider(),
+                dn: $calculatedDn
+            );
+            throw new PasswordRejectedException;
+        }
 
         // Add user to each assigned group
         foreach($authorization->getGrantedDns() as $group){
