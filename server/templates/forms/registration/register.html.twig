@@ -1,0 +1,63 @@
+{% extends '/components/card.html.twig' %}
+{% block title %}Register{% endblock %}
+{% block cardTitle %}Server Account Registration{% endblock %}
+
+{% block cardDescription %}
+<p class="card-text">
+    To gain access to ACM-managed servers and applications, you must register
+    a UND ACM account. To request a registration link, fill out the form below
+    to request approval for account creation.
+</p>
+{% endblock %}
+
+{% block cardContent %}
+    <form>
+        <div class="card-body border-bottom">
+            <div class="row">
+                <div class="col-12">
+                    <label for="identifier">Your NDUS Identifier <span
+                                class="bi-question-square-fill px-1"
+                                data-mdb-popover-init
+                                data-mdb-trigger="hover"
+                                data-mdb-content="This is the same as your username for Blackboard, Campus Connection, or other UND/NDUS systems. This is required so we can verify your status as a UND student."></span>
+                    </label>
+                    <div class="input-group">
+                        <input class="form-control" type="text" id="identifier" name="identifier"/>
+                        <span class="input-group-text">{{ emailSuffix }}</span>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-6">
+                    <label for="firstName" class="pt-3">First Name</label>
+                    <input class="form-control" type="text" id="firstName" name="firstName"/>
+                </div>
+                <div class="col-md-6">
+                    <label for="lastName" class="pt-3">Last Name</label>
+                    <input class="form-control" type="text" id="lastName" name="lastName"/>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-12">
+                    <label for="additionalInfo" class="pt-3">Additional Information <span
+                                class="bi-question-square-fill px-1"
+                                data-mdb-popover-init
+                                data-mdb-trigger="hover"
+                                data-mdb-content="If you need access to something more than traditional baseline permissions and haven't already discussed it with ACM leadership, write down what you need here."></span>
+                    </label>
+                    <textarea class="form-control" id="additionalInfo" name="additionalInfo"></textarea>
+                </div>
+            </div>
+        </div>
+        <div class="card-body">
+            <button
+                    type="button"
+                    class="btn btn-primary"
+                    data-mdb-ripple-init
+                    data-request-method="POST"
+                    data-request-path="{{ path("submitRegistration") }}">
+                Request Account
+            </button>
+        </div>
+    </form>
+{% endblock %}

@@ -1,0 +1,7 @@
+{% extends 'mail/base.html.twig' %}
+{% block body %}
+    <p>
+        A user ({{ subject }}) has requested modifications to their group status. Please review it swaggy.
+    </p>
+    <a href="{{ url("reviewGroupRequest") }}?token={{ token }}">{{ url("reviewGroupRequest") }}</a>
+{% endblock %}

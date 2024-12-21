@@ -1,0 +1,7 @@
+{% extends 'mail/base.html.twig' %}
+{% block body %}
+    <p>
+        Your account has been approved. Please use the link below to set a password and finish account creation.
+    </p>
+    <a href="{{ url("createAccount") }}?token={{ token }}">{{ url("createAccount") }}</a>
+{% endblock %}

@@ -1,0 +1,9 @@
+// Green :3
+$primary: #009A44 !default;
+
+// Make cards cute and square
+$border-radius: 0 !default;
+$card-border-radius: 0;
+
+// Pull in material bootstrap
+@import "../../vendor/mdbootstrap/mdb-ui-kit/src/scss/mdb.free";

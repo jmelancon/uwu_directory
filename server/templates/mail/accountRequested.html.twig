@@ -1,0 +1,7 @@
+{% extends 'mail/base.html.twig' %}
+{% block body %}
+    <p>
+        A user ({{ subject }}) has requested an account registration. Please review it swaggy.
+    </p>
+    <a href="{{ url("grant") }}?token={{ token }}">{{ url("grant") }}</a>
+{% endblock %}

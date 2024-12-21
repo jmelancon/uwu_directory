@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+    <!-- 2024 kb -->
+    <head>
+        <title>{% block title %}Placeholder{% endblock %} | {{ app.request.server.get('ORGANIZATION') }}</title>
+
+        <!-- Page icon. -->
+        <link rel="icon" href="{{ asset("img/acm_favicon.ico") }}"/>
+
+        <!-- Some meta stuff. Viewport's especially important, makes sure scaling looks good across a variety of client DPIs. -->
+        <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+        <meta charset="UTF-8"/>
+
+        <!-- Styles. Dynamically populated by AssetMapper. -->
+        {% block stylesheets %}
+            <link rel="stylesheet" href="{{ asset('styles/app.scss') }}">
+        {% endblock %}
+
+        <!-- JS, once again populated by AssetMapper. -->
+        {% block javascripts %}
+            {% block importmap %}{{ importmap('app') }}{% endblock %}
+        {% endblock %}
+
+        <!-- Flashbag handling. -->
+        <script>
+            window.flashes = [
+                {% for label, messages in app.flashes %}{% for message in messages %}{
+                    "type": "{{ label }}",
+                    "message": "{{ message }}"
+                },{% endfor %}{% endfor %}
+            ]
+        </script>
+    </head>
+
+    <body class="mh-100 h-100 overflow-hidden">
+        <!-- Common alert modal - used by all error/success messages -->
+        {% include 'components/modal.html.twig' %}
+
+        <!-- Page header -->
+        {% include "components/header.html.twig" %}
+
+        <!-- Page body -->
+        <div class="container-fluid overflow-y-scroll pt-5 pb-3 vh-100">
+            <div class="mb-4"></div>
+            {% block body %}{% endblock %}
+        </div>
+    </body>
+</html>

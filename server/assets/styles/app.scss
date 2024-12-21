@@ -1,0 +1,14 @@
+@import "_roboto";
+@import "_bootstrap-icons";
+@import "_mdbootstrap";
+
+body {
+    background-repeat: no-repeat;
+    background-size: cover;
+    width: 100vw;
+}
+
+.btn.btn-primary[disabled] {
+    background-color: #444444;
+    box-shadow: none;
+}
