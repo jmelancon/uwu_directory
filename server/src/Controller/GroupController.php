@@ -26,7 +26,8 @@ class GroupController extends AbstractController
         private readonly Mailer $mailer,
         private readonly Tokenizer $tk,
         private readonly UserExistsCondition $userExists,
-        private readonly LdapGetUserGroups $userGroups
+        private readonly LdapGetUserGroups $userGroups,
+        private readonly LdapGroupModifier $modifier
     ){}
 
     #[Route(
@@ -94,10 +95,9 @@ class GroupController extends AbstractController
     public function reviewGroupRequestSubmit(
         #[ValueResolver(DecodedObjectResolver::class)] GroupRequest $groupRequest,
         #[MapRequestPayload] GroupResponse $groupResponse,
-        LdapGroupModifier $modifier
     ){
         // Modify the groups according to admin response
-        $modifier->write($groupRequest->getIdentifier(), $groupResponse->getGrantedDns());
+        $this->modifier->write($groupRequest->getIdentifier(), $groupResponse->getGrantedDns());
 
         $this->mailer->dispatch(
             to: $groupRequest->getIdentifier() . $this->mailer->emailSuffix,

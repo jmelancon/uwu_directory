@@ -22,6 +22,12 @@ import '@popperjs/core';
  */
 
 /**
+ * Redirect response. Used to draw the response, then redirect once the user dismisses the modal.
+ * @typedef {HandledResponse} RedirectResponse
+ * @property {string} url
+ */
+
+/**
  * Flash item. Used to report errors when loading a fresh page.
  *
  * @typedef {object} Flash
@@ -105,6 +111,16 @@ function populateModalList(list){
 }
 
 /**
+ * Set the modal's dismiss action to change the window location.
+ * @param {string} url
+ */
+function redirectOnModalClose(url){
+    window.modal.on("hidden.mdb.modal", function(){
+        window.location.href = url;
+    });
+}
+
+/**
  * Blanket tool for handling responses from AJAX requests.
  *
  * @param {object} data - Could possibly be a handled response, but also may not be!
@@ -122,6 +138,9 @@ function handleResponse(data, hasSucceeded, statusCode){
         if (data.responseType === "list"){
             /** @var {ListResponse} data */
             populateModalList(data.listContents);
+        } else if (data.responseType === "redirect"){
+            /** @var {RedirectResponse} data */
+
         }
         showModal(data.title, data.message);
     } else if (hasSucceeded) {

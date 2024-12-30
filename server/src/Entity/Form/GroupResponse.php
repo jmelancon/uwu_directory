@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 
 namespace App\Entity\Form;
 
@@ -15,7 +16,7 @@ class GroupResponse
 
     public function getGrantedDns(): array
     {
-        return $this->grantedDns;
+        return $this->grantedDns ?? [];
     }
 
     public function setGrantedDns(array $grantedDns): void

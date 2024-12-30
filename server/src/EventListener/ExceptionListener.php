@@ -4,8 +4,8 @@ namespace App\EventListener;
 
 use App\Entity\Response\HandledResponse;
 use App\Entity\Response\ListResponse;
-use App\Exception\Exception\PasswordRejectedException;
-use App\Exception\Exception\TokenMissingException;
+use App\Exception\PasswordRejectedException;
+use App\Exception\TokenMissingException;
 use ParagonIE\Paseto\Exception\PasetoException;
 use ParagonIE\Paseto\Exception\RuleViolation;
 use Symfony\Component\EventDispatcher\Attribute\AsEventListener;

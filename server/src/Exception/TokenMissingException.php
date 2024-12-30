@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Exception\Exception;
+namespace App\Exception;
 
 class TokenMissingException extends \Exception
 {

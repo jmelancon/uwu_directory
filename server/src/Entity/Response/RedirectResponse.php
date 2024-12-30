@@ -3,16 +3,15 @@ declare(strict_types=1);
 
 namespace App\Entity\Response;
 
-class ListResponse extends HandledResponse
+class RedirectResponse extends HandledResponse
 {
     public function __construct(
         string $title,
         string $message,
-        /** @var array<string> $listContents */
-        public array $listContents
+        public string $url
     )
     {
         parent::__construct($title, $message);
-        $this->responseType = "list";
+        $this->responseType = "redirect";
     }
 }

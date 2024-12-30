@@ -19,10 +19,10 @@ readonly class LdapResetPassword
     public function reset(PasswordReset $authorization, string $password): void
     {
         // Pull out a few details to make access easier
-        $username = $authorization->getIdentifier();
+        $username = ldap_escape($authorization->getIdentifier());
 
         // Set DN
-        $calculatedDn = "CN=" . $username . "$this->usernameSuffix," . $this->userDn;
+        $calculatedDn = "CN=$username$this->usernameSuffix,$this->userDn";
 
         // Set password
         ldap_modify_batch(

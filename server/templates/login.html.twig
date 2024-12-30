@@ -1,0 +1,52 @@
+{% extends '/components/card.html.twig' %}
+{% block title %}Log In{% endblock %}
+{% block cardTitle %}Log In{% endblock %}
+
+{% block cardDescription %}
+    <p class="card-text">
+        You may log in below. If you need to register for an account, please visit the
+        <a href="{{ path("register") }}">account registration page</a>. If you need a password reset, visit the
+        <a href="{{ path("resetForm") }}">password reset page</a>.
+    </p>
+{% endblock %}
+
+{% block cardContent %}
+    <form>
+        <div class="card-body border-bottom">
+            <div class="row">
+                <div class="col-md-6">
+                    <label for="username">Username</label>
+                    <input
+                            class="form-control"
+                            type="text"
+                            id="username"
+                            name="username"
+                            required
+                    >
+                </div>
+                <div class="col-md-6">
+                    <label for="password">Password</label>
+                    <input
+                            class="form-control"
+                            type="password"
+                            id="password"
+                            name="password"
+                            required
+                    >
+                </div>
+            </div>
+        </div>
+        <div class="card-body">
+            <button
+                    id="submitBtn"
+                    type="button"
+                    class="btn btn-primary"
+                    data-mdb-ripple-init
+                    data-request-method="POST"
+                    data-request-path="{{ path("loginSubmit") }}">
+                Log In
+            </button>
+        </div>
+    </form>
+
+{% endblock %}

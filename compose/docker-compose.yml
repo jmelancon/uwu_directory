@@ -3,6 +3,8 @@ services:
   php:
     build: ../server
     env_file: "../config/.env.symfony.prod"
+    depends_on:
+      - directory
     volumes:
       - "php_socket:/var/run"
       - "web_data:/var/www/project"
@@ -10,8 +12,12 @@ services:
 
   web:
     image: nginx:latest
+    healthcheck:
+      test: service nginx status || exit 1
     ports:
      - "8018:80"
+    depends_on:
+      - php
     volumes:
       - "php_socket:/var/run"
       - "web_data:/var/www/project"
@@ -24,8 +30,11 @@ services:
     ports:
       - "636:636"
     volumes:
+      - "../smblds/entrypoint.d:/entrypoint.d"
       - "../smblds/var/lib/samba:/var/lib/samba"
       - "../smblds/etc/samba:/etc/samba"
+      - "../smblds/var/log/samba:/var/log/samba"
+      - "../smblds/var/cache/samba:/var/cache/samba"
 
 volumes:
   php_socket:

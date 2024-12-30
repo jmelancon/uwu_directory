@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 
 namespace App\Service\Ldap;
 
@@ -14,7 +15,7 @@ readonly class LdapGroupModifier
     public function write(string $username, array $newGroups): void
     {
         // Make the new DN
-        $calculatedDn = "CN=" . $username . "$this->usernameSuffix," . $this->userDn;
+        $calculatedDn = "CN=" . ldap_escape($username) . "$this->usernameSuffix," . $this->userDn;
 
         // Fetch existing group memberships and parse the new memberships
         $existing = $this->groups->fetch($username);

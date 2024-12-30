@@ -48,6 +48,7 @@ services:
             $accountSuffix: "%env(USERNAME_SUFFIX)%"
             $principalSuffix: '%env(PRINCIPAL_SUFFIX)%'
             $emailSuffix: '%env(EMAIL_SUFFIX)%'
+            $groupDn: '%ldap.dn.group%'
 
     App\Service\Ldap\LdapResetPassword:
         arguments:
@@ -73,9 +74,20 @@ services:
     App\Service\Ldap\LdapGroupModifier:
         arguments:
             $userDn: '%ldap.dn.user%'
+            $usernameSuffix: '%env(USERNAME_SUFFIX)%'
 
     App\Service\Mailer:
         arguments:
             $administratorAddress: "%env(ADMIN_EMAIL)%"
             $emailSuffix: "%env(EMAIL_SUFFIX)%"
             $senderAddress: "%env(SENDER_EMAIL)%"
+
+    App\Service\Ldap\LdapCheckPassword:
+        arguments:
+           $usernameSuffix: '%env(USERNAME_SUFFIX)%'
+           $connectionString: '%env(LDAP_URI)%'
+           $userDn: '%ldap.dn.user%'
+
+    App\Security\LdapUserProvider:
+        arguments:
+            $userDn: '%ldap.dn.user%'

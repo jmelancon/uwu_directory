@@ -19,10 +19,13 @@ class UserExistsCondition
 
     public function check(string $username): bool
     {
+        // Escape username to prevent malicious actors
+        $escUser = ldap_escape($username);
+
         // Check to see if a user with the chosen ID exists!
         $res = $this->ldap->getSymfonyProvider()->query(
             dn: $this->userDn,
-            query: "(&(objectClass=user)(mail=" . $username . "$this->emailSuffix))"
+            query: "(&(objectClass=user)(mail=$escUser$this->emailSuffix))"
         )->execute();
 
         return $res->count() > 0;

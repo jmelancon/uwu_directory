@@ -4,7 +4,7 @@ namespace App\Service\Ldap;
 
 use App\Entity\Form\PasswordReset;
 use App\Entity\Form\RegistrationAuthorization;
-use App\Exception\Exception\PasswordRejectedException;
+use App\Exception\PasswordRejectedException;
 
 readonly class LdapUserCreator
 {
@@ -12,6 +12,7 @@ readonly class LdapUserCreator
         private LdapAggregator $ldapAggregator,
         private LdapResetPassword $resetter,
         private string $userDn,
+        private string $groupDn,
         private string $baseDn,
         private string $accountSuffix,
         private string $emailSuffix,
@@ -21,12 +22,12 @@ readonly class LdapUserCreator
     public function create(RegistrationAuthorization $authorization, string $password): void
     {
         // Pull out a few details to make access easier
-        $username = $authorization->getInitialRequest()->getIdentifier();
-        $firstName = $authorization->getInitialRequest()->getFirstName();
-        $lastName = $authorization->getInitialRequest()->getLastName();
+        $username = ldap_escape($authorization->getInitialRequest()->getIdentifier());
+        $firstName = ldap_escape($authorization->getInitialRequest()->getFirstName());
+        $lastName = ldap_escape($authorization->getInitialRequest()->getLastName());
 
         // Make the new DN
-        $calculatedDn = "CN=" . $username . "$this->accountSuffix," . $this->userDn;
+        $calculatedDn = "CN=$username$this->accountSuffix,$this->userDn";
 
         // Create and persist new user
         ldap_add(
@@ -69,6 +70,15 @@ readonly class LdapUserCreator
             );
             throw new PasswordRejectedException;
         }
+
+        // Ensure user's been added to the basic users group
+        ldap_mod_add(
+            ldap: $this->ldapAggregator->getStockProvider(),
+            dn: "CN=Basic Users,$this->groupDn",
+            entry: [
+                "member" => $calculatedDn
+            ]
+        );
 
         // Add user to each assigned group
         foreach($authorization->getGrantedDns() as $group){

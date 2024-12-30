@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 
 namespace App\Controller;
 
@@ -13,6 +14,7 @@ use App\Service\ValueResolver\DecodedObjectResolver;
 use Symfony\Bridge\Twig\Attribute\Template;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
+use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Attribute\MapRequestPayload;
 use Symfony\Component\HttpKernel\Attribute\ValueResolver;
 use Symfony\Component\Routing\Attribute\Route;
@@ -42,7 +44,7 @@ class ResetController extends AbstractController
     )]
     public function resetFormSubmit(
         #[MapRequestPayload] PasswordReset $passwordReset
-    ){
+    ): Response{
         try{
             if ($this->userExists->check($passwordReset->getIdentifier())){
                 $resetToken = $this->tk->encode($passwordReset);
@@ -75,7 +77,8 @@ class ResetController extends AbstractController
     #[Template("forms/reset/set.html.twig")]
     public function setNewPassword(
         #[ValueResolver(DecodedObjectResolver::class)] PasswordReset $authorization
-    ){}
+    ): void
+    {}
 
     #[Route(
         path: "/set/submit",
@@ -87,7 +90,7 @@ class ResetController extends AbstractController
         #[ValueResolver(DecodedObjectResolver::class)] PasswordReset $authorization,
         #[MapRequestPayload] PasswordBundle $passwordBundle,
         LdapResetPassword $resetter
-    ){
+    ): Response{
         $resetter->reset($authorization, $passwordBundle->getPassword());
 
         return new JsonResponse(

@@ -6,7 +6,7 @@ ENV PATH="$PATH:/usr/local/bin"
 
 # Install required libs
 RUN apt update
-RUN apt install libldap-dev libgmp-dev git unzip -y
+RUN apt install libldap-dev libgmp-dev git unzip socat -y
 
 # Install LDAP and GMP extensions
 RUN docker-php-ext-install ldap gmp
@@ -32,5 +32,8 @@ RUN php bin/console assets:install
 # Clear any cache
 RUN php bin/console cache:pool:clear --all
 
-# Run app
+# Health check
+HEALTHCHECK CMD socat -u OPEN:/dev/null UNIX-CONNECT:/run/php8.3-fpm.sock;
+
+# Run app as root
 USER root
