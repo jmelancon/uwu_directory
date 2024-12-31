@@ -1,14 +1,18 @@
 name: infra
 services:
   php:
-    build: ../server
-    env_file: "../config/.env.symfony.prod"
+    build:
+      dockerfile: compose/build/server.Dockerfile
+      context: ../
+    env_file: "../environment/server/.env"
     depends_on:
       - directory
+      - db
     volumes:
       - "php_socket:/var/run"
       - "web_data:/var/www/project"
-      - "../config/project.fpm.conf:/usr/local/etc/php-fpm.d/zz-docker.conf"
+      - "../config/zz-docker.conf:/usr/local/etc/php-fpm.d/zz-docker.conf"
+      - "../secrets/var/oauth:/var/oauth"
 
   web:
     image: nginx:latest
@@ -21,20 +25,20 @@ services:
     volumes:
       - "php_socket:/var/run"
       - "web_data:/var/www/project"
-      - "../config/project.nginx.conf:/etc/nginx/conf.d/default.conf"
+      - "../config/default.conf:/etc/nginx/conf.d/default.conf"
 
   directory:
     hostname: "dc1"
     image: smblds/smblds:latest
-    env_file: "../config/.env.smblds.prod"
+    env_file: "../environment/smblds/.env"
     ports:
       - "636:636"
     volumes:
-      - "../smblds/entrypoint.d:/entrypoint.d"
-      - "../smblds/var/lib/samba:/var/lib/samba"
-      - "../smblds/etc/samba:/etc/samba"
-      - "../smblds/var/log/samba:/var/log/samba"
-      - "../smblds/var/cache/samba:/var/cache/samba"
+      - "../persist/entrypoint.d:/entrypoint.d"
+      - "../persist/var/lib/samba:/var/lib/samba"
+      - "../persist/etc/samba:/etc/samba"
+      - "../persist/var/log/samba:/var/log/samba"
+      - "../persist/var/cache/samba:/var/cache/samba"
 
 volumes:
   php_socket:
