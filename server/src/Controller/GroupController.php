@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 
 namespace App\Controller;
 
@@ -35,7 +36,7 @@ class GroupController extends AbstractController
         name: "requestMoreGroups",
         methods: ["GET"]
     )]
-    #[Template("forms/groups/request.html.twig")]
+    #[Template("/views/forms/groups/request.html.twig")]
     public function requestMoreGroups(){}
 
     #[Route(
@@ -45,7 +46,8 @@ class GroupController extends AbstractController
     )]
     public function requestMoreGroupsSubmit(
         #[MapRequestPayload] GroupRequest $groupRequest
-    ){
+    ): JsonResponse
+    {
         try{
             if ($this->userExists->check($groupRequest->getIdentifier())) {
                 $token = $this->tk->encode($groupRequest);
@@ -75,11 +77,12 @@ class GroupController extends AbstractController
         name: "reviewGroupRequest",
         methods: ["GET"]
     )]
-    #[Template("forms/groups/review.html.twig")]
+    #[Template("/views/forms/groups/review.html.twig")]
     public function reviewGroupRequest(
         #[ValueResolver(DecodedObjectResolver::class)] GroupRequest $groupRequest,
         #[ValueResolver(LdapGroupListResolver::class)] array $groups
-    ){
+    ): array
+    {
         return [
             "groupRequest" => $groupRequest,
             "groups" => $groups,
@@ -95,7 +98,8 @@ class GroupController extends AbstractController
     public function reviewGroupRequestSubmit(
         #[ValueResolver(DecodedObjectResolver::class)] GroupRequest $groupRequest,
         #[MapRequestPayload] GroupResponse $groupResponse,
-    ){
+    ): JsonResponse
+    {
         // Modify the groups according to admin response
         $this->modifier->write($groupRequest->getIdentifier(), $groupResponse->getGrantedDns());
 

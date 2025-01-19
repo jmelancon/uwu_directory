@@ -1,16 +1,2 @@
-// Bootstrap's extremely fucky with its icon font and AssetMapper unfortunately won't play nice.
-// That's no fun!
-$bootstrap-icons-font: "bootstrap-icons" !default;
-$bootstrap-icons-font-dir: "/assets/vendor/bootstrap-icons/font/fonts";
-$bootstrap-icons-font-file: "#{$bootstrap-icons-font-dir}/#{$bootstrap-icons-font}";
-
-// The hash was already initially hardcoded so I really don't care
-$bootstrap-icons-font-woff2-hash: "5f093324f4acf9261081bc283536be6d";
-$bootstrap-icons-font-woff-hash: "d1a1fe42d24f56909b038e225b9cac4e";
-
-$bootstrap-icons-font-src:
-        url("#{$bootstrap-icons-font-file}-#{$bootstrap-icons-font-woff2-hash}.woff2") format("woff2"),
-        url("#{$bootstrap-icons-font-file}-#{$bootstrap-icons-font-woff-hash}.woff")   format("woff") !default;
-
 // Pull in icons
-@import "../../vendor/twbs/bootstrap-icons/font/bootstrap-icons";
+@import "bootstrap-icons/font/bootstrap-icons";

@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 
 namespace App\Controller;
 
@@ -79,7 +80,7 @@ class RegistrationController extends AbstractController
         methods: ["GET"]
     )]
     #[Template(
-        template: "forms/registration/register.html.twig"
+        template: "/views/forms/registration/register.html.twig"
     )]
     public function register(){}
 
@@ -88,12 +89,12 @@ class RegistrationController extends AbstractController
         name: "grant",
         methods: ["GET"]
     )]
-    #[Template("forms/registration/grant.html.twig", ["registration" => "registration", "groups" => "groups"])]
+    #[Template("/views/forms/registration/grant.html.twig", ["registration" => "registration", "groups" => "groups"])]
     public function grant(
         #[ValueResolver(DecodedObjectResolver::class)] RegistrationRequest $registration,
         /** @var $groups array<Entry> */
         #[ValueResolver(LdapGroupListResolver::class)] array $groups
-    )
+    ): void
     {
     }
 
@@ -105,7 +106,8 @@ class RegistrationController extends AbstractController
     public function grantSubmit(
         #[ValueResolver(DecodedObjectResolver::class)] RegistrationRequest $registration,
         Request $request
-    ){
+    ): Response
+    {
         // Make sure the username isn't taken already
         if ($this->userExists->check($registration->getIdentifier()))
             return new JsonResponse(
@@ -153,12 +155,13 @@ class RegistrationController extends AbstractController
         name: "createAccount",
         methods: ["GET"]
     )]
-    #[Template("forms/registration/password.html.twig")]
+    #[Template("/views/forms/registration/password.html.twig")]
     public function createAccount(
         // this stupid piece of shit exists solely to confirm that the user holds a registration
         // authorization.
         #[ValueResolver(DecodedObjectResolver::class)] RegistrationAuthorization $authorization,
-    ){}
+    ): void
+    {}
 
     #[Route(
         path: "/createAccount/submit",
@@ -169,7 +172,8 @@ class RegistrationController extends AbstractController
         #[ValueResolver(DecodedObjectResolver::class)] RegistrationAuthorization $authorization,
         #[MapRequestPayload] PasswordBundle $passwordBundle,
         LdapUserCreator $creator
-    ){
+    ): JsonResponse
+    {
         // Make sure the username isn't taken already
         if ($this->userExists->check($authorization->getInitialRequest()->getIdentifier()))
             return new JsonResponse(

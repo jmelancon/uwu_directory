@@ -33,7 +33,7 @@ class ResetController extends AbstractController
         name: "resetForm",
         methods: ["GET"]
     )]
-    #[Template("forms/reset/request.html.twig")]
+    #[Template("/views/forms/reset/request.html.twig")]
     public function resetForm(){}
 
     #[Route(
@@ -74,7 +74,7 @@ class ResetController extends AbstractController
         name: "setNewPassword",
         methods: ["GET"]
     )]
-    #[Template("forms/reset/set.html.twig")]
+    #[Template("/views/forms/reset/set.html.twig")]
     public function setNewPassword(
         #[ValueResolver(DecodedObjectResolver::class)] PasswordReset $authorization
     ): void

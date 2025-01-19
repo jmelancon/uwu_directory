@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 
 namespace App\Service\Ldap;
 
@@ -33,10 +34,15 @@ class LdapAggregator
 
         // Connect stock LDAP interface
         $this->stockProvider = ldap_connect($uri);
-        ldap_bind(
+        ldap_bind_ext(
             ldap: $this->stockProvider,
             dn: $username,
-            password: $password
+            password: $password,
+            controls: [
+                [
+                    "oid" => LDAP_CONTROL_PAGEDRESULTS
+                ]
+            ]
         );
     }
 

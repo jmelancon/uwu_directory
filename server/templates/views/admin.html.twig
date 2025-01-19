@@ -1,0 +1,29 @@
+{% extends "/layouts/tabbed.html.twig" %}
+{% block sidebar %}
+    <twig:sidebar-item icon="bi-person-fill" tab="users" selected>Users</twig:sidebar-item>
+    <twig:sidebar-item icon="bi-people-fill" tab="groups">Groups</twig:sidebar-item>
+    <twig:sidebar-item icon="bi-server" tab="services">Services</twig:sidebar-item>
+    <twig:sidebar-item icon="bi-gear-fill" tab="config">Config</twig:sidebar-item>
+{% endblock %}
+{% block panels %}
+    <twig:panel id="users" heading="Manage Users" selected>
+        <p>feel free to manage your users here or something, i don't gaf</p>
+
+        <table id="example" class="display table table-striped table-responsive">
+            <thead>
+            <tr>
+                <th>First Name</th>
+                <th>Last Name</th>
+                <th>Username</th>
+                <th>Email</th>
+            </tr>
+            </thead>
+            <tbody>
+            </tbody>
+        </table>
+        <twig:corner-button icon="bi-person-plus-fill"/>
+    </twig:panel>
+    <twig:panel heading="Manage Groups" id="groups"/>
+    <twig:panel heading="Manage Services" id="services"/>
+    <twig:panel heading="Manage Configuration" id="config"/>
+{% endblock %}

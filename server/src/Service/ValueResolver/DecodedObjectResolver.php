@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 
 namespace App\Service\ValueResolver;
 
@@ -18,6 +19,7 @@ readonly class DecodedObjectResolver implements ValueResolverInterface
 
     /**
      * @inheritDoc
+     * @throws TokenMissingException
      */
     public function resolve(Request $request, ArgumentMetadata $argument): iterable
     {

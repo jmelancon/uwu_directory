@@ -11,7 +11,7 @@ class LdapGetUserGroups
         private string $emailSuffix
     ){}
 
-    public function fetch(string $username){
+    public function fetch(string $username): ?array{
         // Escape username
         $escUser = ldap_escape($username);
         // Pull user

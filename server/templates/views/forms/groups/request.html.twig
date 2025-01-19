@@ -1,0 +1,47 @@
+{% extends '/layouts/card.html.twig' %}
+{% block title %}Groups{% endblock %}
+{% block cardTitle %}Request Group Permissions{% endblock %}
+
+{% block cardDescription %}
+<p class="card-text">
+    Access to specific services are assigned via group permissions. To request addition to a group, fill out
+    the form below. A moderator will then be prompted to modify your account's group memberships.
+</p>
+{% endblock %}
+
+{% block cardContent %}
+    <form>
+        <div class="card-body border-bottom">
+            <div class="row">
+                <div class="col-12">
+                    <label for="identifier">Your NDUS Identifier <span
+                                class="bi-question-square-fill px-1"
+                                data-mdb-popover-init
+                                data-mdb-trigger="hover"
+                                data-mdb-content="This is the same as your username for Blackboard, Campus Connection, or other UND/NDUS systems. This is required so we can verify your status as a UND student."></span>
+                    </label>
+                    <div class="input-group">
+                        <input class="form-control" type="text" id="identifier" name="identifier"/>
+                        <span class="input-group-text">{{ emailSuffix }}</span>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-12">
+                    <label for="requestDetails" class="pt-3">Request Details</label>
+                    <textarea class="form-control" id="requestDetails" name="requestDetails"></textarea>
+                </div>
+            </div>
+        </div>
+        <div class="card-body">
+            <button
+                    type="button"
+                    class="btn btn-primary"
+                    data-mdb-ripple-init
+                    data-request-method="POST"
+                    data-request-path="{{ path("requestMoreGroupsSubmit") }}">
+                Request Change
+            </button>
+        </div>
+    </form>
+{% endblock %}

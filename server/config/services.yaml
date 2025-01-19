@@ -91,3 +91,7 @@ services:
     App\Security\LdapUserProvider:
         arguments:
             $userDn: '%ldap.dn.user%'
+
+    App\Service\DataTableSource\LdapUserDataTableProvider:
+        arguments:
+            $userDn: '%ldap.dn.user%'

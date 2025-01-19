@@ -1,0 +1,14 @@
+{% extends '/layouts/base.html.twig' %}
+{% block extendedBody %}
+    <div class=" min-vh-100 container-fluid p-0 m-0 pt-5 d-flex">
+        <nav
+            class="nav flex-column bg-body-secondary border-secondary shadow-4-strong pt-2 m-0"
+            style="width: 64px; min-width: 64px;">
+            {% block sidebar %}{% endblock %}
+        </nav>
+
+        <div class="flex-column flex-fill pt-2 tab-content" >
+            {% block panels %}{% endblock %}
+        </div>
+    </div>
+{% endblock %}

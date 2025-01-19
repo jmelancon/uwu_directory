@@ -1,8 +1,11 @@
 <?php
+declare(strict_types=1);
 
 namespace App\Exception;
 
-class PasswordRejectedException extends \Exception
+use Exception;
+
+class PasswordRejectedException extends Exception
 {
 
 }

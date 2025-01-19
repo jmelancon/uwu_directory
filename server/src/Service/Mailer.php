@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 
 namespace App\Service;
 
@@ -19,7 +20,8 @@ class Mailer
         string $subject,
         string $template,
         array $context
-    ){
+    ): void
+    {
         $message = (new TemplatedEmail())
             ->htmlTemplate($template)
             ->context($context)

@@ -18,12 +18,12 @@ readonly class LdapGroupModifier
         $calculatedDn = "CN=" . ldap_escape($username) . "$this->usernameSuffix," . $this->userDn;
 
         // Fetch existing group memberships and parse the new memberships
-        $existing = $this->groups->fetch($username);
+        $existing = $this->groups->fetch($username) ?? [];
         $new = array_keys($newGroups);
 
         // Filter out groups that won't be changed, get add/remove lists
         $add = array_diff($new, $existing);
-        $del = array_diff($existing, $new);
+        $del = array_diff($existing);
 
         // Apply additions
         foreach($add as $groupDn){

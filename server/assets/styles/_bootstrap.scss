@@ -1,0 +1,14 @@
+// Green :3
+$primary: #009A44 !default;
+
+// Make cards cute and square
+$border-radius: 0 !default;
+$card-border-radius: 0;
+
+// Same goes for form inputs
+$form-notch-leading-border-radius: 0;
+
+$font-family-base: "Roboto", sans;
+
+// Pull in bootstrap
+@import "bootstrap/scss/bootstrap";

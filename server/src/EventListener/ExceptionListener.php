@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 
 namespace App\EventListener;
 
@@ -8,6 +9,7 @@ use App\Exception\PasswordRejectedException;
 use App\Exception\TokenMissingException;
 use ParagonIE\Paseto\Exception\PasetoException;
 use ParagonIE\Paseto\Exception\RuleViolation;
+use RangeException;
 use Symfony\Component\EventDispatcher\Attribute\AsEventListener;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\RedirectResponse;
@@ -79,7 +81,7 @@ class ExceptionListener
         // CASE: User passes malformed token
         if (
             (
-                $exception instanceof \RangeException && ($exception->getMessage() === 'Incorrect padding')
+                $exception instanceof RangeException && ($exception->getMessage() === 'Incorrect padding')
                 || $exception instanceof PasetoException
             ) && $method === Request::METHOD_GET)
         {

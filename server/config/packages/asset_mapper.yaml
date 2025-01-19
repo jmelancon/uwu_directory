@@ -1,7 +1,0 @@
-framework:
-    asset_mapper:
-        # The paths to make available to the asset mapper.
-        paths:
-            - assets/
-            - vendor/twbs/bootstrap-icons/font
-            - vendor/googlefonts/roboto-2

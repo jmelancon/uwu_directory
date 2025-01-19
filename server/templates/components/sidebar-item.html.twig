@@ -1,0 +1,13 @@
+<a
+    class="hover-shadow text-center position-relative nav-link text-body {{ selected ?? false ? "active"  }}"
+    id="{{ tab }}_link"
+    href="#{{ tab }}"
+    style="height: 64px;"
+    role="tab"
+    aria-controls="{{ tab }}"
+    aria-selected="{{ selected ?? "false" ? "true" : "false" }}"
+    data-bs-toggle="tab"
+    data-bs-target="#{{ tab }}">
+        <span class="{{ icon }} fs-4 pt-2 position-absolute top-0 translate-middle-x"></span>
+        <small class="small position-absolute pb-2 bottom-0 translate-middle-x" style="font-size: 12px;">{% block content %}{% endblock %}</small>
+</a>

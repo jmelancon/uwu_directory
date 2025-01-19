@@ -1,6 +1,6 @@
 @import "_roboto";
 @import "_bootstrap-icons";
-@import "_mdbootstrap";
+@import "_bootstrap";
 
 body {
     background-repeat: no-repeat;
@@ -11,4 +11,8 @@ body {
 .btn.btn-primary[disabled] {
     background-color: #444444;
     box-shadow: none;
+}
+
+.nav.flex-column > a.active{
+    @extend .bg-body-tertiary, .shadow;
 }

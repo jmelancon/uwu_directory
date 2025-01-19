@@ -1,0 +1,8 @@
+<div
+    class="container pt-4 mx-3 tab-pane fade {{ selected ?? false ? "active show"}} overflow-auto"
+    id="{{ id }}"
+    role="tabpanel"
+    aria-labelledby="{{ id }}_btn">
+    <h1 class="display-6">{{ heading }}</h1>
+    {% block content %}{% endblock %}
+</div>

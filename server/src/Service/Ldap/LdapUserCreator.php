@@ -1,10 +1,12 @@
 <?php
+declare(strict_types=1);
 
 namespace App\Service\Ldap;
 
 use App\Entity\Form\PasswordReset;
 use App\Entity\Form\RegistrationAuthorization;
 use App\Exception\PasswordRejectedException;
+use Throwable;
 
 readonly class LdapUserCreator
 {
@@ -19,6 +21,9 @@ readonly class LdapUserCreator
         private string $principalSuffix
     ){}
 
+    /**
+     * @throws PasswordRejectedException
+     */
     public function create(RegistrationAuthorization $authorization, string $password): void
     {
         // Pull out a few details to make access easier
@@ -63,7 +68,7 @@ readonly class LdapUserCreator
                 $password
             );
         }
-        catch (\Throwable) {
+        catch (Throwable) {
             ldap_delete(
                 ldap: $this->ldapAggregator->getStockProvider(),
                 dn: $calculatedDn

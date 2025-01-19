@@ -3,6 +3,8 @@ declare(strict_types=1);
 
 namespace App\Service\Ldap;
 
+use Throwable;
+
 readonly class LdapCheckPassword
 {
     public function __construct(
@@ -30,7 +32,7 @@ readonly class LdapCheckPassword
                 dn: "CN=$escUser$this->usernameSuffix,$this->userDn",
                 password: $password
             );
-        } catch (\Throwable) {
+        } catch (Throwable) {
             return false;
         }
     }
