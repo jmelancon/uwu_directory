@@ -10,6 +10,7 @@ import './typescript/modal'
 import './typescript/datatables'
 import './typescript/flashes'
 import './typescript/popover'
+import './typescript/nav'
 
 declare global {
     interface Window {
@@ -22,10 +23,20 @@ declare global {
 
 
 
-// Set dark mode if applicable
-document.documentElement.dataset.bsTheme =
-    window.matchMedia("(prefers-color-scheme: dark)").matches ?
-        "dark" : "light";
+// Light/Dark mode management
+const colorScheme = window.matchMedia('(prefers-color-scheme: dark)');
+
+function setColorScheme(query: Event|MediaQueryList){
+    if (query instanceof Event)
+        query = <MediaQueryList>query.target;
+
+    document.documentElement.dataset.bsTheme =
+        query.matches ?
+            "dark" : "light";
+}
+
+setColorScheme(colorScheme);
+colorScheme.addEventListener('change', setColorScheme);
 
 window.addEventListener("load",(_e) => {
     window.$ = $;

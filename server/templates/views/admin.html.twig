@@ -1,10 +1,19 @@
 {% extends "/layouts/tabbed.html.twig" %}
 {% block sidebar %}
-    <twig:sidebar-item icon="bi-person-fill" tab="view_users" selected>View Users</twig:sidebar-item>
-    <twig:sidebar-item icon="bi-person-plus-fill" tab="add_user">Add User</twig:sidebar-item>
-    <twig:sidebar-item icon="bi-people-fill" tab="groups">Groups</twig:sidebar-item>
-    <twig:sidebar-item icon="bi-server" tab="services">Services</twig:sidebar-item>
-    <twig:sidebar-item icon="bi-gear-fill" tab="config">Config</twig:sidebar-item>
+    <twig:sidebar-item icon="bi-person-fill" tab="view_users" name="Users" selected/>
+    <twig:sidebar-item icon="bi-person-plus-fill" tab="add_user" name="Add User" parent="view_users"/>
+    <twig:sidebar-item icon="bi-person-fill-gear" tab="edit_user" name="Edit User" parent="view_users"/>
+
+
+    <twig:sidebar-item icon="bi-building-fill" tab="view_groups" name="Groups"/>
+    <twig:sidebar-item icon="bi-building-fill-add" tab="add_group" name="Add Group" parent="view_groups"/>
+    <twig:sidebar-item icon="bi-building-fill-gear" tab="edit_group" name="Edit Group" parent="view_groups"/>
+
+    <twig:sidebar-item icon="bi-database-fill" tab="view_services" name="View Services"/>
+    <twig:sidebar-item icon="bi-database-fill-gear" tab="add_service" name="Add Service" parent="view_services"/>
+    <twig:sidebar-item icon="bi-database-fill-add" tab="edit_service" name="Edit Service" parent="view_services"/>
+
+    <twig:sidebar-item icon="bi-gear-fill" tab="config" name="Config"/>
 {% endblock %}
 {% block panels %}
     <twig:panel id="view_users" heading="User Overview" selected>
@@ -62,7 +71,10 @@
             </button>
         </form>
     </twig:panel>
-    <twig:panel heading="Manage Groups" id="groups">
+    <twig:panel heading="Edit User" id="edit_user">
+        <p>Not implemented, check back soon pookie</p>
+    </twig:panel>
+    <twig:panel heading="Manage Groups" id="view_groups">
         <p>feel free to manage your groups here or something, i don't gaf</p>
 
         <table id="example2" class="display table table-striped table-responsive">
@@ -77,7 +89,22 @@
             </tbody>
         </table>
     </twig:panel>
-    <twig:panel heading="Manage Services" id="services"/>
-    <twig:panel heading="Manage Configuration" id="config"/>
-    <twig:panel heading="Add User" id="add_user"/>
+    <twig:panel heading="Add Group" id="add_group">
+        <p>Not implemented, check back soon pookie</p>
+    </twig:panel>
+    <twig:panel heading="Edit Group" id="edit_group">
+        <p>Not implemented, check back soon pookie</p>
+    </twig:panel>
+    <twig:panel heading="Manage Services" id="view_services">
+        <p>Not implemented, check back soon pookie</p>
+    </twig:panel>
+    <twig:panel heading="Add Service" id="add_service">
+        <p>Not implemented, check back soon pookie</p>
+    </twig:panel>
+    <twig:panel heading="Edit Service" id="edit_service">
+        <p>Not implemented, check back soon pookie</p>
+    </twig:panel>
+    <twig:panel heading="Manage Configuration" id="config">
+        <p>Not implemented, check back soon pookie</p>
+    </twig:panel>
 {% endblock %}

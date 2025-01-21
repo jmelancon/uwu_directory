@@ -13,8 +13,33 @@ body {
     box-shadow: none;
 }
 
-.nav.flex-column > a.active{
-    @extend .bg-body-tertiary, .shadow;
+.nav.flex-column{
+    & > a{
+        height: 48px;
+        width: 48px;
+        &.active{
+            @extend .shadow;
+            background-color: $primary;
+        };
+        &:hover{
+            @extend .shadow;
+        };
+        &[data-sidenav-parent], &.child-selected{
+            background-color: $primary-bg-subtle;
+            @media (prefers-color-scheme: dark) {
+                background-color: $primary-bg-subtle-dark;
+            }
+            &.active{
+                background-color: $primary;
+            }
+        };
+        & > span {
+            width: 48px;
+            height: 48px;
+            line-height: 48px;
+            text-align: center;
+        }
+    };
 }
 
 div.dt-container div.dt-length select {

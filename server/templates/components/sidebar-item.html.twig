@@ -2,16 +2,17 @@
     class="hover-shadow text-center position-relative nav-link text-body {{ selected ?? false ? "active"  }}"
     id="{{ tab }}_link"
     href="#{{ tab }}"
-    style="height: 48px; width: 48px;"
     role="tab"
+    tabindex="0"
     aria-controls="{{ tab }}"
     aria-selected="{{ selected ?? "false" ? "true" : "false" }}"
     data-bs-toggle="tab"
-    data-bs-target="#{{ tab }}">
+    data-bs-target="#{{ tab }}"
+    data-my-name="{{ tab }}"
+    {% if parent is defined %}data-sidenav-parent="{{ parent }}"{% endif %}>
         <span class="{{ icon }} fs-5 position-absolute translate-middle-x top-0 align-text-bottom"
-              style="width: 48px; height: 48px; line-height: 48px; text-align: center;"
               data-bs-toggle="popover"
               data-bs-placement="right"
               data-bs-trigger="hover"
-              data-bs-content="{% block content %}{% endblock %}"></span>
+              data-bs-content="{{ name }}"></span>
 </a>
