@@ -28,14 +28,15 @@ class DataTableAPIController extends AbstractController
     {
         $rows = $provider->fetch(
             pageSize: $request->length,
-            context: ["cookie" => $this->getUser()->getUserIdentifier()]
+            offset: $request->start,
+            context: ["request" => $request]
         );
         return new JsonResponse(
             new TableResponse(
                 draw: $request->draw,
-                recordsTotal: sizeof($rows),
-                recordsFiltered: sizeof($rows),
-                data: $rows
+                recordsTotal: $rows->total,
+                recordsFiltered: $rows->count,
+                data: $rows->data
             )
         );
     }

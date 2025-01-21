@@ -9,7 +9,7 @@ use App\Exception\IncompleteCredentialsException;
 use App\Exception\InvalidCredentialsException;
 use App\Exception\UserDoesNotExistException;
 use App\Service\Condition\UserExistsCondition;
-use App\Service\Ldap\LdapCheckPassword;
+use App\Service\Ldap\LdapBindAuthentication;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -24,9 +24,9 @@ use Symfony\Component\Security\Http\Authenticator\Passport\SelfValidatingPasspor
 class LdapAuthenticator extends AbstractAuthenticator
 {
     public function __construct(
-        private readonly LdapCheckPassword $passwordChecker,
-        private readonly UserExistsCondition $userExists,
-        private readonly UrlGeneratorInterface $urlGenerator
+        private readonly LdapBindAuthentication $passwordChecker,
+        private readonly UserExistsCondition    $userExists,
+        private readonly UrlGeneratorInterface  $urlGenerator
     )
     {
     }

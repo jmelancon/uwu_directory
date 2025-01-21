@@ -7,12 +7,18 @@ use App\Entity\Form\PasswordBundle;
 use App\Entity\Form\RegistrationAuthorization;
 use App\Entity\Form\RegistrationRequest;
 use App\Entity\Response\HandledResponse;
+use App\Exception\PasswordRejectedException;
 use App\Service\Condition\UserExistsCondition;
+use App\Service\CreateEntity\UserCreator;
+use App\Service\DeleteEntity\UserDeleter;
 use App\Service\Ldap\LdapUserCreator;
 use App\Service\Mailer;
 use App\Service\Tokenizer;
+use App\Service\UpdateEntity\UserGroupModifier;
+use App\Service\UpdateEntity\UserPasswordSetter;
 use App\Service\ValueResolver\DecodedObjectResolver;
 use App\Service\ValueResolver\LdapGroupListResolver;
+use Exception;
 use Symfony\Bridge\Twig\Attribute\Template;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
@@ -38,7 +44,7 @@ class RegistrationController extends AbstractController
         methods: ["POST"],
         format: "json"
     )]
-    public function hello(
+    public function submitRegistration(
         #[MapRequestPayload] RegistrationRequest $registrationRequest,
     ): JsonResponse {
         // Make sure the username isn't taken already
@@ -171,7 +177,10 @@ class RegistrationController extends AbstractController
     public function createAccountSubmit(
         #[ValueResolver(DecodedObjectResolver::class)] RegistrationAuthorization $authorization,
         #[MapRequestPayload] PasswordBundle $passwordBundle,
-        LdapUserCreator $creator
+        UserCreator $creator,
+        UserPasswordSetter $userPasswordSetter,
+        UserDeleter $deleter,
+        UserGroupModifier $groupModifier
     ): JsonResponse
     {
         // Make sure the username isn't taken already
@@ -183,7 +192,23 @@ class RegistrationController extends AbstractController
                 )
             );
 
-        $creator->create($authorization, $passwordBundle->getPassword());
+        // Parse out authorization to a user object
+        $user = $authorization->asUser();
+
+        // Create the user
+        $creator->create($user);
+
+        // Set the password
+        try{
+            $userPasswordSetter->set($user, $passwordBundle->getPassword());
+        } catch (Exception){
+            $deleter->delete($user);
+            throw new PasswordRejectedException();
+        }
+
+        // Grant groups
+        $groupModifier->write($user->getUserIdentifier(), $authorization->getGrantedDns());
+
         return new JsonResponse(
             new HandledResponse(
                 title: "Hooray!",

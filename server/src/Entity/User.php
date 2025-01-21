@@ -13,7 +13,7 @@ class User implements UserInterface
         private string $lastName,
         private string $email,
         /** @var array<string> roleDNs */
-        private array $roleDNs
+        private array $roleDNs = []
     ){}
 
     public function getRoleDNs(): array

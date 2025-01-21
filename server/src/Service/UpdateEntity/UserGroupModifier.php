@@ -1,15 +1,18 @@
 <?php
 declare(strict_types=1);
 
-namespace App\Service\Ldap;
+namespace App\Service\UpdateEntity;
 
-readonly class LdapGroupModifier
+use App\Service\Ldap\LdapAggregator;
+use App\Service\ReadEntity\ReadUserGroups;
+
+readonly class UserGroupModifier
 {
     public function __construct(
         private LdapAggregator $ldapAggregator,
-        private LdapGetUserGroups $groups,
-        private string $userDn,
-        private string $usernameSuffix
+        private ReadUserGroups $groups,
+        private string         $userDn,
+        private string         $usernameSuffix
     ){}
 
     public function write(string $username, array $newGroups): void

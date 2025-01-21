@@ -16,3 +16,7 @@ body {
 .nav.flex-column > a.active{
     @extend .bg-body-tertiary, .shadow;
 }
+
+div.dt-container div.dt-length select {
+    width: 100%;
+}

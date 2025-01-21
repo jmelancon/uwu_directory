@@ -1,8 +1,8 @@
 <div
-    class="container pt-4 mx-3 tab-pane fade {{ selected ?? false ? "active show"}} overflow-auto"
+    class="container {% if not skeleton is defined %}pt-4 mx-3{% endif %} tab-pane fade {{ selected ?? false ? "active show"}} overflow-auto"
     id="{{ id }}"
     role="tabpanel"
     aria-labelledby="{{ id }}_btn">
-    <h1 class="display-6">{{ heading }}</h1>
+    {% if not skeleton is defined %}<h1 class="display-6">{{ heading }}</h1>{% endif %}
     {% block content %}{% endblock %}
 </div>

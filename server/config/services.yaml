@@ -41,19 +41,16 @@ services:
         arguments:
             $baseDn: '%ldap.dn.group%'
 
-    App\Service\Ldap\LdapUserCreator:
+    App\Service\CreateEntity\UserCreator:
         arguments:
             $userDn: '%ldap.dn.user%'
             $baseDn: '%ldap.dn.base%'
-            $accountSuffix: "%env(USERNAME_SUFFIX)%"
             $principalSuffix: '%env(PRINCIPAL_SUFFIX)%'
-            $emailSuffix: '%env(EMAIL_SUFFIX)%'
             $groupDn: '%ldap.dn.group%'
 
-    App\Service\Ldap\LdapResetPassword:
+    App\Service\UpdateEntity\UserPasswordSetter:
         arguments:
             $userDn: '%ldap.dn.user%'
-            $usernameSuffix: '%env(USERNAME_SUFFIX)%'
 
     App\Service\Ldap\LdapAggregator:
         arguments:
@@ -66,12 +63,11 @@ services:
             $userDn: '%ldap.dn.user%'
             $emailSuffix: '%env(EMAIL_SUFFIX)%'
 
-    App\Service\Ldap\LdapGetUserGroups:
+    App\Service\ReadEntity\ReadUserGroups:
         arguments:
             $userDn: '%ldap.dn.user%'
-            $emailSuffix: '%env(EMAIL_SUFFIX)%'
 
-    App\Service\Ldap\LdapGroupModifier:
+    App\Service\UpdateEntity\UserGroupModifier:
         arguments:
             $userDn: '%ldap.dn.user%'
             $usernameSuffix: '%env(USERNAME_SUFFIX)%'
@@ -82,7 +78,7 @@ services:
             $emailSuffix: "%env(EMAIL_SUFFIX)%"
             $senderAddress: "%env(SENDER_EMAIL)%"
 
-    App\Service\Ldap\LdapCheckPassword:
+    App\Service\Ldap\LdapBindAuthentication:
         arguments:
            $usernameSuffix: '%env(USERNAME_SUFFIX)%'
            $connectionString: '%env(LDAP_URI)%'

@@ -1,21 +1,23 @@
 <?php
 declare(strict_types=1);
 
-namespace App\Service\Ldap;
+namespace App\Service\ReadEntity;
 
-class LdapGetUserGroups
+use App\Service\Ldap\LdapAggregator;
+
+readonly class ReadUserGroups
 {
     public function __construct(
         private LdapAggregator $ldapAggregator,
-        private string $userDn,
-        private string $emailSuffix
+        private string         $userDn,
     ){}
 
     public function fetch(string $username): ?array{
         // Escape username
         $escUser = ldap_escape($username);
+
         // Pull user
-        $query = $this->ldapAggregator->getSymfonyProvider()->query($this->userDn, "(mail=$escUser$this->emailSuffix)");
+        $query = $this->ldapAggregator->getSymfonyProvider()->query($this->userDn, "(cn=$escUser)");
         return $query->execute()?->toArray()[0]?->getAttribute("memberOf") ?? null;
     }
 }

@@ -7,10 +7,10 @@ use App\Entity\Form\GroupRequest;
 use App\Entity\Form\GroupResponse;
 use App\Entity\Response\HandledResponse;
 use App\Service\Condition\UserExistsCondition;
-use App\Service\Ldap\LdapGetUserGroups;
-use App\Service\Ldap\LdapGroupModifier;
 use App\Service\Mailer;
+use App\Service\ReadEntity\ReadUserGroups;
 use App\Service\Tokenizer;
+use App\Service\UpdateEntity\UserGroupModifier;
 use App\Service\ValueResolver\DecodedObjectResolver;
 use App\Service\ValueResolver\LdapGroupListResolver;
 use Symfony\Bridge\Twig\Attribute\Template;
@@ -24,11 +24,11 @@ use Symfony\Component\Routing\Attribute\Route;
 class GroupController extends AbstractController
 {
     public function __construct(
-        private readonly Mailer $mailer,
-        private readonly Tokenizer $tk,
+        private readonly Mailer              $mailer,
+        private readonly Tokenizer           $tk,
         private readonly UserExistsCondition $userExists,
-        private readonly LdapGetUserGroups $userGroups,
-        private readonly LdapGroupModifier $modifier
+        private readonly ReadUserGroups      $userGroups,
+        private readonly UserGroupModifier   $modifier
     ){}
 
     #[Route(

@@ -9,6 +9,7 @@ import './typescript/forms'
 import './typescript/modal'
 import './typescript/datatables'
 import './typescript/flashes'
+import './typescript/popover'
 
 declare global {
     interface Window {
@@ -42,7 +43,7 @@ window.addEventListener("load",(_e) => {
             ajax: {
                 url: '/api/v1/datatables/users',
                 type: "POST"
-            }
+            },
         }
     );
 })

@@ -14,8 +14,8 @@ addEventListener("keyup", (event) => {
             ]
         );
         showModal(
-            "Directory Application, V0.0.0_alpha",
-            "Created with <3 by 4096kb, copyright 2025. Open source and AGPL-licensed. Queer rights! 🏳️‍🌈 🏳️‍⚧️"
+            "🌸 uwu_directory, V0.1.0_alpha 🌸",
+            "Uncomplicated Web User Directory. Created with <3 by 4096kb. Queer rights! 🏳️‍🌈 🏳️‍⚧️"
         );
     }
 });

@@ -1,12 +1,13 @@
 {% extends "/layouts/tabbed.html.twig" %}
 {% block sidebar %}
-    <twig:sidebar-item icon="bi-person-fill" tab="users" selected>Users</twig:sidebar-item>
+    <twig:sidebar-item icon="bi-person-fill" tab="view_users" selected>View Users</twig:sidebar-item>
+    <twig:sidebar-item icon="bi-person-plus-fill" tab="add_user">Add User</twig:sidebar-item>
     <twig:sidebar-item icon="bi-people-fill" tab="groups">Groups</twig:sidebar-item>
     <twig:sidebar-item icon="bi-server" tab="services">Services</twig:sidebar-item>
     <twig:sidebar-item icon="bi-gear-fill" tab="config">Config</twig:sidebar-item>
 {% endblock %}
 {% block panels %}
-    <twig:panel id="users" heading="Manage Users" selected>
+    <twig:panel id="view_users" heading="User Overview" selected>
         <p>feel free to manage your users here or something, i don't gaf</p>
 
         <table id="example" class="display table table-striped table-responsive">
@@ -21,9 +22,47 @@
             <tbody>
             </tbody>
         </table>
-        <twig:corner-button icon="bi-person-plus-fill"/>
+    </twig:panel>
+    <twig:panel id="add_user" heading="Add New User">
+        <p>Fill out the form below to add a new user.</p>
+        <form class="gap-2">
+            <div class="row row-gap-2 mb-2">
+                <div class="col-md-6">
+                    <div class="form-floating">
+                        <input class="form-control" type="text" id="identifier" name="identifier" placeholder="Username"/>
+                        <label class="form-label" for="identifier">Username</label>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="form-floating">
+                        <input class="form-control" type="text" id="email" name="email" placeholder="Email"/>
+                        <label class="form-label" for="email">Email</label>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="form-floating">
+                        <input class="form-control" type="text" id="firstName" name="firstName" placeholder="First Name"/>
+                        <label class="form-label" for="firstName">First Name</label>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="form-floating">
+                        <input class="form-control" type="text" id="lastName" name="lastName" placeholder="Last Name"/>
+                        <label class="form-label" for="lastName">Last Name</label>
+                    </div>
+                </div>
+            </div>
+            <button
+                    type="button"
+                    class="btn btn-primary"
+                    data-request-method="POST"
+                    data-request-path="{{ path("adminAPICreateUser") }}">
+                Create
+            </button>
+        </form>
     </twig:panel>
     <twig:panel heading="Manage Groups" id="groups"/>
     <twig:panel heading="Manage Services" id="services"/>
     <twig:panel heading="Manage Configuration" id="config"/>
+    <twig:panel heading="Add User" id="add_user"/>
 {% endblock %}

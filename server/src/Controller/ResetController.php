@@ -7,9 +7,9 @@ use App\Entity\Form\PasswordBundle;
 use App\Entity\Form\PasswordReset;
 use App\Entity\Response\HandledResponse;
 use App\Service\Condition\UserExistsCondition;
-use App\Service\Ldap\LdapResetPassword;
 use App\Service\Mailer;
 use App\Service\Tokenizer;
+use App\Service\UpdateEntity\UserPasswordSetter;
 use App\Service\ValueResolver\DecodedObjectResolver;
 use Symfony\Bridge\Twig\Attribute\Template;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -89,7 +89,7 @@ class ResetController extends AbstractController
     public function setNewPasswordSubmit(
         #[ValueResolver(DecodedObjectResolver::class)] PasswordReset $authorization,
         #[MapRequestPayload] PasswordBundle $passwordBundle,
-        LdapResetPassword $resetter
+        UserPasswordSetter $resetter
     ): Response{
         $resetter->reset($authorization, $passwordBundle->getPassword());
 

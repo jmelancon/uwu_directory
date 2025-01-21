@@ -3,6 +3,8 @@ declare(strict_types=1);
 
 namespace App\Entity\Form;
 
+use App\Entity\User;
+
 class RegistrationAuthorization
 {
     private RegistrationRequest $initialRequest;
@@ -26,5 +28,15 @@ class RegistrationAuthorization
     public function setGrantedDns(array $grantedDns): void
     {
         $this->grantedDns = $grantedDns;
+    }
+
+    public function asUser(): User
+    {
+        return new User(
+            identifier: $this->getInitialRequest()->getIdentifier(),
+            firstName:  $this->getInitialRequest()->getFirstName(),
+            lastName: $this->getInitialRequest()->getLastName(),
+            email: $this->getInitialRequest()->getIdentifier() . "@example.com"
+        );
     }
 }

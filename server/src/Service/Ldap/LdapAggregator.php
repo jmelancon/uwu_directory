@@ -34,15 +34,11 @@ class LdapAggregator
 
         // Connect stock LDAP interface
         $this->stockProvider = ldap_connect($uri);
-        ldap_bind_ext(
+        ldap_set_option($this->stockProvider, LDAP_OPT_PROTOCOL_VERSION, 3);
+        ldap_bind(
             ldap: $this->stockProvider,
             dn: $username,
             password: $password,
-            controls: [
-                [
-                    "oid" => LDAP_CONTROL_PAGEDRESULTS
-                ]
-            ]
         );
     }
 

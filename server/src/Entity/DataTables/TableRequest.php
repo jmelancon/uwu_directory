@@ -35,10 +35,10 @@ class TableRequest
         public SearchArgument $search,
 
         /**
-         * @var array<int, OrderArgument> $order
+         * @var array<int, OrderArgument>|null $order
          * Parameters for how to order returned data.
          */
-        public array $order,
+        public ?array $order,
 
         /**
          * @var array<int, ColumnArgument> $columns

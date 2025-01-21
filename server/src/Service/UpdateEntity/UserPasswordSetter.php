@@ -1,29 +1,30 @@
 <?php
 declare(strict_types=1);
 
-namespace App\Service\Ldap;
+namespace App\Service\UpdateEntity;
 
 use App\Entity\Form\PasswordReset;
+use App\Entity\User;
+use App\Service\Ldap\LdapAggregator;
 
-readonly class LdapResetPassword
+readonly class UserPasswordSetter
 {
     public function __construct(
         private LdapAggregator $ldapAggregator,
         private string $userDn,
-        private string $usernameSuffix
     ){}
 
     private function adifyPassword(string $password): string{
         return iconv("UTF-8", "UTF-16LE", '"' . $password . '"');
     }
 
-    public function reset(PasswordReset $authorization, string $password): void
+    public function set(User $user, string $password): void
     {
         // Pull out a few details to make access easier
-        $username = ldap_escape($authorization->getIdentifier());
+        $username = ldap_escape($user->getIdentifier());
 
         // Set DN
-        $calculatedDn = "CN=$username$this->usernameSuffix,$this->userDn";
+        $calculatedDn = "CN=$username,$this->userDn";
 
         // Set password
         ldap_modify_batch(

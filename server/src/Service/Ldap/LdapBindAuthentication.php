@@ -5,7 +5,7 @@ namespace App\Service\Ldap;
 
 use Throwable;
 
-readonly class LdapCheckPassword
+readonly class LdapBindAuthentication
 {
     public function __construct(
         private string $userDn,

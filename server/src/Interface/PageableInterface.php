@@ -3,6 +3,8 @@ declare(strict_types=1);
 
 namespace App\Interface;
 
+use App\Entity\Middlemen\PagedData;
+
 interface PageableInterface
 {
     /**
@@ -35,8 +37,7 @@ interface PageableInterface
      * @param array $context
      * Context to provide to the data provider
      *
-     * @return array<array>|array<void>
-     * Returns the data requested. Array will be empty if there is no data to return.
+     * @return PagedData
      */
-    public function fetch(int $pageSize, int $offset = 0, array $context = []): array;
+    public function fetch(int $pageSize, int $offset = 0, array $context = []): PagedData;
 }
