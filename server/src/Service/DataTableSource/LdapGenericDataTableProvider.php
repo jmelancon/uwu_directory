@@ -11,31 +11,32 @@ use App\Interface\PageableInterface;
 use App\Service\Ldap\LdapAggregator;
 use LDAP\Result;
 use Symfony\Component\HttpFoundation\RequestStack;
+use ValueError;
 
-readonly class LdapUserDataTableProvider
+readonly abstract class LdapGenericDataTableProvider implements PageableInterface
 {
     public function __construct(
         private LdapAggregator $ldapAggregator,
-        private RequestStack $requestStack,
-        private string $userDn,
+        private RequestStack   $requestStack,
+        private string         $baseDn,
     ){}
 
-    public function supports(int $pageSize, array $context = []): bool
+    final public function supports(int $pageSize, array $context = []): bool
     {
         return $pageSize <= 100
             && array_key_exists("request", $context)
             && ($context["request"] instanceof TableRequest);
     }
 
-    protected function hasCache(): bool{
+    final protected function hasCache(): bool{
         return $this->requestStack->getSession()->get(self::class) instanceof LdapQueryCache;
     }
 
-    protected function fetchCache(): ?LdapQueryCache{
+    final protected function fetchCache(): ?LdapQueryCache{
         return $this->requestStack->getSession()->get(self::class);
     }
 
-    protected function cacheNotExpired(int $draw, string $filter): bool{
+    final protected function cacheNotExpired(int $draw, string $filter): bool{
         if (!$this->hasCache())
             return false;
 
@@ -44,23 +45,18 @@ readonly class LdapUserDataTableProvider
         return $draw > $cache->lastDraw && $cache->genesisFilter == $filter;
     }
 
-    protected function setCache(LdapQueryCache $cache): void{
+    final protected function setCache(LdapQueryCache $cache): void{
         $this->requestStack->getSession()->set(self::class, $cache);
     }
 
-    protected function refreshCache(int $draw, string $filter): LdapQueryCache{
+    final protected function refreshCache(int $draw, string $filter): LdapQueryCache{
         // Search using given filter and cookie
         /** @var Result $res */
         $res = ldap_search(
             ldap: $this->ldapAggregator->getStockProvider(),
-            base: $this->userDn,
+            base: $this->baseDn,
             filter: $filter,
-            attributes: [
-                "givenName",
-                "sn",
-                "mail",
-                "cn"
-            ],
+            attributes: $this->getLdapRequiredAttributes(),
         );
 
         ldap_parse_result(
@@ -81,14 +77,7 @@ readonly class LdapUserDataTableProvider
 
         // Process data
         $data = array_map(
-            callback: function(array $value){
-                return [
-                    "firstName" => $value["givenname"][0],
-                    "lastName" => $value["sn"][0],
-                    "username" => $value["cn"][0],
-                    "email" => $value["mail"][0]
-                ];
-            },
+            callback: $this->transformFromLdapCallback(...),
             array: array_slice(
                 array: $rows,
                 offset: 1
@@ -105,19 +94,16 @@ readonly class LdapUserDataTableProvider
         return $newCache;
     }
 
-    public function fetch(int $pageSize, int $offset = 0, array $context = []): PagedData
+    final public function fetch(int $pageSize, int $offset = 0, array $context = []): PagedData
     {
+        if (!$this->supports($pageSize, $context))
+            throw new ValueError("Context sucks bro...........");
+
         /** @var TableRequest $request */
         $request = $context["request"];
 
-        // Check if we need to construct a filter
-        if ($request->search->value){
-            $searchCriteria = ldap_escape($request->search->value);
-            $filterAddition = "(|(cn=*$searchCriteria*)(displayName=*$searchCriteria*)(mail=*$searchCriteria*))";
-        } else {
-            $filterAddition = "";
-        }
-        $filter = "(&(objectClass=user)(loginShell=/bin/bash)$filterAddition)";
+        // Get filter
+        $filter = $this->createFilter($request->search ? $request->search->value : "");
 
         // Ensure there's available cache
         if (!$this->cacheNotExpired($request->draw, $filter))
@@ -147,4 +133,8 @@ readonly class LdapUserDataTableProvider
             )
         );
     }
+
+    protected abstract function getLdapRequiredAttributes(): array;
+    protected abstract function transformFromLdapCallback(array $value): array;
+    protected abstract function createFilter(string $search = ""): string;
 }

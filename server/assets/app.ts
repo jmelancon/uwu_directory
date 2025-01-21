@@ -38,10 +38,39 @@ window.addEventListener("load",(_e) => {
                 {data: 'lastName'},
                 {data: 'username'},
                 {data: 'email'},
+                {
+                    data: null,
+                    orderable: false,
+                    defaultContent:
+                        "<button class='btn bi-pencil-fill' aria-label='Edit'/>" +
+                        "<button class='btn bi-trash-fill' aria-label='Delete'/>"
+                }
             ],
             serverSide: true,
             ajax: {
                 url: '/api/v1/datatables/users',
+                type: "POST"
+            },
+        }
+    );
+
+    prepDataTable(
+        "#example2",
+        {
+            columns: [
+                {data: 'name'},
+                {data: 'size'},
+                {
+                    data: null,
+                    orderable: false,
+                    defaultContent:
+                        "<button class='btn bi-eye-fill' aria-label='View Members'/>" +
+                        "<button class='btn bi-trash-fill' aria-label='Delete'/>"
+                }
+            ],
+            serverSide: true,
+            ajax: {
+                url: '/api/v1/datatables/groups',
                 type: "POST"
             },
         }

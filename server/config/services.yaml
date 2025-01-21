@@ -88,6 +88,10 @@ services:
         arguments:
             $userDn: '%ldap.dn.user%'
 
-    App\Service\DataTableSource\LdapUserDataTableProvider:
+    App\Service\DataTableSource\UserDataTableProvider:
         arguments:
             $userDn: '%ldap.dn.user%'
+
+    App\Service\DataTableSource\GroupDataTableProvider:
+        arguments:
+            $groupDn: '%ldap.dn.group%'

@@ -5,7 +5,8 @@ namespace App\Controller;
 
 use App\Entity\DataTables\TableRequest;
 use App\Entity\DataTables\TableResponse;
-use App\Service\DataTableSource\LdapUserDataTableProvider;
+use App\Service\DataTableSource\GroupDataTableProvider;
+use App\Service\DataTableSource\UserDataTableProvider;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpKernel\Attribute\MapRequestPayload;
@@ -23,7 +24,32 @@ class DataTableAPIController extends AbstractController
     )]
     public function users(
         #[MapRequestPayload] TableRequest $request,
-        LdapUserDataTableProvider $provider
+        UserDataTableProvider $provider
+    ): JsonResponse
+    {
+        $rows = $provider->fetch(
+            pageSize: $request->length,
+            offset: $request->start,
+            context: ["request" => $request]
+        );
+        return new JsonResponse(
+            new TableResponse(
+                draw: $request->draw,
+                recordsTotal: $rows->total,
+                recordsFiltered: $rows->count,
+                data: $rows->data
+            )
+        );
+    }
+
+    #[Route(
+        path: "/groups",
+        name: "groupsDataTable",
+        methods: ["POST"]
+    )]
+    public function groups(
+        #[MapRequestPayload] TableRequest $request,
+        GroupDataTableProvider $provider
     ): JsonResponse
     {
         $rows = $provider->fetch(
