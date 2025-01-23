@@ -30,3 +30,13 @@ interface Flash {
     type: string;
     message: string;
 }
+/**
+ * User.
+ */
+interface User {
+    identifier: string;
+    firstName: string;
+    lastName: string;
+    email: string;
+    roleDNs: string[];
+}

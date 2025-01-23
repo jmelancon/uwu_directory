@@ -70,7 +70,7 @@ services:
     App\Service\UpdateEntity\UserGroupModifier:
         arguments:
             $userDn: '%ldap.dn.user%'
-            $usernameSuffix: '%env(USERNAME_SUFFIX)%'
+            $groupDn: '%ldap.dn.group%'
 
     App\Service\Mailer:
         arguments:
@@ -95,3 +95,12 @@ services:
     App\Service\DataTableSource\GroupDataTableProvider:
         arguments:
             $groupDn: '%ldap.dn.group%'
+
+    App\Service\DeleteEntity\UserDeleter:
+        arguments:
+            $userDn: '%ldap.dn.user%'
+
+    App\Service\UpdateEntity\UserUpdater:
+        arguments:
+            $userDn: '%ldap.dn.user%'
+            $principalSuffix: '%env(PRINCIPAL_SUFFIX)%'

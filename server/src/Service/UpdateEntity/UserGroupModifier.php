@@ -12,21 +12,25 @@ readonly class UserGroupModifier
         private LdapAggregator $ldapAggregator,
         private ReadUserGroups $groups,
         private string         $userDn,
-        private string         $usernameSuffix
+        private string         $groupDn
     ){}
 
     public function write(string $username, array $newGroups): void
     {
         // Make the new DN
-        $calculatedDn = "CN=" . ldap_escape($username) . "$this->usernameSuffix," . $this->userDn;
+        $calculatedDn = "CN=" . ldap_escape($username) . "," . $this->userDn;
 
         // Fetch existing group memberships and parse the new memberships
         $existing = $this->groups->fetch($username) ?? [];
         $new = array_keys($newGroups);
 
+        // Ensure that the "Basic Users" group is applied at all times
+        if (!in_array("CN=Basic Users,$this->groupDn", $new))
+            $new[] = "CN=Basic Users,$this->groupDn";
+
         // Filter out groups that won't be changed, get add/remove lists
         $add = array_diff($new, $existing);
-        $del = array_diff($existing);
+        $del = array_diff($existing, $new);
 
         // Apply additions
         foreach($add as $groupDn){

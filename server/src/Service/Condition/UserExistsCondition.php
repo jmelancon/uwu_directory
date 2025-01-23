@@ -8,7 +8,7 @@ use App\Service\Ldap\LdapAggregator;
 use Symfony\Bundle\FrameworkBundle\Routing\Attribute\AsRoutingConditionService;
 
 
-#[AsRoutingConditionService(alias: self::class)]
+#[AsRoutingConditionService(alias: "userExists")]
 class UserExistsCondition
 {
 
@@ -26,7 +26,7 @@ class UserExistsCondition
         // Check to see if a user with the chosen ID exists!
         $res = $this->ldap->getSymfonyProvider()->query(
             dn: $this->userDn,
-            query: "(&(objectClass=user)(mail=$escUser$this->emailSuffix))"
+            query: "(&(objectClass=user)(cn=$escUser))"
         )->execute();
 
         return $res->count() > 0;

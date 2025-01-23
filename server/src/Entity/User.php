@@ -4,6 +4,7 @@ declare(strict_types=1);
 namespace App\Entity;
 
 use Symfony\Component\Security\Core\User\UserInterface;
+use Symfony\Component\Serializer\Attribute\Ignore;
 
 class User implements UserInterface
 {
@@ -66,6 +67,7 @@ class User implements UserInterface
         $this->email = $email;
     }
 
+    #[Ignore]
     public function getRoles(): array
     {
         return array_merge(
@@ -102,6 +104,7 @@ class User implements UserInterface
         // TODO: Implement eraseCredentials() method.
     }
 
+    #[Ignore]
     public function getUserIdentifier(): string
     {
         return $this->identifier;
