@@ -3,7 +3,6 @@ declare(strict_types=1);
 
 namespace App\Service\DataTableSource;
 
-use App\Service\DataTableSource\LdapGenericDataTableProvider;
 use App\Service\Ldap\LdapAggregator;
 use Symfony\Component\HttpFoundation\RequestStack;
 

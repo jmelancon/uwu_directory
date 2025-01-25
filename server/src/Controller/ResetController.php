@@ -3,14 +3,17 @@ declare(strict_types=1);
 
 namespace App\Controller;
 
-use App\Entity\Form\PasswordBundle;
-use App\Entity\Form\PasswordReset;
-use App\Entity\Response\HandledResponse;
+use App\Entity\User;
+use App\Exception\UserDoesNotExistException;
+use App\Security\LdapUserProvider;
 use App\Service\Condition\UserExistsCondition;
+use App\Service\CRUD\UpdateEntity\UserPasswordSetter;
 use App\Service\Mailer;
 use App\Service\Tokenizer;
-use App\Service\UpdateEntity\UserPasswordSetter;
 use App\Service\ValueResolver\DecodedObjectResolver;
+use App\Struct\Form\PasswordBundle;
+use App\Struct\Form\PasswordReset;
+use App\Struct\Response\HandledResponse;
 use Symfony\Bridge\Twig\Attribute\Template;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
@@ -25,7 +28,8 @@ class ResetController extends AbstractController
     public function __construct(
         private readonly Mailer $mailer,
         private readonly Tokenizer $tk,
-        private readonly UserExistsCondition $userExists
+        private readonly UserExistsCondition $userExists,
+        private readonly LdapUserProvider $userProvider
     ){}
 
     #[Route(
@@ -91,7 +95,12 @@ class ResetController extends AbstractController
         #[MapRequestPayload] PasswordBundle $passwordBundle,
         UserPasswordSetter $resetter
     ): Response{
-        $resetter->reset($authorization, $passwordBundle->getPassword());
+        // Grab the user
+        $user = $this->userProvider->loadUserByIdentifier($authorization->getIdentifier());
+        if (!$user instanceof User)
+            throw new UserDoesNotExistException();
+
+        $resetter->set($user, $passwordBundle->getPassword());
 
         return new JsonResponse(
             new HandledResponse(

@@ -3,16 +3,16 @@ declare(strict_types=1);
 
 namespace App\Controller;
 
-use App\Entity\Form\GroupRequest;
-use App\Entity\Form\GroupResponse;
-use App\Entity\Response\HandledResponse;
 use App\Service\Condition\UserExistsCondition;
+use App\Service\CRUD\ReadEntity\ReadUserGroups;
+use App\Service\CRUD\UpdateEntity\UserGroupModifier;
 use App\Service\Mailer;
-use App\Service\ReadEntity\ReadUserGroups;
 use App\Service\Tokenizer;
-use App\Service\UpdateEntity\UserGroupModifier;
 use App\Service\ValueResolver\DecodedObjectResolver;
 use App\Service\ValueResolver\LdapGroupListResolver;
+use App\Struct\Form\GroupRequest;
+use App\Struct\Form\GroupResponse;
+use App\Struct\Response\HandledResponse;
 use Symfony\Bridge\Twig\Attribute\Template;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;

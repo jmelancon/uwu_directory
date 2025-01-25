@@ -3,19 +3,18 @@ declare(strict_types=1);
 
 namespace App\Service\Condition;
 
-use App\Entity\Form\RegistrationRequest;
 use App\Service\Ldap\LdapAggregator;
 use Symfony\Bundle\FrameworkBundle\Routing\Attribute\AsRoutingConditionService;
 
 
 #[AsRoutingConditionService(alias: "userExists")]
-class UserExistsCondition
+readonly class UserExistsCondition
 {
 
     public function __construct(
         private LdapAggregator $ldap,
         private string $userDn,
-        private string $emailSuffix
+        private string $baseGroup
     ){}
 
     public function check(string $username): bool
@@ -26,7 +25,7 @@ class UserExistsCondition
         // Check to see if a user with the chosen ID exists!
         $res = $this->ldap->getSymfonyProvider()->query(
             dn: $this->userDn,
-            query: "(&(objectClass=user)(cn=$escUser))"
+            query: "(&(objectClass=user)(cn=$escUser)(memberOf=$this->baseGroup))"
         )->execute();
 
         return $res->count() > 0;

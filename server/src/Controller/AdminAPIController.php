@@ -3,15 +3,15 @@ declare(strict_types=1);
 
 namespace App\Controller;
 
-use App\Entity\Response\HandledResponse;
-use App\Entity\Response\RedirectResponse;
 use App\Entity\User;
 use App\Security\LdapUserProvider;
-use App\Service\CreateEntity\UserCreator;
-use App\Service\DeleteEntity\UserDeleter;
-use App\Service\UpdateEntity\UserGroupModifier;
-use App\Service\UpdateEntity\UserUpdater;
+use App\Service\CRUD\CreateEntity\UserCreator;
+use App\Service\CRUD\DeleteEntity\UserDeleter;
+use App\Service\CRUD\UpdateEntity\UserGroupModifier;
+use App\Service\CRUD\UpdateEntity\UserUpdater;
 use App\Service\ValueResolver\LdapGroupListResolver;
+use App\Struct\Response\HandledResponse;
+use App\Struct\Response\RedirectResponse;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpKernel\Attribute\MapRequestPayload;

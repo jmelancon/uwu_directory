@@ -8,6 +8,7 @@ use DateTime;
 use ParagonIE\Paseto\Builder;
 use ParagonIE\Paseto\Exception\InvalidKeyException;
 use ParagonIE\Paseto\Exception\InvalidPurposeException;
+use ParagonIE\Paseto\Exception\InvalidVersionException;
 use ParagonIE\Paseto\Exception\PasetoException;
 use ParagonIE\Paseto\Keys\Version4\SymmetricKey;
 use ParagonIE\Paseto\Parser;
@@ -91,7 +92,19 @@ class Tokenizer
         return (string) $token;
     }
 
-    public function decode(string $encrypted): object{
+    /**
+     * Decode and deserialize a Paseto token.
+     *
+     * @param string $encrypted
+     * The raw JWT string.
+     *
+     * @return mixed
+     * The decoded object.
+     *
+     * @throws PasetoException
+     * @throws InvalidVersionException
+     */
+    public function decode(string $encrypted): mixed{
         $parser = (new Parser())
             ->setKey($this->key)
             // Adding rules to be checked against the token

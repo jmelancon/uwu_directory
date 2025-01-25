@@ -2,6 +2,7 @@ parameters:
     ldap.dn.base: "%env(LDAP_DN_BASE)%"
     ldap.dn.user: "%env(LDAP_DN_USER_RELATIVE)%,%ldap.dn.base%"
     ldap.dn.group: "%env(LDAP_DN_GROUP_RELATIVE)%,%ldap.dn.base%"
+    ldap.filter.baseGroup: "CN=Basic Users,%ldap.dn.group%"
 
 services:
     # default configuration for services in *this* file
@@ -41,14 +42,14 @@ services:
         arguments:
             $baseDn: '%ldap.dn.group%'
 
-    App\Service\CreateEntity\UserCreator:
+    App\Service\CRUD\CreateEntity\UserCreator:
         arguments:
             $userDn: '%ldap.dn.user%'
             $baseDn: '%ldap.dn.base%'
             $principalSuffix: '%env(PRINCIPAL_SUFFIX)%'
-            $groupDn: '%ldap.dn.group%'
+            $baseGroup: '%ldap.filter.baseGroup%'
 
-    App\Service\UpdateEntity\UserPasswordSetter:
+    App\Service\CRUD\UpdateEntity\UserPasswordSetter:
         arguments:
             $userDn: '%ldap.dn.user%'
 
@@ -61,13 +62,13 @@ services:
     App\Service\Condition\UserExistsCondition:
         arguments:
             $userDn: '%ldap.dn.user%'
-            $emailSuffix: '%env(EMAIL_SUFFIX)%'
+            $baseGroup: '%ldap.filter.baseGroup%'
 
-    App\Service\ReadEntity\ReadUserGroups:
+    App\Service\CRUD\ReadEntity\ReadUserGroups:
         arguments:
             $userDn: '%ldap.dn.user%'
 
-    App\Service\UpdateEntity\UserGroupModifier:
+    App\Service\CRUD\UpdateEntity\UserGroupModifier:
         arguments:
             $userDn: '%ldap.dn.user%'
             $groupDn: '%ldap.dn.group%'
@@ -91,16 +92,17 @@ services:
     App\Service\DataTableSource\UserDataTableProvider:
         arguments:
             $userDn: '%ldap.dn.user%'
+            $baseGroup: '%ldap.filter.baseGroup%'
 
     App\Service\DataTableSource\GroupDataTableProvider:
         arguments:
             $groupDn: '%ldap.dn.group%'
 
-    App\Service\DeleteEntity\UserDeleter:
+    App\Service\CRUD\DeleteEntity\UserDeleter:
         arguments:
             $userDn: '%ldap.dn.user%'
 
-    App\Service\UpdateEntity\UserUpdater:
+    App\Service\CRUD\UpdateEntity\UserUpdater:
         arguments:
             $userDn: '%ldap.dn.user%'
             $principalSuffix: '%env(PRINCIPAL_SUFFIX)%'

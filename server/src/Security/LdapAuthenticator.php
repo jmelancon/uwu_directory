@@ -3,13 +3,13 @@ declare(strict_types=1);
 
 namespace App\Security;
 
-use App\Entity\Response\HandledResponse;
-use App\Entity\Response\RedirectResponse;
 use App\Exception\IncompleteCredentialsException;
 use App\Exception\InvalidCredentialsException;
 use App\Exception\UserDoesNotExistException;
 use App\Service\Condition\UserExistsCondition;
 use App\Service\Ldap\LdapBindAuthentication;
+use App\Struct\Response\HandledResponse;
+use App\Struct\Response\RedirectResponse;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;

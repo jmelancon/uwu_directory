@@ -3,7 +3,7 @@ declare(strict_types=1);
 
 namespace App\Interface;
 
-use App\Entity\Middlemen\PagedData;
+use App\Struct\DataSource\PagedData;
 
 interface PageableInterface
 {

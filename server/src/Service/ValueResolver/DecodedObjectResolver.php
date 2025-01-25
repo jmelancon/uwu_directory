@@ -5,6 +5,8 @@ namespace App\Service\ValueResolver;
 
 use App\Exception\TokenMissingException;
 use App\Service\Tokenizer;
+use ParagonIE\Paseto\Exception\InvalidVersionException;
+use ParagonIE\Paseto\Exception\PasetoException;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpKernel\Attribute\AsTargetedValueResolver;
 use Symfony\Component\HttpKernel\Controller\ValueResolverInterface;
@@ -18,8 +20,15 @@ readonly class DecodedObjectResolver implements ValueResolverInterface
     ){}
 
     /**
-     * @inheritDoc
+     * Take a Paseto token from query params and decode it.
+     *
+     * @param Request $request
+     * @param ArgumentMetadata $argument
+     * @return iterable
+     *
      * @throws TokenMissingException
+     * @throws InvalidVersionException
+     * @throws PasetoException
      */
     public function resolve(Request $request, ArgumentMetadata $argument): iterable
     {

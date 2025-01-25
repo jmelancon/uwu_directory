@@ -3,10 +3,10 @@ declare(strict_types=1);
 
 namespace App\Controller;
 
-use App\Entity\DataTables\TableRequest;
-use App\Entity\DataTables\TableResponse;
 use App\Service\DataTableSource\GroupDataTableProvider;
 use App\Service\DataTableSource\UserDataTableProvider;
+use App\Struct\DataTables\TableRequest;
+use App\Struct\DataTables\TableResponse;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpKernel\Attribute\MapRequestPayload;

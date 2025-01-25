@@ -3,12 +3,12 @@ declare(strict_types=1);
 
 namespace App\Service\DataTableSource;
 
-use App\Entity\DataTables\TableRequest;
-use App\Entity\Middlemen\LdapQueryCache;
-use App\Entity\Middlemen\PagedData;
 use App\Enum\DataTableDirection;
 use App\Interface\PageableInterface;
 use App\Service\Ldap\LdapAggregator;
+use App\Struct\DataTables\TableRequest;
+use App\Struct\DataSource\LdapQueryCache;
+use App\Struct\DataSource\PagedData;
 use LDAP\Result;
 use Symfony\Component\HttpFoundation\RequestStack;
 use ValueError;

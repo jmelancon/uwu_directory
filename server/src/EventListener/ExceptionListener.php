@@ -3,10 +3,10 @@ declare(strict_types=1);
 
 namespace App\EventListener;
 
-use App\Entity\Response\HandledResponse;
-use App\Entity\Response\ListResponse;
 use App\Exception\PasswordRejectedException;
 use App\Exception\TokenMissingException;
+use App\Struct\Response\HandledResponse;
+use App\Struct\Response\ListResponse;
 use ParagonIE\Paseto\Exception\PasetoException;
 use ParagonIE\Paseto\Exception\RuleViolation;
 use RangeException;
@@ -23,7 +23,7 @@ use Symfony\Component\Validator\Exception\ValidationFailedException;
 #[AsEventListener(
     event: "kernel.exception"
 )]
-class ExceptionListener
+readonly class ExceptionListener
 {
     public function __construct(
         private UrlGeneratorInterface $urlGen

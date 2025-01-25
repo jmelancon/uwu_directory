@@ -9,7 +9,7 @@ use App\Service\Ldap\LdapAggregator;
 use Symfony\Component\Security\Core\User\UserInterface;
 use Symfony\Component\Security\Core\User\UserProviderInterface;
 
-class LdapUserProvider implements UserProviderInterface
+readonly class LdapUserProvider implements UserProviderInterface
 {
     public function __construct(
         private LdapAggregator $ldap,

@@ -12,6 +12,7 @@ readonly class UserDataTableProvider extends LdapGenericDataTableProvider
         LdapAggregator $ldapAggregator,
         RequestStack $requestStack,
         string $userDn,
+        private string $baseGroup
     ){
         parent::__construct($ldapAggregator, $requestStack, $userDn);
     }
@@ -41,6 +42,6 @@ readonly class UserDataTableProvider extends LdapGenericDataTableProvider
         } else {
             $filterAddition = "";
         }
-        return "(&(objectClass=user)(loginShell=/bin/bash)$filterAddition)";
+        return "(&(objectClass=user)(memberOf=" . $this->baseGroup . ")$filterAddition)";
     }
 }
