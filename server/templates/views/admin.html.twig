@@ -7,11 +7,10 @@
 
     <twig:sidebar-item icon="bi-building-fill" tab="view_groups" name="Groups"/>
     <twig:sidebar-item icon="bi-building-fill-add" tab="add_group" name="Add Group" parent="view_groups"/>
-    <twig:sidebar-item icon="bi-building-fill-gear" tab="edit_group" name="Edit Group" parent="view_groups"/>
+    <twig:sidebar-item icon="bi-building-fill-gear" tab="edit_members" name="View Members" parent="view_groups"/>
 
     <twig:sidebar-item icon="bi-database-fill" tab="view_services" name="View Services"/>
     <twig:sidebar-item icon="bi-database-fill-gear" tab="add_service" name="Add Service" parent="view_services"/>
-    <twig:sidebar-item icon="bi-database-fill-add" tab="edit_service" name="Edit Service" parent="view_services"/>
 
     <twig:sidebar-item icon="bi-gear-fill" tab="config" name="Config"/>
 {% endblock %}
@@ -137,7 +136,7 @@
     <twig:panel heading="Manage Groups" id="view_groups">
         <p>feel free to manage your groups here or something, i don't gaf</p>
 
-        <table id="example2" class="display table table-striped table-responsive">
+        <table id="view_groups_datatable" class="display table table-striped table-responsive">
             <thead>
             <tr>
                 <th>Group Name</th>
@@ -169,8 +168,21 @@
             </button>
         </form>
     </twig:panel>
-    <twig:panel heading="Edit Group" id="edit_group">
-        <p>Not implemented, check back soon pookie</p>
+    <twig:panel heading="Edit Group Membership" id="edit_members">
+        <p>Pick a group from the View Groups tab to begin.</p>
+        <table id="edit_members_datatable" class="display table table-striped table-responsive visually-hidden">
+            <thead>
+            <tr>
+                <th>First Name</th>
+                <th>Last Name</th>
+                <th>Username</th>
+                <th>Email</th>
+                <th>Actions</th>
+            </tr>
+            </thead>
+            <tbody>
+            </tbody>
+        </table>
     </twig:panel>
     <twig:panel heading="Manage Services" id="view_services">
         <p>Not implemented, check back soon pookie</p>

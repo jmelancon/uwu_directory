@@ -31,7 +31,7 @@ readonly class GroupDataTableProvider extends LdapGenericDataTableProvider
         ];
     }
 
-    protected function createFilter(string $search = ""): string{
+    protected function createFilter(string $search = "", array $context = []): string{
         if ($search){
             $searchCriteria = ldap_escape($search);
             $filterAddition = "(|(cn=*$searchCriteria*))";

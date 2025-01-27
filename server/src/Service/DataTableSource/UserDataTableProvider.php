@@ -12,7 +12,7 @@ readonly class UserDataTableProvider extends LdapGenericDataTableProvider
         LdapAggregator $ldapAggregator,
         RequestStack $requestStack,
         string $userDn,
-        private string $baseGroup
+        protected string $baseGroup
     ){
         parent::__construct($ldapAggregator, $requestStack, $userDn);
     }
@@ -35,7 +35,7 @@ readonly class UserDataTableProvider extends LdapGenericDataTableProvider
         ];
     }
 
-    protected function createFilter(string $search = ""): string{
+    protected function createFilter(string $search = "", array $context = []): string{
         if ($search){
             $searchCriteria = ldap_escape($search);
             $filterAddition = "(|(cn=*$searchCriteria*)(displayName=*$searchCriteria*)(mail=*$searchCriteria*))";

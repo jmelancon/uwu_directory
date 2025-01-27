@@ -94,6 +94,12 @@ services:
             $userDn: '%ldap.dn.user%'
             $baseGroup: '%ldap.filter.baseGroup%'
 
+    App\Service\DataTableSource\MemberDataTableProvider:
+        arguments:
+            $userDn: '%ldap.dn.user%'
+            $groupDn: '%ldap.dn.group%'
+            $baseGroup: '%ldap.filter.baseGroup%'
+
     App\Service\DataTableSource\GroupDataTableProvider:
         arguments:
             $groupDn: '%ldap.dn.group%'

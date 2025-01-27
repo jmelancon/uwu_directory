@@ -13,6 +13,7 @@ import './typescript/flashes'
 import './typescript/popover'
 import './typescript/nav'
 import './typescript/userEditor'
+import {fetchMembers} from "./typescript/membershipEditor";
 
 declare global {
     interface Window {
@@ -50,9 +51,17 @@ window.addEventListener("load",(_e) => {
         const argumentIndex: number = +$(caller).data("argumentIndex");
         const argument: string = rows[argumentIndex].innerText;
 
-        if (argument && ariaLabel === "Edit" && table[0]?.id === "example"){
-            console.log("Fetching user...")
-            fetchUser(argument);
+        if (argument && table.length === 1){
+            switch (table[0].id){
+                case "example":
+                    if (ariaLabel === "Edit")
+                        fetchUser(argument);
+                    break;
+                case "view_groups_datatable":
+                    if (ariaLabel === "View Members")
+                        fetchMembers(argument);
+                    break;
+            }
         }
     }
 
@@ -81,7 +90,7 @@ window.addEventListener("load",(_e) => {
     );
 
     prepDataTable(
-        "#example2",
+        "#view_groups_datatable",
         {
             columns: [
                 {data: 'name'},
@@ -90,7 +99,7 @@ window.addEventListener("load",(_e) => {
                     data: null,
                     orderable: false,
                     defaultContent:
-                        "<button class='btn bi-eye-fill' aria-label='View Members'/>" +
+                        "<button class='btn bi-eye-fill' aria-label='View Members' onclick='window.editButtonProxy(this)' data-argument-index='0'/>" +
                         "<button class='btn bi-trash-fill' aria-label='Delete'/>"
                 }
             ],

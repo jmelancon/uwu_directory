@@ -21,7 +21,7 @@ readonly abstract class LdapGenericDataTableProvider implements PageableInterfac
         private string         $baseDn,
     ){}
 
-    final public function supports(int $pageSize, array $context = []): bool
+    public function supports(int $pageSize, array $context = []): bool
     {
         return $pageSize <= 100
             && array_key_exists("request", $context)
@@ -103,7 +103,7 @@ readonly abstract class LdapGenericDataTableProvider implements PageableInterfac
         $request = $context["request"];
 
         // Get filter
-        $filter = $this->createFilter($request->search ? $request->search->value : "");
+        $filter = $this->createFilter($request->search ? $request->search->value : "", $context);
 
         // Ensure there's available cache
         if (!$this->cacheNotExpired($request->draw, $filter))
@@ -136,5 +136,5 @@ readonly abstract class LdapGenericDataTableProvider implements PageableInterfac
 
     protected abstract function getLdapRequiredAttributes(): array;
     protected abstract function transformFromLdapCallback(array $value): array;
-    protected abstract function createFilter(string $search = ""): string;
+    protected abstract function createFilter(string $search = "", array $context = []): string;
 }
