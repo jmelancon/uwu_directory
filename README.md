@@ -1,12 +1,14 @@
-<div style="display: flex;">
-    <div style="width: 256px; height: 256px">
-        <img width=256 height=256 src="docs/assets/logo.svg" alt="uwu_directory logo. It's the flower emoji borrowed from Google's emoji set."/>
-    </div>
-    <div>
-        <h1>uwu_directory</h1>
-        <p><i>Joseph Melancon, 2024</i></p>
-    </div>
-</div>
+<table role="presentation" border="0" cellspacing="0" width="100%">
+    <tr>
+        <td>
+            <img width=256 height=256 src="docs/assets/logo.svg" alt="uwu_directory logo. It's the flower emoji borrowed from Google's emoji set."/>
+        </td>
+        <td>
+            <h1>uwu_directory</h1>
+            <p><i>Joseph Melancon, 2024</i></p>
+        </td>
+    </tr>
+</table>
 <hr/>
 
 ## Abstract
