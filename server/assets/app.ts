@@ -112,7 +112,7 @@ window.addEventListener("load",(_e) => {
     );
 
     prepDataTable(
-        "#manage_services_datatable",
+        "#view_services_datatable",
         {
             columns: [
                 {data: 'cn'},

@@ -9,8 +9,8 @@
     <twig:sidebar-item icon="bi-building-fill-add" tab="add_group" name="Add Group" parent="view_groups"/>
     <twig:sidebar-item icon="bi-building-fill-gear" tab="edit_members" name="View Members" parent="view_groups"/>
 
-    <twig:sidebar-item icon="bi-database-fill" tab="view_services" name="View Services"/>
-    <twig:sidebar-item icon="bi-database-fill-gear" tab="add_service" name="Add Service" parent="view_services"/>
+    <twig:sidebar-item icon="bi-database-fill" tab="view_services" name="View Services (LDAP)"/>
+    <twig:sidebar-item icon="bi-database-fill-add" tab="add_service" name="Add Service (LDAP)" parent="view_services"/>
 
     <twig:sidebar-item icon="bi-gear-fill" tab="config" name="Config"/>
 {% endblock %}
@@ -184,8 +184,8 @@
             </tbody>
         </table>
     </twig:panel>
-    <twig:panel heading="Manage Services" id="view_services">
-        <table id="manage_services_datatable" class="display table table-striped table-responsive">
+    <twig:panel heading="View Services (LDAP)" id="view_services">
+        <table id="view_services_datatable" class="display table table-striped table-responsive">
             <thead>
             <tr>
                 <th>Service Name</th>
