@@ -68,3 +68,15 @@ is this:
 
 These steps are subject to change and may not work over the course
 of this program's initial development.
+
+## Dependencies / Thanks
+
+The following frameworks, libraries, etc. are used across the application:
+
+ - [Symfony](https://symfony.com): PHP Framework
+ - [Bootstrap](https://getbootstrap.com): CSS Framework
+ - [DataTables](https://datatables.net): AJAX Table JS Library
+ - [smblds](https://github.com/smblds/smblds-container): LDAP Docker Container
+ - [Roboto](https://github.com/googlefonts/roboto-2): Primary Typeface
+ - [ParagonIE Paseto](https://paseto.io/): JWT Interface Library
+ - [thephpleague/oauth2-server (future)](https://github.com/thephpleague/oauth2-server): OAuth2 Library
