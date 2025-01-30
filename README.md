@@ -5,7 +5,7 @@
         </td>
         <td>
             <h1>uwu_directory</h1>
-            <p><i>Joseph Melancon, 2024</i></p>
+            <p><i>Joseph Melancon, 2025</i></p>
         </td>
     </tr>
 </table>
