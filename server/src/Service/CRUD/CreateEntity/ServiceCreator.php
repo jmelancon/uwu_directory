@@ -3,6 +3,7 @@ declare(strict_types=1);
 
 namespace App\Service\CRUD\CreateEntity;
 
+use App\Const\UserAccountControl;
 use App\Service\Ldap\LdapAggregator;
 
 readonly class ServiceCreator
@@ -33,7 +34,7 @@ readonly class ServiceCreator
                 "objectClass" => ["person", "organizationalPerson", "top", "user"],
                 "objectCategory" => ["CN=Person,CN=Schema,CN=Configuration," . $this->baseDn],
                 "cn" => [$escName],
-                "userAccountControl" => ["512"],
+                "userAccountControl" => [UserAccountControl::NORMAL_ACCOUNT | UserAccountControl::PASSWD_CANT_CHANGE],
             ]
         );
     }

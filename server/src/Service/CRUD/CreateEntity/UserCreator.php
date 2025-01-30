@@ -3,6 +3,7 @@ declare(strict_types=1);
 
 namespace App\Service\CRUD\CreateEntity;
 
+use App\Const\UserAccountControl;
 use App\Entity\User;
 use App\Service\Ldap\LdapAggregator;
 
@@ -48,7 +49,7 @@ readonly class UserCreator
                 "givenName" => [$firstName],
                 "sn" => [$lastName],
                 "sAMAccountName" => [$username],
-                "userAccountControl" => ["512"],
+                "userAccountControl" => [UserAccountControl::NORMAL_ACCOUNT],
                 "userPrincipalName" => [$username . $this->principalSuffix],
                 "lockoutTime" => ["0"]
             ]
