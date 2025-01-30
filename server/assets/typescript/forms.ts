@@ -1,7 +1,7 @@
 import $ from "jquery";
 import {AjaxSettings} from "datatables.net-bs5";
-import {populateModalList, redirectOnModalClose, resetModal, showModal} from "./modal";
-import {isHandledResponse, isListResponse, isRedirectResponse} from './types'
+import {populateModalList, populateModalSecret, redirectOnModalClose, resetModal, showModal} from "./modal";
+import {isHandledResponse, isListResponse, isRedirectResponse, isSecretResponse} from './types'
 
 /**
  * Blanket tool for handling responses from AJAX requests.
@@ -21,6 +21,8 @@ function handleResponse(data: any, hasSucceeded: boolean, statusCode: number){
             populateModalList(data.listContents);
         } else if (isRedirectResponse(data)){
             redirectOnModalClose(data.url)
+        } else if (isSecretResponse(data)){
+            populateModalSecret(data.secret);
         }
         showModal(data.title, data.message);
     } else if (hasSucceeded) {

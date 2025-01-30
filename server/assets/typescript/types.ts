@@ -9,3 +9,7 @@ export function isListResponse(obj: HandledResponse): obj is ListResponse{
 export function isRedirectResponse(obj: HandledResponse): obj is RedirectResponse{
     return obj.responseType === "redirect";
 }
+
+export function isSecretResponse(obj: HandledResponse): obj is SecretResponse{
+    return obj.responseType === "secret";
+}

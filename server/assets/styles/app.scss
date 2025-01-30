@@ -1,3 +1,8 @@
+// Allow for loading of custom SCSS from /var/server/custom.scss
+// This is relative so it kinda sucks, but 🤷
+//noinspection CssUnknownTarget
+@import "../../../../../var/server/custom.scss";
+
 @import "_roboto";
 @import "_bootstrap-icons";
 @import "_bootstrap";
@@ -6,6 +11,14 @@ body {
     background-repeat: no-repeat;
     background-size: cover;
     width: 100vw;
+}
+
+#site_logo{
+    background-image: $site_logo;
+    width: 32px;
+    height: 32px;
+    background-repeat: no-repeat;
+    background-size: 32px 32px;
 }
 
 .btn.btn-primary[disabled] {

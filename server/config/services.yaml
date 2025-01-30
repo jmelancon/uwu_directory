@@ -1,7 +1,8 @@
 parameters:
     ldap.dn.base: "%env(LDAP_DN_BASE)%"
-    ldap.dn.user: "%env(LDAP_DN_USER_RELATIVE)%,%ldap.dn.base%"
-    ldap.dn.group: "%env(LDAP_DN_GROUP_RELATIVE)%,%ldap.dn.base%"
+    ldap.dn.user: "CN=Users,%ldap.dn.base%"
+    ldap.dn.service: "CN=Services,%ldap.dn.base%"
+    ldap.dn.group: "CN=Groups,%ldap.dn.base%"
     ldap.filter.baseGroup: "CN=Basic Users,%ldap.dn.group%"
 
 services:
@@ -49,9 +50,18 @@ services:
             $principalSuffix: '%env(PRINCIPAL_SUFFIX)%'
             $baseGroup: '%ldap.filter.baseGroup%'
 
+    App\Service\CRUD\CreateEntity\ServiceCreator:
+        arguments:
+            $baseDn: '%ldap.dn.base%'
+            $serviceDn: '%ldap.dn.service%'
+
     App\Service\CRUD\UpdateEntity\UserPasswordSetter:
         arguments:
             $userDn: '%ldap.dn.user%'
+
+    App\Service\CRUD\UpdateEntity\ServicePasswordGenerator:
+        arguments:
+            $serviceDn: '%ldap.dn.service%'
 
     App\Service\Ldap\LdapAggregator:
         arguments:

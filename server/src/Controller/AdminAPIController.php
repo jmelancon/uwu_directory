@@ -3,19 +3,24 @@ declare(strict_types=1);
 
 namespace App\Controller;
 
+use App\Entity\Service;
 use App\Entity\User;
 use App\Security\LdapUserProvider;
+use App\Service\CRUD\CreateEntity\ServiceCreator;
 use App\Service\CRUD\CreateEntity\UserCreator;
 use App\Service\CRUD\DeleteEntity\UserDeleter;
+use App\Service\CRUD\UpdateEntity\ServicePasswordGenerator;
 use App\Service\CRUD\UpdateEntity\UserGroupModifier;
 use App\Service\CRUD\UpdateEntity\UserUpdater;
 use App\Service\ValueResolver\LdapGroupListResolver;
 use App\Struct\Response\HandledResponse;
 use App\Struct\Response\RedirectResponse;
+use App\Struct\Response\SecretResponse;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpKernel\Attribute\MapRequestPayload;
 use Symfony\Component\HttpKernel\Attribute\ValueResolver;
+use Symfony\Component\HttpKernel\Controller\ArgumentResolver\RequestPayloadValueResolver;
 use Symfony\Component\Ldap\Entry;
 use Symfony\Component\Routing\Attribute\Route;
 use Symfony\Component\Security\Http\Attribute\IsGranted;
@@ -31,7 +36,9 @@ class AdminAPIController extends AbstractController
         private readonly UserUpdater      $userUpdater,
         private readonly UserGroupModifier $userGroupModifier,
         private readonly LdapUserProvider $ldapUserProvider,
-        private readonly SerializerInterface $serializer
+        private readonly SerializerInterface $serializer,
+        private readonly ServiceCreator $serviceCreator,
+        private readonly ServicePasswordGenerator $servicePasswordGenerator
     ){}
     #[Route(
         path: "/user/create",
@@ -48,6 +55,26 @@ class AdminAPIController extends AbstractController
             new HandledResponse(
                 title: "User Created!",
                 message: "The user has been created."
+            )
+        );
+    }
+
+    #[Route(
+        path: "/service/create",
+        name: "adminAPICreateService",
+        methods: "POST",
+        format: "json"
+    )]
+    public function createService(
+        #[MapRequestPayload] Service $service
+    ){
+        $this->serviceCreator->create($service->getName());
+        $secret = $this->servicePasswordGenerator->set($service->getName());
+        return new JsonResponse(
+            new SecretResponse(
+                title: "Success!",
+                message: "Your service has been created. Use the following password in your service's configuration:",
+                secret: $secret
             )
         );
     }

@@ -24,6 +24,13 @@ interface RedirectResponse extends HandledResponse{
 }
 
 /**
+ * Secret response. Has an additional field for showing a monospaced value. Good for generated passwords.
+ */
+interface SecretResponse extends HandledResponse{
+    secret: string;
+}
+
+/**
  * Flash item. Used to report errors when loading a fresh page.
  */
 interface Flash {

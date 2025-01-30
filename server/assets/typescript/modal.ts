@@ -20,6 +20,19 @@ export function resetModal(){
     const list = $("#modalList")
     list.children('li').remove();
     list.addClass("visually-hidden");
+
+    const secret = $("#modalSecret");
+    secret[0].innerText = "";
+    secret.closest("div").addClass("visually-hidden");
+}
+
+/**
+ * Add a secret to the preformatted segment in the modal and show it.
+ */
+export function populateModalSecret(secret: string){
+    const modalSecret = $("#modalSecret");
+    modalSecret[0].innerText = secret;
+    modalSecret.closest("div").removeClass("visually-hidden");
 }
 
 /**
