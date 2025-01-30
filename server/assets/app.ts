@@ -110,4 +110,26 @@ window.addEventListener("load",(_e) => {
             },
         }
     );
+
+    prepDataTable(
+        "#manage_services_datatable",
+        {
+            columns: [
+                {data: 'cn'},
+                {data: 'dn'},
+                {
+                    data: null,
+                    orderable: false,
+                    defaultContent:
+                        "<button class='btn bi-key-fill' aria-label='Reset Password'/>" +
+                        "<button class='btn bi-trash-fill' aria-label='Delete'/>"
+                }
+            ],
+            serverSide: true,
+            ajax: {
+                url: '/api/v1/datatables/services',
+                type: "POST"
+            },
+        }
+    );
 })

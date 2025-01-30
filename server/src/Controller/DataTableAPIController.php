@@ -5,6 +5,7 @@ namespace App\Controller;
 
 use App\Service\DataTableSource\GroupDataTableProvider;
 use App\Service\DataTableSource\MemberDataTableProvider;
+use App\Service\DataTableSource\ServiceDataTableProvider;
 use App\Service\DataTableSource\UserDataTableProvider;
 use App\Struct\DataTables\TableRequest;
 use App\Struct\DataTables\TableResponse;
@@ -51,6 +52,31 @@ class DataTableAPIController extends AbstractController
     public function groups(
         #[MapRequestPayload] TableRequest $request,
         GroupDataTableProvider $provider
+    ): JsonResponse
+    {
+        $rows = $provider->fetch(
+            pageSize: $request->length,
+            offset: $request->start,
+            context: ["request" => $request]
+        );
+        return new JsonResponse(
+            new TableResponse(
+                draw: $request->draw,
+                recordsTotal: $rows->total,
+                recordsFiltered: $rows->count,
+                data: $rows->data
+            )
+        );
+    }
+
+    #[Route(
+        path: "/services",
+        name: "servicesDataTable",
+        methods: ["POST"]
+    )]
+    public function services(
+        #[MapRequestPayload] TableRequest $request,
+        ServiceDataTableProvider $provider
     ): JsonResponse
     {
         $rows = $provider->fetch(

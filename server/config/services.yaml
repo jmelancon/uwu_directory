@@ -114,6 +114,10 @@ services:
         arguments:
             $groupDn: '%ldap.dn.group%'
 
+    App\Service\DataTableSource\ServiceDataTableProvider:
+        arguments:
+            $serviceDn: '%ldap.dn.service%'
+
     App\Service\CRUD\DeleteEntity\UserDeleter:
         arguments:
             $userDn: '%ldap.dn.user%'

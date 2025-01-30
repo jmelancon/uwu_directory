@@ -18,7 +18,7 @@ readonly class ServiceDataTableProvider extends LdapGenericDataTableProvider
 
     protected function transformFromLdapCallback(array $value): array{
         return [
-            "dn" => $value["dn"][0],
+            "dn" => $value["dn"],
             "cn" => $value["cn"][0],
         ];
     }
@@ -33,7 +33,7 @@ readonly class ServiceDataTableProvider extends LdapGenericDataTableProvider
     protected function createFilter(string $search = "", array $context = []): string{
         if ($search){
             $searchCriteria = ldap_escape($search);
-            $filterAddition = "(|(cn=*$searchCriteria*)(displayName=*$searchCriteria*)(mail=*$searchCriteria*))";
+            $filterAddition = "(|(cn=*$searchCriteria*))";
         } else {
             $filterAddition = "";
         }
