@@ -18,6 +18,17 @@ management interface build in PHP with the Symfony framework. Included alongside
 the interface are support files to deploy a full directory suite using the
 `smblds` Docker container.
 
+## Project Status
+
+This ain't done, chief.
+
 ## Installation
 
 Figure it out urself lol (I will write this section later)
+
+## Todo
+
+ - Finish basic LDAP service integration
+ - Add configuration options
+ - Polish registration flow
+ - Add OAuth endpoints/configuration tabs
