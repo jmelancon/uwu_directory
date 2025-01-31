@@ -4,7 +4,7 @@
             <img width=256 height=256 src="docs/assets/logo.svg" alt="uwu_directory logo. It's the flower emoji borrowed from Google's emoji set."/>
         </td>
         <td>
-            <h1>uwu_directory</h1>
+            <h1>Uncomplicated Web User Directory</h1>
             <p><i>Joseph Melancon, 2025</i></p>
         </td>
     </tr>
