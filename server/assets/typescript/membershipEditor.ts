@@ -29,7 +29,7 @@ export function fetchMembers(group: string){
             ],
             serverSide: true,
             ajax: {
-                url: '/api/v1/datatables/members/' + encodeURI(group),
+                url: '/api/v1/table/group/' + encodeURI(group),
                 type: "POST"
             },
         }

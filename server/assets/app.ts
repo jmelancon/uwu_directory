@@ -83,7 +83,7 @@ window.addEventListener("load",(_e) => {
             ],
             serverSide: true,
             ajax: {
-                url: '/api/v1/datatables/users',
+                url: '/api/v1/table/user',
                 type: "POST"
             },
         }
@@ -105,7 +105,7 @@ window.addEventListener("load",(_e) => {
             ],
             serverSide: true,
             ajax: {
-                url: '/api/v1/datatables/groups',
+                url: '/api/v1/table/group',
                 type: "POST"
             },
         }
@@ -127,7 +127,7 @@ window.addEventListener("load",(_e) => {
             ],
             serverSide: true,
             ajax: {
-                url: '/api/v1/datatables/services',
+                url: '/api/v1/table/service',
                 type: "POST"
             },
         }

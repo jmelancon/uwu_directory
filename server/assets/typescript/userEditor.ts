@@ -14,7 +14,7 @@ export function fetchUser(username: string){
     landingDiv.addClass("visually-hidden");
 
     const options: JQuery.AjaxSettings = {
-        url: `/api/v1/admin/user/${username}`,
+        url: `/api/v1/user/${username}`,
         method: "GET",
         success: (data: User) => {
             // Populate fields
@@ -30,7 +30,7 @@ export function fetchUser(username: string){
                     checkbox.checked = true;
             })
 
-            editorDiv.find("button[data-request-path]").data("requestPath", `/api/v1/admin/user/${data.identifier}/update`);
+            editorDiv.find("button[data-request-path]").data("requestPath", `/api/v1/user/${data.identifier}/update`);
 
             skeletonDiv.addClass("visually-hidden");
             editorDiv.removeClass("visually-hidden");

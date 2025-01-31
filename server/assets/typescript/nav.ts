@@ -7,7 +7,6 @@ function processMajorTabChange(node: HTMLElement){
     const myName = me.data("myName");
 
     // Am I a parent or a child?
-    console.log(me, me.data("sidenavParent"))
     if (me.data("sidenavParent")){
         const parentTabId = me.data("sidenavParent")
         const fellowChildren = $(`nav a[data-sidenav-parent=\"${parentTabId}\"]`);
