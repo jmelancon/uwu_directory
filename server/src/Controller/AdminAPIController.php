@@ -3,9 +3,11 @@ declare(strict_types=1);
 
 namespace App\Controller;
 
+use App\Entity\Group;
 use App\Entity\Service;
 use App\Entity\User;
 use App\Security\LdapUserProvider;
+use App\Service\CRUD\CreateEntity\GroupCreator;
 use App\Service\CRUD\CreateEntity\ServiceCreator;
 use App\Service\CRUD\CreateEntity\UserCreator;
 use App\Service\CRUD\DeleteEntity\UserDeleter;
@@ -20,7 +22,6 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpKernel\Attribute\MapRequestPayload;
 use Symfony\Component\HttpKernel\Attribute\ValueResolver;
-use Symfony\Component\HttpKernel\Controller\ArgumentResolver\RequestPayloadValueResolver;
 use Symfony\Component\Ldap\Entry;
 use Symfony\Component\Routing\Attribute\Route;
 use Symfony\Component\Security\Http\Attribute\IsGranted;
@@ -31,14 +32,15 @@ use Symfony\Component\Serializer\SerializerInterface;
 class AdminAPIController extends AbstractController
 {
     public function __construct(
-        private readonly UserCreator      $userCreator,
-        private readonly UserDeleter      $userDeleter,
-        private readonly UserUpdater      $userUpdater,
-        private readonly UserGroupModifier $userGroupModifier,
-        private readonly LdapUserProvider $ldapUserProvider,
-        private readonly SerializerInterface $serializer,
-        private readonly ServiceCreator $serviceCreator,
-        private readonly ServicePasswordGenerator $servicePasswordGenerator
+        private readonly UserCreator              $userCreator,
+        private readonly UserDeleter              $userDeleter,
+        private readonly UserUpdater              $userUpdater,
+        private readonly UserGroupModifier        $userGroupModifier,
+        private readonly LdapUserProvider         $ldapUserProvider,
+        private readonly SerializerInterface      $serializer,
+        private readonly ServiceCreator           $serviceCreator,
+        private readonly ServicePasswordGenerator $servicePasswordGenerator,
+        private readonly GroupCreator             $groupCreator
     ){}
     #[Route(
         path: "/user/create",
@@ -75,6 +77,24 @@ class AdminAPIController extends AbstractController
                 title: "Success!",
                 message: "Your service has been created. Use the following password in your service's configuration:",
                 secret: $secret
+            )
+        );
+    }
+
+    #[Route(
+        path: "/group/create",
+        name: "adminAPICreateGroup",
+        methods: "POST",
+        format: "json"
+    )]
+    public function createGroup(
+        #[MapRequestPayload] Group $group
+    ){
+        $this->groupCreator->create($group->getName());
+        return new JsonResponse(
+            new HandledResponse(
+                title: "Success!",
+                message: "Your group has been created."
             )
         );
     }

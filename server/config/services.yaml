@@ -55,6 +55,11 @@ services:
             $baseDn: '%ldap.dn.base%'
             $serviceDn: '%ldap.dn.service%'
 
+    App\Service\CRUD\CreateEntity\GroupCreator:
+        arguments:
+            $baseDn: '%ldap.dn.base%'
+            $groupDn: '%ldap.dn.group%'
+
     App\Service\CRUD\UpdateEntity\UserPasswordSetter:
         arguments:
             $userDn: '%ldap.dn.user%'
