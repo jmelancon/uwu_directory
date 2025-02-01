@@ -201,7 +201,7 @@ class RegistrationController extends AbstractController
         try{
             $userPasswordSetter->set($user, $passwordBundle->getPassword());
         } catch (Exception){
-            $deleter->delete($user);
+            $deleter->delete($user->getUserIdentifier());
             throw new PasswordRejectedException();
         }
 

@@ -35,7 +35,7 @@ class UserController extends AbstractController
     ){}
 
     #[Route(
-        path: "/create",
+        path: "/",
         name: ".create",
         methods: "POST",
         format: "json"
@@ -54,13 +54,13 @@ class UserController extends AbstractController
     }
 
     #[Route(
-        path: "/{user}/delete",
+        path: "/{user}",
         name: ".delete",
-        methods: "POST",
+        methods: "DELETE",
         format: "json"
     )]
     public function deleteUser(
-        User $user
+        string $user
     ): JsonResponse
     {
         $this->userDeleter->delete($user);
@@ -93,7 +93,7 @@ class UserController extends AbstractController
     }
 
     #[Route(
-        path: "/{user}/update",
+        path: "/{user}",
         name: ".update",
         methods: "POST",
         condition: "service('userExists').check(params['user'])",

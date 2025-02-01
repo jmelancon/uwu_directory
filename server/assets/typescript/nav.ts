@@ -1,42 +1,54 @@
-import $ from 'jquery';
-
 function processMajorTabChange(node: HTMLElement){
     // Declare some constants
-    const me = $(node);
-    const others = $(`nav a:not(#${me[0].id})`);
-    const myName = me.data("myName");
+    const others = document.querySelectorAll(`nav a:not(#${node.id})`);
+    const myName = node.attributes.getNamedItem("data-my-name")?.value ?? "";
 
     // Am I a parent or a child?
-    if (me.data("sidenavParent")){
-        const parentTabId = me.data("sidenavParent")
-        const fellowChildren = $(`nav a[data-sidenav-parent=\"${parentTabId}\"]`);
-        const otherChildren = $(`nav a[data-sidenav-parent]:not([data-sidenav-parent='${parentTabId}'])`);
+    if (node.attributes.getNamedItem("data-sidenav-parent")){
+        const parentTabId = node.attributes.getNamedItem("data-sidenav-parent")?.value;
 
         // Set this child group visible
-        fellowChildren.removeClass("visually-hidden");
-        otherChildren.addClass("visually-hidden");
+        document.querySelectorAll(`nav a[data-sidenav-parent=\"${parentTabId}\"]`).forEach((element) => {
+            element.classList.remove("visually-hidden");
+        });
+
+        // Set all others to hidden
+        document.querySelectorAll(`nav a[data-sidenav-parent]:not([data-sidenav-parent='${parentTabId}'])`)
+            .forEach((element) => {
+                element.classList.add("visually-hidden");
+            });
 
         // Remove child-selected from others, but ensure that the parent has it!
-        others.removeClass("child-selected");
-        $("#" + parentTabId + "_link").addClass("child-selected");
+        others.forEach((element) => {
+            element.classList.remove("child-selected")
+        })
+        document.getElementById(parentTabId + "_link")?.classList.add("child-selected");
 
     } else {
-        const myChildren = $(`nav a[data-sidenav-parent='${myName}']`);
-        const otherChildren = $(`nav a[data-sidenav-parent]:not([data-sidenav-parent='${myName}'])`);
+        // Show children that are mine
+        document.querySelectorAll(`nav a[data-sidenav-parent='${myName}']`).forEach((element) => {
+            element.classList.remove("visually-hidden");
+        });
 
-        // Hide nav children that aren't mine
-        myChildren.removeClass("visually-hidden");
-        otherChildren.addClass("visually-hidden");
+        // Hide those that aren't
+        document.querySelectorAll(`nav a[data-sidenav-parent]:not([data-sidenav-parent='${myName}'])`)
+            .forEach((element) => {
+                element.classList.add("visually-hidden");
+            });
 
         // Snatch the child-selected class
-        me.addClass("child-selected");
-        others.removeClass("child-selected");
+        node.classList.add("child-selected");
+        others.forEach((element) => {
+            element.classList.remove("child-selected");
+        });
     }
 }
 
 window.addEventListener("load", (_e) => {
     // Process initial tab layout
-    processMajorTabChange($("nav a.active")[0])
+    const activeTab = document.querySelector("nav a.active");
+    if (activeTab && activeTab instanceof HTMLElement)
+        processMajorTabChange(activeTab);
 
     // Add a mutation observer to watch for aria-selected changes
     const observer = new MutationObserver(function(mutations) {
@@ -52,7 +64,7 @@ window.addEventListener("load", (_e) => {
     });
 
     // Add hook for tab changes
-    $("nav a[data-bs-toggle='tab']").each((_index, element) => {
+    document.querySelectorAll("nav a[data-bs-toggle='tab']").forEach((element) => {
         observer.observe(element, {attributes: true});
-    })
+    });
 })

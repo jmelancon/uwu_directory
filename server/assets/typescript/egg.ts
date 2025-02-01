@@ -1,7 +1,6 @@
-import $ from "jquery";
 import {populateModalList, showModal, resetModal} from "./modal";
 addEventListener("keyup", (event) => {
-    if (event.key == "~" && (document.activeElement ? $(document.activeElement).filter(":input").length == 0 : true)){
+    if ( event.key == "~" && !(["input", "textarea", "select"].includes(document.activeElement?.tagName?.toLowerCase() ?? ""))){
         resetModal();
         populateModalList(
             [

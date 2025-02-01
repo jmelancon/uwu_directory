@@ -13,11 +13,11 @@ readonly class UserDeleter
         private string             $userDn,
     ){}
 
-    public function delete(User $user): void{
-        $escUser = ldap_escape($user->getUserIdentifier());
+    public function delete(string $username): void{
+        $escUser = ldap_escape($username);
         ldap_delete(
             ldap: $this->ldapAggregator->getStockProvider(),
-            dn: $escUser . "," . $this->userDn
+            dn: "CN=" . $escUser . "," . $this->userDn
         );
     }
 }
