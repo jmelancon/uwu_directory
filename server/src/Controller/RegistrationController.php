@@ -4,7 +4,7 @@ declare(strict_types=1);
 namespace App\Controller;
 
 use App\Exception\PasswordRejectedException;
-use App\Service\Condition\UserExistsCondition;
+use App\Service\Condition\Exists\UserExistsCondition;
 use App\Service\CRUD\CreateEntity\UserCreator;
 use App\Service\CRUD\DeleteEntity\UserDeleter;
 use App\Service\CRUD\UpdateEntity\UserGroupModifier;

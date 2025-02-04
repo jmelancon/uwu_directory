@@ -16,7 +16,7 @@ export function showModal(title: string, message: string){
         modal.hide();
         modalElement.addEventListener("hidden.bs.modal", () => {
             // Set a 100ms sleep so we don't break the CSS on the backdrop
-            new Promise(resolve => {setTimeout(resolve, 100)}).then(() => {
+            new Promise(resolve => {setTimeout(resolve, 150)}).then(() => {
                 showModal(title, message);
             });
         }, {once: true})
@@ -105,7 +105,7 @@ export function populateModalList(list: string[]){
 /**
  * Set up the modal for use as a confirmation dialog.
  */
-export function populateModalConfirm(action: Function, argument: string) {
+export function populateModalConfirm(action: Function, ...args: any[]) {
     // All we'll do is copy over the attributes from the calling button, minus the blocking
     // attribute.
     const confirmDiv = document.getElementById("modalConfirm");
@@ -119,7 +119,7 @@ export function populateModalConfirm(action: Function, argument: string) {
     if (!confirmButton)
         return;
 
-    confirmButton.addEventListener("click", action.bind(null, argument), {once: true});
+    confirmButton.addEventListener("click", action.bind(null, ...args), {once: true});
 
     confirmDiv.classList.remove("visually-hidden");
     dismissDiv.classList.add("visually-hidden");

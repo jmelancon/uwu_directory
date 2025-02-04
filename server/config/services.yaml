@@ -74,10 +74,18 @@ services:
             $username: "%env(LDAP_USERNAME)%"
             $password: "%env(LDAP_PASSWORD)%"
 
-    App\Service\Condition\UserExistsCondition:
+    App\Service\Condition\Exists\UserExistsCondition:
         arguments:
             $userDn: '%ldap.dn.user%'
             $baseGroup: '%ldap.filter.baseGroup%'
+
+    App\Service\Condition\Exists\GroupExistsCondition:
+        arguments:
+            $groupDn: '%ldap.dn.group%'
+
+    App\Service\Condition\Exists\ServiceExistsCondition:
+        arguments:
+            $serviceDn: '%ldap.dn.service%'
 
     App\Service\CRUD\ReadEntity\ReadUserGroups:
         arguments:
@@ -96,7 +104,7 @@ services:
 
     App\Service\Ldap\LdapBindAuthentication:
         arguments:
-           $usernameSuffix: '%env(USERNAME_SUFFIX)%'
+           $usernameSuffix: ''
            $connectionString: '%env(LDAP_URI)%'
            $userDn: '%ldap.dn.user%'
 
@@ -126,6 +134,14 @@ services:
     App\Service\CRUD\DeleteEntity\UserDeleter:
         arguments:
             $userDn: '%ldap.dn.user%'
+
+    App\Service\CRUD\DeleteEntity\GroupDeleter:
+        arguments:
+            $groupDn: '%ldap.dn.group%'
+
+    App\Service\CRUD\DeleteEntity\ServiceDeleter:
+        arguments:
+            $serviceDn: '%ldap.dn.service%'
 
     App\Service\CRUD\UpdateEntity\UserUpdater:
         arguments:

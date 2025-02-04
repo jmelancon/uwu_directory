@@ -5,6 +5,7 @@ namespace App\Controller\API\v1;
 
 use App\Entity\Group;
 use App\Service\CRUD\CreateEntity\GroupCreator;
+use App\Service\CRUD\DeleteEntity\GroupDeleter;
 use App\Service\ValueResolver\LdapGroupListResolver;
 use App\Struct\Response\HandledResponse;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -23,13 +24,15 @@ use Symfony\Component\Security\Http\Attribute\IsGranted;
 class GroupController extends AbstractController
 {
     public function __construct(
-        private readonly GroupCreator $groupCreator
+        private readonly GroupCreator $groupCreator,
+        private readonly GroupDeleter $groupDeleter
     ){}
 
     #[Route(
         path: "/create",
         name: ".create",
         methods: "POST",
+        condition: "not service('groupExists').check(params['group'])",
         format: "json"
     )]
     public function createGroup(
@@ -63,6 +66,26 @@ class GroupController extends AbstractController
                     ];
                 },
                 $groups
+            )
+        );
+    }
+
+    #[Route(
+        path: "/{group}",
+        name: ".delete",
+        methods: "DELETE",
+        condition: "service('groupExists').check(params['group']) and service('groupNotCritical').check(params['group'])",
+        format: "json"
+    )]
+    public function deleteGroup(
+        string $group
+    ): JsonResponse
+    {
+        $this->groupDeleter->delete($group);
+        return new JsonResponse(
+            new HandledResponse(
+                title: "Group Deleted.",
+                message: "The group has been deleted."
             )
         );
     }

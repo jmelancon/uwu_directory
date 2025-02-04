@@ -1,5 +1,5 @@
 export function isHandledResponse(obj: any): obj is HandledResponse {
-    return 'sentinel' in obj && obj.sentinel
+    return Object.hasOwn(obj, "sentinel") && obj.sentinel === "omg haiiiiiii :3"
 }
 
 export function isListResponse(obj: HandledResponse): obj is ListResponse{

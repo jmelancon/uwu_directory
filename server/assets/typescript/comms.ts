@@ -1,6 +1,3 @@
-import $ from "jquery";
-import {AjaxSettings} from "datatables.net-bs5";
-
 import {populateModalList, populateModalSecret, redirectOnModalClose, resetModal, showModal} from "./modal";
 import {isHandledResponse, isListResponse, isRedirectResponse, isSecretResponse} from './types'
 
@@ -45,27 +42,6 @@ function handleResponse(data: any, hasSucceeded: boolean, statusCode: number){
 }
 
 /**
- * Simply a passthrough function to the handleResponse function.
- *
- * @param {object} data - Parsed response from the server, if applicable
- * @param {string} _textStatus - A string describing the response status
- * @param {jqXHR} jqXHR - The jQuery XHR response object
- */
-function handleSuccess(data: object, _textStatus: string, jqXHR: JQueryXHR) {
-    handleResponse(data, true, jqXHR.status);
-}
-
-/**
- * Simply a passthrough function to the handleResponse function.
- *
- * @param {string} textStatus - A string describing the response status
- * @param {jqXHR} jqXHR - The jQuery XHR response object
- */
-function handleFailure(jqXHR: JQueryXHR, textStatus: string){
-    handleResponse(jqXHR.responseJSON ?? textStatus, false, jqXHR.status);
-}
-
-/**
  * Wrap jQuery's Ajax method with some standardized modal stuff.
  *
  * @param endpoint
@@ -79,23 +55,22 @@ function handleFailure(jqXHR: JQueryXHR, textStatus: string){
  */
 export function issueRequest(endpoint: string, method: string, data: {[p: string]: any}|null): void{
     // Set request options
-    const options: AjaxSettings = {
+    const options: RequestInit = {
         method: method,
-        success: handleSuccess,
-        error: handleFailure
+        body: JSON.stringify(data),
+        headers: {"X-Requested-With": "XMLHttpRequest"}
     };
 
-    // Add data if needed
-    if (data){
-        options.data = data;
-        options.dataType = "";
-    }
-
     // Fire request
-    $.ajax(
-        endpoint,
-        options
-    );
+    fetch(endpoint, options)
+        .then((response: Response) => {
+            // Get the response JSON, then act on it.
+            response.json().then((value: any) => {
+                handleResponse(value, response.ok, response.status);
+            }).catch((_error: SyntaxError) => {
+                handleResponse(null, false, response.status)
+            })
+        })
 }
 
 export function deleteRequest(endpoint: string): void{
@@ -103,5 +78,14 @@ export function deleteRequest(endpoint: string): void{
         endpoint,
         "DELETE",
         null
+    );
+}
+
+export function postRequest(endpoint: string, data: {[p: string]: any}|null = {}): void{
+    debugger;
+    issueRequest(
+        endpoint,
+        "POST",
+        data
     );
 }

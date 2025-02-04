@@ -1,7 +1,7 @@
 <?php
 declare(strict_types=1);
 
-namespace App\Service\Condition;
+namespace App\Service\Condition\Exists;
 
 use App\Service\Ldap\LdapAggregator;
 use Symfony\Bundle\FrameworkBundle\Routing\Attribute\AsRoutingConditionService;

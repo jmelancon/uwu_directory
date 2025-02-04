@@ -6,7 +6,7 @@ namespace App\Security;
 use App\Exception\IncompleteCredentialsException;
 use App\Exception\InvalidCredentialsException;
 use App\Exception\UserDoesNotExistException;
-use App\Service\Condition\UserExistsCondition;
+use App\Service\Condition\Exists\UserExistsCondition;
 use App\Service\Ldap\LdapBindAuthentication;
 use App\Struct\Response\HandledResponse;
 use App\Struct\Response\RedirectResponse;

@@ -38,6 +38,7 @@ class UserController extends AbstractController
         path: "/",
         name: ".create",
         methods: "POST",
+        condition: "not service('userExists').check(request.request.get('identifier'))",
         format: "json"
     )]
     public function createUser(
@@ -57,6 +58,7 @@ class UserController extends AbstractController
         path: "/{user}",
         name: ".delete",
         methods: "DELETE",
+        condition: "service('userExists').check(params['user']) and service('userNotCritical').check(params['user'])",
         format: "json"
     )]
     public function deleteUser(

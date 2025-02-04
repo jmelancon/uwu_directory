@@ -6,7 +6,7 @@ namespace App\Controller;
 use App\Entity\User;
 use App\Exception\UserDoesNotExistException;
 use App\Security\LdapUserProvider;
-use App\Service\Condition\UserExistsCondition;
+use App\Service\Condition\Exists\UserExistsCondition;
 use App\Service\CRUD\UpdateEntity\UserPasswordSetter;
 use App\Service\Mailer;
 use App\Service\Tokenizer;

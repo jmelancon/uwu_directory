@@ -32,7 +32,7 @@ services:
     ports:
       - "636:636"
     volumes:
-      - "../persist/smblds/entrypoint.d:/entrypoint.d"
+      - "../config/smblds/entrypoint.d:/entrypoint.d"
       - "../persist/smblds/var/lib/samba:/var/lib/samba"
       - "../persist/smblds/etc/samba:/etc/samba"
       - "../persist/smblds/var/log/samba:/var/log/samba"

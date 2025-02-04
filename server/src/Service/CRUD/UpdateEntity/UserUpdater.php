@@ -5,7 +5,7 @@ namespace App\Service\CRUD\UpdateEntity;
 
 use App\Entity\User;
 use App\Exception\UsernameTakenException;
-use App\Service\Condition\UserExistsCondition;
+use App\Service\Condition\Exists\UserExistsCondition;
 use App\Service\Ldap\LdapAggregator;
 
 readonly class UserUpdater

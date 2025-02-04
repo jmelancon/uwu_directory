@@ -1,4 +1,4 @@
-import {resetModal, showModal} from './modal';
+import {resetModal, showModal} from '../modal';
 import $ from 'jquery';
 export function fetchUser(username: string){
     // Interact with web API to attempt user fetch
@@ -30,7 +30,7 @@ export function fetchUser(username: string){
                     checkbox.checked = true;
             })
 
-            editorDiv.find("button[data-request-path]").data("requestPath", `/api/v1/user/${data.identifier}/update`);
+            editorDiv.find("button[data-request-path]").data("requestPath", `/api/v1/user/${data.identifier}`);
 
             skeletonDiv.addClass("visually-hidden");
             editorDiv.removeClass("visually-hidden");

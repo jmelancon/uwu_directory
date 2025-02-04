@@ -1,4 +1,8 @@
 {% extends "/layouts/tabbed.html.twig" %}
+{% block javascripts %}
+    {{ parent() }}
+    {{ encore_entry_script_tags('admin') }}
+{% endblock %}
 {% block sidebar %}
     <twig:sidebar-item icon="bi-person-fill" tab="view_users" name="Users" selected/>
     <twig:sidebar-item icon="bi-person-plus-fill" tab="add_user" name="Add User" parent="view_users"/>
