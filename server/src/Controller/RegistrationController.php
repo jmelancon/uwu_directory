@@ -206,7 +206,7 @@ class RegistrationController extends AbstractController
         }
 
         // Grant groups
-        $groupModifier->write($user->getUserIdentifier(), $authorization->getGrantedDns());
+        $groupModifier->batch($user->getUserIdentifier(), $authorization->getGrantedDns());
 
         return new JsonResponse(
             new HandledResponse(

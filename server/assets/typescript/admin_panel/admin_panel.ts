@@ -1,11 +1,11 @@
 import './nav'
-import './userEditor'
+import './user_editor'
 import './datatables'
 
-import {fetchUser} from "./userEditor";
+import {fetchUser} from "./user_editor";
 import {populateModalConfirm, resetModal, showModal} from "../modal";
 import {deleteRequest, postRequest} from "../comms";
-import {fetchMembers} from "./membershipEditor";
+import {fetchMembers} from "./membership_editor";
 import {prepDataTable} from "./datatables";
 
 window.addEventListener("load",(_e) => {
@@ -21,6 +21,7 @@ window.addEventListener("load",(_e) => {
 
         const argumentIndex: number = +(caller.attributes.getNamedItem("data-argument-index")?.value ?? -1);
         const argument: string = rows[argumentIndex].innerText;
+        const context: string = caller.attributes.getNamedItem("data-argument-context")?.value ?? "";
 
         // Check if confirmation is required. If it is, we'll need to
 
@@ -38,6 +39,11 @@ window.addEventListener("load",(_e) => {
                 case "view_groups_datatable":
                     if (ariaLabel === "View Members")
                         fetchMembers(argument);
+                    else if (ariaLabel === "Delete"){
+                        resetModal();
+                        populateModalConfirm(deleteRequest, "/api/v1/group/" + argument);
+                        showModal("Delete Group?", "Are you sure you want to delete this group?");
+                    }
                     break;
                 case "view_services_datatable":
                     if (ariaLabel === "Reset Password"){
@@ -45,7 +51,18 @@ window.addEventListener("load",(_e) => {
                         populateModalConfirm(postRequest, `/api/v1/service/${argument}/password`)
                         showModal("Reset Service Credentials?", "Are you sure you want to reset this service's credentials? This will disconnect the service until its configuration is updated.")
                     }
-                    break
+                    else if (ariaLabel === "Delete"){
+                        resetModal();
+                        populateModalConfirm(deleteRequest, `/api/v1/service/${argument}`)
+                        showModal("Delete Service?", "Are you sure you want to delete this service?")
+                    }
+                    break;
+                case "edit_members_datatable":
+                    if (ariaLabel === "Revoke"){
+                        resetModal();
+                        populateModalConfirm(deleteRequest, `/api/v1/user/${argument}/membership/${context}`)
+                        showModal("Revoke Membership?", "Are you sure you want to revoke this user's membership?")
+                    }
             }
         }
     }
@@ -85,7 +102,7 @@ window.addEventListener("load",(_e) => {
                     orderable: false,
                     defaultContent:
                         "<button class='btn bi-eye-fill' aria-label='View Members' onclick='window.editButtonProxy(this)' data-argument-index='0'/>" +
-                        "<button class='btn bi-trash-fill' aria-label='Delete'/>"
+                        "<button class='btn bi-trash-fill' aria-label='Delete' onclick='window.editButtonProxy(this)' data-argument-index='0'/>"
                 }
             ],
             serverSide: true,
@@ -107,7 +124,7 @@ window.addEventListener("load",(_e) => {
                     orderable: false,
                     defaultContent:
                         "<button class='btn bi-key-fill' aria-label='Reset Password' onclick='window.editButtonProxy(this)' data-argument-index='0'/>" +
-                        "<button class='btn bi-trash-fill' aria-label='Delete'/>"
+                        "<button class='btn bi-trash-fill' aria-label='Delete' onclick='window.editButtonProxy(this)' data-argument-index='0'/>"
                 }
             ],
             serverSide: true,

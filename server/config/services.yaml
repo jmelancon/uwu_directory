@@ -90,6 +90,7 @@ services:
     App\Service\CRUD\ReadEntity\ReadUserGroups:
         arguments:
             $userDn: '%ldap.dn.user%'
+            $groupDn: '%ldap.dn.group%'
 
     App\Service\CRUD\UpdateEntity\UserGroupModifier:
         arguments:

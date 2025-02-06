@@ -101,7 +101,7 @@ class GroupController extends AbstractController
     ): JsonResponse
     {
         // Modify the groups according to admin response
-        $this->modifier->write($groupRequest->getIdentifier(), $groupResponse->getGrantedDns());
+        $this->modifier->batch($groupRequest->getIdentifier(), $groupResponse->getGrantedDns());
 
         $this->mailer->dispatch(
             to: $groupRequest->getIdentifier() . $this->mailer->emailSuffix,

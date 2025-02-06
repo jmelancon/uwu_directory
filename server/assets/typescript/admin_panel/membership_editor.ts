@@ -24,7 +24,7 @@ export function fetchMembers(group: string){
                     data: null,
                     orderable: false,
                     defaultContent:
-                        "<button class='btn bi-trash-fill' aria-label='Revoke'/>"
+                        `<button class='btn bi-x-circle-fill' aria-label='Revoke' onclick='window.editButtonProxy(this)' data-argument-index='2' data-argument-context='${group}'/>`
                 }
             ],
             serverSide: true,

@@ -30,7 +30,7 @@ export function fetchUser(username: string){
                     checkbox.checked = true;
             })
 
-            editorDiv.find("button[data-request-path]").data("requestPath", `/api/v1/user/${data.identifier}`);
+            editorDiv.find("button[data-request-path]").attr("data-request-path", `/api/v1/user/${data.identifier}`);
 
             skeletonDiv.addClass("visually-hidden");
             editorDiv.removeClass("visually-hidden");

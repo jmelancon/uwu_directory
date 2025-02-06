@@ -1,37 +1,90 @@
-import $ from "jquery";
 import {issueRequest} from "./comms";
 window.addEventListener("load", (_e) => {
-    const submitBtn = $("#submitBtn");
+    document.querySelectorAll("form").forEach((element) => {
+        element.addEventListener("submit", (event) => {
+            event.preventDefault();
 
-    $("form button").on('click', function(event){
-        event.preventDefault();
+            // Get caller. It'll hold the request information.
+            const caller = event.submitter;
+            if (caller == null || !(caller instanceof HTMLButtonElement))
+                return;
 
-        // Lock out button
-        submitBtn.attr("disabled", "disabled");
+            // Lock out form buttons
+            element.querySelectorAll("button.btn").forEach((button) => {
+                if (button instanceof HTMLButtonElement)
+                    button.disabled = true;
+            })
 
-        // Grab form input
-        const formData = new FormData($(this).closest("form")[0]);
+            // Grab form input
+            const formData = new FormData(element);
 
-        // Check for token as URL parameter
-        const urlParams = new URLSearchParams(window.location.search);
-        const token = urlParams.get("token")
-        const suffix = token ? "?token=" + encodeURIComponent(token) : "";
+            // Check for token as URL parameter
+            const urlParams = new URLSearchParams(window.location.search);
+            const token = urlParams.get("token")
+            const suffix = token ? "?token=" + encodeURIComponent(token) : "";
 
-        issueRequest(
-            $(this).data("requestPath") + suffix,
-            $(this).data("requestMethod"),
-            Object.fromEntries(formData)
-        );
+            // Serialize FormData to object
+            // This code is actually so shit it's not even funny
+            let serializedData = {};
+            formData.forEach((formValue: FormDataEntryValue, key: string) => {
+                // Since HTML [name] syntax permits arrays, associative or indexed, we'll have to iterate
+                // over the string and ensure that these arrays are created. Define a regex for the syntax first.
+                const re = /(?<RootKeyArray>[^[\n]+)\[]|\[(?<KeyArray>.+?)]\[]|\[(?<Key>.+?)]|(?<RootKey>^[^[\n]+)/gm;
 
-        // Unlock button
-        submitBtn.removeAttr("disabled");
+                // We'll use a """"pointer"""" to keep track of where we are in the object.
+                let pointer = serializedData;
+
+                // Iterate!
+                Array.from(key.matchAll(re)).forEach((results: RegExpExecArray, index: number, array: RegExpExecArray[]) => {
+                    // Grab the named groups from the regex results
+                    const groups = results.groups;
+                    if (!groups)
+                        throw new Error();
+
+                    const isArray: boolean = (groups["RootKeyArray"] != undefined) || (groups["KeyArray"] != undefined);
+                    const isLeaf: boolean = index == array.length - 1
+                    const property: string = (groups["RootKeyArray"] ?? "")
+                        + (groups["KeyArray"] ?? "")
+                        + (groups["Key"] ?? "")
+                        + (groups["RootKey"] ?? "");
+                    const propertyExists: boolean = pointer.hasOwnProperty(property);
+
+                    // Are we at the end of the statement and need to assign?
+                    if (isLeaf){
+                        if (isArray && !propertyExists){//@ts-ignore
+                            pointer[property] = [];
+                        }
+
+                        if (isArray) { //@ts-ignore
+                            pointer[property].append(regexResults);
+                        }
+                        else{ //@ts-ignore
+                            pointer[property] = formValue;
+                        }
+
+                    }
+                    else if (!propertyExists){ //@ts-ignore
+                        pointer[property] = isArray ? [] : {};
+                    }
+
+                    // Increment pointer
+                    { //@ts-ignore
+                        pointer = pointer[property];
+                    }
+                });
+            });
+
+            issueRequest(
+                caller.getAttribute("data-request-path") + suffix,
+                caller.getAttribute("data-request-method") ?? "",
+                JSON.stringify(serializedData)
+            );
+
+            // Unlock button
+            element.querySelectorAll("button.btn").forEach((button) => {
+                if (button instanceof HTMLButtonElement)
+                    button.disabled = false;
+            })
+        });
     });
-
-    $("form").on("submit", (event) => {
-        event.preventDefault();
-        let buttons = $(event.target).find(".btn");
-        if (buttons.length === 1){
-            buttons[0].click();
-        }
-    })
 });

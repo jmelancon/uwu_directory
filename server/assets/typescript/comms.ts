@@ -53,12 +53,18 @@ function handleResponse(data: any, hasSucceeded: boolean, statusCode: number){
  * @param data
  * The serialized data as a Javascript Object. Optional.
  */
-export function issueRequest(endpoint: string, method: string, data: {[p: string]: any}|null): void{
+export function issueRequest(endpoint: string, method: string, data: BodyInit|null): void{
     // Set request options
     const options: RequestInit = {
         method: method,
-        body: JSON.stringify(data),
-        headers: {"X-Requested-With": "XMLHttpRequest"}
+        body: data,
+        headers: {
+            "Content-Type": "application/json",
+            "Accept": "application/json",
+            "X-Requested-By": "uwu_client",
+        },
+        mode: "cors",
+        credentials: "same-origin"
     };
 
     // Fire request
@@ -81,8 +87,7 @@ export function deleteRequest(endpoint: string): void{
     );
 }
 
-export function postRequest(endpoint: string, data: {[p: string]: any}|null = {}): void{
-    debugger;
+export function postRequest(endpoint: string, data: BodyInit|null = null): void{
     issueRequest(
         endpoint,
         "POST",

@@ -15,7 +15,27 @@ readonly class UserGroupModifier
         private string         $groupDn
     ){}
 
-    public function write(string $username, array $newGroups): void
+    private function executeAddition(string $userDn, string $groupDn): void{
+        ldap_mod_add(
+            ldap: $this->ldapAggregator->getStockProvider(),
+            dn: $groupDn,
+            entry: [
+                "member" => $userDn
+            ]
+        );
+    }
+
+    private function executeDeletion(string $userDn, string $groupDn): void{
+        ldap_mod_del(
+            ldap: $this->ldapAggregator->getStockProvider(),
+            dn: $groupDn,
+            entry: [
+                "member" => $userDn
+            ]
+        );
+    }
+
+    public function batch(string $username, array $newGroups): void
     {
         // Make the new DN
         $calculatedDn = "CN=" . ldap_escape($username) . "," . $this->userDn;
@@ -34,24 +54,24 @@ readonly class UserGroupModifier
 
         // Apply additions
         foreach($add as $groupDn){
-            ldap_mod_add(
-                ldap: $this->ldapAggregator->getStockProvider(),
-                dn: $groupDn,
-                entry: [
-                    "member" => $calculatedDn
-                ]
-            );
+            $this->executeAddition($calculatedDn, $groupDn);
         }
 
         // Apply deletions
         foreach($del as $groupDn){
-            ldap_mod_del(
-                ldap: $this->ldapAggregator->getStockProvider(),
-                dn: $groupDn,
-                entry: [
-                    "member" => $calculatedDn
-                ]
-            );
+            $this->executeDeletion($calculatedDn, $groupDn);
         }
+    }
+
+    public function add(string $username, string $group): void{
+        $userDn = "CN=" . ldap_escape($username) . "," . $this->userDn;
+        $groupDn = "CN=" . ldap_escape($group) . "," . $this->groupDn;
+        $this->executeAddition($userDn, $groupDn);
+    }
+
+    public function delete(string $username, string $group): void{
+        $userDn = "CN=" . ldap_escape($username) . "," . $this->userDn;
+        $groupDn = "CN=" . ldap_escape($group) . "," . $this->groupDn;
+        $this->executeDeletion($userDn, $groupDn);
     }
 }

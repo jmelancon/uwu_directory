@@ -12,11 +12,13 @@ export function showModal(title: string, message: string){
 
     // Assert that the modal isn't already open. If it is, we need to close it and wait for it
     // to go away.
-    if (modalElement && (modalElement.checkVisibility())){
+    if (modalElement
+        && modalElement instanceof HTMLElement
+        && (modalElement.checkVisibility() || modalElement.style.display !== "none")){
         modal.hide();
         modalElement.addEventListener("hidden.bs.modal", () => {
-            // Set a 100ms sleep so we don't break the CSS on the backdrop
-            new Promise(resolve => {setTimeout(resolve, 150)}).then(() => {
+            // Set a 50ms sleep so we don't break the CSS on the backdrop
+            new Promise(resolve => {setTimeout(resolve, 50)}).then(() => {
                 showModal(title, message);
             });
         }, {once: true})
