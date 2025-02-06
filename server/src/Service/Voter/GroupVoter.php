@@ -3,10 +3,8 @@ declare(strict_types=1);
 
 namespace App\Service\Voter;
 
-use App\Entity\Group;
 use App\Service\Condition\Exists\GroupExistsCondition;
 use App\Service\Condition\NonCritical\NonCriticalGroupCondition;
-use Symfony\Component\HttpKernel\Attribute\MapRequestPayload;
 use Symfony\Component\Security\Core\Authentication\Token\TokenInterface;
 use Symfony\Component\Security\Core\Authorization\Voter\Voter;
 

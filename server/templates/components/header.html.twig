@@ -3,11 +3,9 @@
         <div class="container-fluid">
             <div class="navbar-brand align-items-center d-inline-flex gap-2">
                 <span class="pe-1 d-block" aria-description="Site Logo" id="site_logo"></span>
-                uwu_directory
+                {{ config("service") }}
             </div>
             <div class="navbar-nav">
-                <a class="nav-link" href="https://discord.gg/HtpK4rV8R2">Discord</a>
-                <a class="nav-link" href="https://acm.cs.und.edu/wiki">Wiki</a>
                 {% if is_granted("ROLE_SSO_ADMINISTRATORS") %}
                     <a class="nav-link" href="{{ path("administratorIndex") }}">Admin</a>
                 {% endif %}

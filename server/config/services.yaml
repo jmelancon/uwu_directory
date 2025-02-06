@@ -148,3 +148,8 @@ services:
         arguments:
             $userDn: '%ldap.dn.user%'
             $principalSuffix: '%env(PRINCIPAL_SUFFIX)%'
+
+    App\Service\ConfigurationProvider:
+        arguments:
+            $generalConfigPath: '/var/server/config.json'
+            $styleConfigPath: '/var/server/custom.scss'

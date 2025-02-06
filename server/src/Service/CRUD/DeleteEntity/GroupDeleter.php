@@ -3,7 +3,6 @@ declare(strict_types=1);
 
 namespace App\Service\CRUD\DeleteEntity;
 
-use App\Entity\User;
 use App\Service\Ldap\LdapAggregator;
 
 readonly class GroupDeleter

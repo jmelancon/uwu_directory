@@ -3,7 +3,6 @@ declare(strict_types=1);
 
 namespace App\Service\CRUD\CreateEntity;
 
-use App\Const\UserAccountControl;
 use App\Service\Ldap\LdapAggregator;
 
 readonly class GroupCreator

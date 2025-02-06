@@ -37,7 +37,8 @@ class ServiceController extends AbstractController
     )]
     public function createService(
         #[MapRequestPayload] Service $service
-    ){
+    ): JsonResponse
+    {
         $this->serviceCreator->create($service->getName());
         $secret = $this->servicePasswordGenerator->set($service->getName());
         return new JsonResponse(

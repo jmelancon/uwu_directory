@@ -1,6 +1,7 @@
 <div
-    class="container {% if not skeleton is defined %}pt-4 mx-3{% endif %} tab-pane fade {{ selected ?? false ? "active show"}} overflow-auto"
+    class="{% if not skeleton is defined %}p-4{% endif %} tab-pane fade {{ selected ?? false ? "active show"}} overflow-y-scroll overflow-x-hidden"
     id="{{ id }}"
+    style="height: calc(100vh - 54px);"
     role="tabpanel"
     aria-labelledby="{{ id }}_btn">
     {% if not skeleton is defined %}<h1 class="display-6">{{ heading }}</h1>{% endif %}

@@ -3,9 +3,9 @@
 //noinspection CssUnknownTarget
 @import "../../../../../var/server/custom.scss";
 
-@import "_roboto";
-@import "_bootstrap-icons";
-@import "_bootstrap";
+@import "./_roboto";
+@import "./_bootstrap-icons";
+@import "./_bootstrap";
 
 body {
     background-repeat: no-repeat;
@@ -57,4 +57,10 @@ body {
 
 div.dt-container div.dt-length select {
     width: 100%;
+}
+
+.dataTable tr .btn {
+    font-size: 15px;
+    padding: 0 4px;
+    margin: 0;
 }

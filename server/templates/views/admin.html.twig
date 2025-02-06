@@ -20,8 +20,6 @@
 {% endblock %}
 {% block panels %}
     <twig:panel id="view_users" heading="User Overview" selected>
-        <p>feel free to manage your users here or something, i don't gaf</p>
-
         <table id="example" class="display table table-striped table-responsive">
             <thead>
             <tr>
@@ -138,8 +136,6 @@
         </div>
     </twig:panel>
     <twig:panel heading="Manage Groups" id="view_groups">
-        <p>feel free to manage your groups here or something, i don't gaf</p>
-
         <table id="view_groups_datatable" class="display table table-striped table-responsive">
             <thead>
             <tr>
@@ -226,6 +222,74 @@
         </form>
     </twig:panel>
     <twig:panel heading="Manage Configuration" id="config">
-        <p>Not implemented, check back soon pookie</p>
+        <p>
+            Options for your instance of uwu_directory may be configured here. Configuration will be written to
+            <code>/var/server/custom.scss</code> and <code>/var/server/config.json</code>, so ensure that your Docker
+            volumes are properly configured to store these files.
+        </p>
+        <form class="gap-2">
+            <hr/>
+            <div class="row row-gap-2 mb-2">
+                <h4>Site Branding</h4>
+                <p>
+                    Across the interface, two values are used for populating branded text fields: the service name
+                    and the organization name. The service name refers to this webpage, the product users interact with,
+                    and the organization name refers to you, the organization hosting the service.
+                </p>
+                <div class="col-md-6">
+                    <div class="form-floating">
+                        <input class="form-control" type="text" id="service" name="service" placeholder="Service Name" value="{{ config("service") }}"/>
+                        <label class="form-label" for="service">Service Name</label>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="form-floating">
+                        <input class="form-control" type="text" id="organization" name="organization" placeholder="Organization Name" value="{{ config("organization") or "" }}"/>
+                        <label class="form-label" for="organization">Organization Name</label>
+                    </div>
+                </div>
+            </div>
+            <hr/>
+            <div class="row row-gap-2 mb-2">
+                <h4>Organizational Constraints</h4>
+                <p>
+                    In certain cases, it may be desirable to restrict registrations to a specific email domain.
+                    By specifying a suffix formatted like <code>@example.com</code> in the field below, all new
+                    registrations will be required to be suffixed with this string.
+                </p>
+                <div class="col-md-6">
+                    <div class="form-floating">
+                        <input class="form-control" type="text" id="emailSuffix" name="emailSuffix" placeholder="Email Suffix" value="{{ config("emailSuffix") or "" }}"/>
+                        <label class="form-label" for="emailSuffix">Email Suffix</label>
+                    </div>
+                </div>
+            </div>
+            <hr/>
+            <div class="row row-gap-2 mb-2">
+                <h4>Site Styling</h4>
+                <p>
+                    uwu_directory utilizes Bootstrap 5.3 for stylesheets. You may use the below textarea to
+                    specify custom SCSS variables to be employed by this framework. For more information on available
+                    variables, refer to the
+                    <a href="https://getbootstrap.com/docs/5.3/customize/sass/">Bootstrap documentation</a>.
+                </p>
+                <div class="col-md-12">
+                    <div class="form-floating">
+                        <textarea
+                            class="form-control font-monospace"
+                            id="customScss" name="customScss"
+                            placeholder="Custom SCSS" style="height: 12em; font-size: 14px;" type="text">{{ config("customScss") }}</textarea>
+                        <label class="form-label" for="customScss">Custom SCSS</label>
+                    </div>
+                </div>
+            </div>
+            <button
+                    type="submit"
+                    class="btn btn-primary"
+                    data-request-method="POST"
+                    data-request-path="{{ path("api.v1.config.create") }}">
+                Save
+            </button>
+        </form>
     </twig:panel>
 {% endblock %}
