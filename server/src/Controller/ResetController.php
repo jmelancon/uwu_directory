@@ -14,6 +14,8 @@ use App\Service\ValueResolver\DecodedObjectResolver;
 use App\Struct\Form\PasswordBundle;
 use App\Struct\Form\PasswordReset;
 use App\Struct\Response\HandledResponse;
+use Exception;
+use Psr\Log\LoggerInterface;
 use Symfony\Bridge\Twig\Attribute\Template;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
@@ -29,7 +31,8 @@ class ResetController extends AbstractController
         private readonly Mailer $mailer,
         private readonly Tokenizer $tk,
         private readonly UserExistsCondition $userExists,
-        private readonly LdapUserProvider $userProvider
+        private readonly LdapUserProvider $userProvider,
+        private readonly LoggerInterface $logger,
     ){}
 
     #[Route(
@@ -63,6 +66,8 @@ class ResetController extends AbstractController
                     ]
                 );
             }
+        } catch (Exception $e){
+            $this->logger->error("Twig or Paseto encountered an error in the reset controller.\n" . $e->getTraceAsString());
         } finally {
             return new JsonResponse(
                 new HandledResponse(

@@ -14,16 +14,7 @@
         <div class="card-body border-bottom">
             <div class="row">
                 <div class="col-12">
-                    <label for="identifier">Your NDUS Identifier <span
-                                class="bi-question-square-fill px-1"
-                                data-mdb-popover-init
-                                data-mdb-trigger="hover"
-                                data-mdb-content="This is the same as your username for Blackboard, Campus Connection, or other UND/NDUS systems. This is required so we can verify your status as a UND student."></span>
-                    </label>
-                    <div class="input-group">
-                        <input class="form-control" type="text" id="identifier" name="identifier"/>
-                        <span class="input-group-text">{{ emailSuffix }}</span>
-                    </div>
+                    <twig:email_input name="email" id="email"/>
                 </div>
             </div>
             <div class="row">
@@ -35,9 +26,8 @@
         </div>
         <div class="card-body">
             <button
-                    type="button"
+                    type="submit"
                     class="btn btn-primary"
-                    data-mdb-ripple-init
                     data-request-method="POST"
                     data-request-path="{{ path("requestMoreGroupsSubmit") }}">
                 Request Change

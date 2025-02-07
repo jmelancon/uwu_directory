@@ -1,0 +1,61 @@
+<div id="edit_user_landing" class="">
+    <p>Select a user in the users tab to begin.</p>
+</div>
+<div id="edit_user_skeleton" class="visually-hidden">
+    <div class="row row-gap-2 mb-2 p-2 placeholder-glow placeholder-lg fs-1">
+        <span class="col-md-6 placeholder"></span>
+        <span class="col-md-6 placeholder"></span>
+        <span class="col-md-6 placeholder"></span>
+        <span class="col-md-6 placeholder"></span>
+        <a href="#" tabindex="-1" class="btn btn-primary disabled placeholder col-1" aria-hidden="true"></a>
+    </div>
+</div>
+<div id="edit_user_editor" class="visually-hidden">
+    <form class="gap-2">
+        <div class="row row-gap-2 mb-2">
+            <div class="col-md-6">
+                <div class="form-floating">
+                    <input class="form-control" type="text" id="identifier" name="identifier" placeholder="Username"/>
+                    <label class="form-label" for="identifier">Username</label>
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="form-floating">
+                    <input class="form-control" type="text" id="email" name="email" placeholder="Email"/>
+                    <label class="form-label" for="email">Email</label>
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="form-floating">
+                    <input class="form-control" type="text" id="firstName" name="firstName" placeholder="First Name"/>
+                    <label class="form-label" for="firstName">First Name</label>
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="form-floating">
+                    <input class="form-control" type="text" id="lastName" name="lastName" placeholder="Last Name"/>
+                    <label class="form-label" for="lastName">Last Name</label>
+                </div>
+            </div>
+        </div>
+
+        <div class="row py-3 pb-4">
+            {% for group in allGroups() %}
+                {% set cn = group.getAttribute("cn")[0] %}
+                {% set dn = group.getDn() %}
+                <div class="col-md-4">
+                    <input class="form-check-input" type="checkbox" name="roleDNs[{{ dn }}]" id="edit_user_group_{{ dn }}"/>
+                    <label class="form-check-label" for="edit_user_group_{{ dn }}" class="pt-3">{{ cn }}</label>
+                </div>
+            {% endfor %}
+        </div>
+
+        <button
+                type="submit"
+                class="btn btn-primary"
+                data-request-method="POST"
+                data-request-path="#">
+            Update
+        </button>
+    </form>
+</div>

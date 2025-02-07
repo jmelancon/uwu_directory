@@ -14,7 +14,9 @@ class ConfigurationProvider
     public function __construct(
         private readonly SerializerInterface $serializer,
         private readonly string $generalConfigPath,
-        private readonly string $styleConfigPath
+        private readonly string $styleConfigPath,
+        private readonly string $faviconPath,
+        private readonly string $productionFaviconPath,
     ){
         if (!$this->has()){
             $success = $this->persist(new Config());
@@ -38,7 +40,16 @@ class ConfigurationProvider
         if (!is_string($stylesheet))
             throw new RuntimeException("Could not read stylesheet file ($this->styleConfigPath)");
 
+        if (file_exists($this->faviconPath)){
+            $favicon = file_get_contents($this->faviconPath);
+            if (!is_string($favicon))
+                throw new RuntimeException("Could not read favicon file ($this->faviconPath)");
+        } else {
+            $favicon = '';
+        }
+
         $config->setCustomScss($stylesheet);
+        $config->setFavicon($favicon);
 
         return $config;
     }
@@ -65,6 +76,26 @@ class ConfigurationProvider
 
         if(!$successfulStyleWrite)
             return false;
+
+        if (!empty($config->getFavicon())){
+            $successfulFaviconWrite = file_put_contents(
+                filename: $this->faviconPath,
+                data: $config->getFavicon()
+            );
+            if(!$successfulFaviconWrite)
+                return false;
+
+            $successfulProductionFaviconWrite = file_put_contents(
+                filename: $this->productionFaviconPath,
+                data: $config->getFavicon()
+            );
+            if(!$successfulProductionFaviconWrite)
+                return false;
+        } else {
+            exec("/usr/bin/rm -f $this->faviconPath");
+            exec("/usr/bin/rm -f $this->productionFaviconPath");
+        }
+
 
         $this->config = $config;
         return true;

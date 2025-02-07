@@ -1,10 +1,12 @@
 <header class="fixed-top shadow">
-    <nav class="navbar navbar-expand bg-body-tertiary">
+    <nav class="navbar navbar-expand bg-body-tertiary" style="max-height: 56px;">
         <div class="container-fluid">
-            <div class="navbar-brand align-items-center d-inline-flex gap-2">
-                <span class="pe-1 d-block" aria-description="Site Logo" id="site_logo"></span>
-                {{ config("service") }}
-            </div>
+            <a href="{{ path('root') }}">
+                <div class="navbar-brand align-items-center d-inline-flex gap-2">
+                    <span class="pe-1 d-block" aria-description="Site Logo" id="site_logo"></span>
+                    {{ config("service")|default("uwu_directory") }}
+                </div>
+            </a>
             <div class="navbar-nav">
                 {% if is_granted("ROLE_SSO_ADMINISTRATORS") %}
                     <a class="nav-link" href="{{ path("administratorIndex") }}">Admin</a>

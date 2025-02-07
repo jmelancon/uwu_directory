@@ -35,7 +35,7 @@ class ConfigurationController extends AbstractController
         return new JsonResponse(
             new HandledResponse(
                 "Success!",
-                "Your configuration has been saved. To reload stylesheets, please reboot the container."
+                "Your configuration has been saved. To reload stylesheets and favicons, please reboot the container."
             )
         );
     }

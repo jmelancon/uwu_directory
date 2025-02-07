@@ -1,0 +1,18 @@
+<p>Fill out the form below to add a new group.</p>
+<form class="gap-2">
+    <div class="row row-gap-2 mb-2">
+        <div class="col-md-6">
+            <div class="form-floating">
+                <input class="form-control" type="text" id="name" name="name" placeholder="Group Name"/>
+                <label class="form-label" for="name">Group Name</label>
+            </div>
+        </div>
+    </div>
+    <button
+            type="submit"
+            class="btn btn-primary"
+            data-request-method="POST"
+            data-request-path="{{ path("api.v1.group.create") }}">
+        Create
+    </button>
+</form>

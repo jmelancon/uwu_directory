@@ -14,6 +14,9 @@ class Config{
     )]
     private ?string $emailSuffix = null;
 
+    #[Groups("generalConfig")]
+    private ?string $parentOrgAccountDescription = null;
+
     private string $customScss =  "// Custom SCSS for uwu_directory\n\n"
                                 . "// Site logo (SVG formatted, 256px by 256px viewport size)\n"
                                 . "// \$site_logo: url('data:image/svg+xml,<svg>...</svg>');\n\n"
@@ -25,6 +28,34 @@ class Config{
 
     #[Groups("generalConfig")]
     private string $service = "uwu_directory";
+
+    #[Groups("generalConfig")]
+    private ?string $emailSignature = null;
+
+    #[Groups("generalConfig")]
+    private ?string $emailStyles = null;
+
+    private ?string $favicon = null;
+
+    public function getEmailSignature(): ?string
+    {
+        return $this->emailSignature;
+    }
+
+    public function setEmailSignature(?string $emailSignature): void
+    {
+        $this->emailSignature = $emailSignature;
+    }
+
+    public function getEmailStyles(): ?string
+    {
+        return $this->emailStyles;
+    }
+
+    public function setEmailStyles(?string $emailStyles): void
+    {
+        $this->emailStyles = $emailStyles;
+    }
 
     #[Groups("generalConfig")]
     public function getEmailSuffix(): ?string
@@ -65,5 +96,25 @@ class Config{
     public function setService(?string $service): void
     {
         $this->service = $service;
+    }
+
+    public function getParentOrgAccountDescription(): ?string
+    {
+        return $this->parentOrgAccountDescription;
+    }
+
+    public function setParentOrgAccountDescription(?string $parentOrgAccountDescription): void
+    {
+        $this->parentOrgAccountDescription = $parentOrgAccountDescription;
+    }
+
+    public function getFavicon(): ?string
+    {
+        return $this->favicon;
+    }
+
+    public function setFavicon(?string $favicon): void
+    {
+        $this->favicon = $favicon;
     }
 }

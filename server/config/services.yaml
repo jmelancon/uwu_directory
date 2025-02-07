@@ -39,7 +39,7 @@ services:
                     referrals: false
                     x_tls_require_cert: false
 
-    App\Service\ValueResolver\LdapGroupListResolver:
+    App\Service\CRUD\ReadEntity\ReadGroups:
         arguments:
             $baseDn: '%ldap.dn.group%'
 
@@ -153,3 +153,5 @@ services:
         arguments:
             $generalConfigPath: '/var/server/config.json'
             $styleConfigPath: '/var/server/custom.scss'
+            $faviconPath: '/var/server/favicon.svg'
+            $productionFaviconPath: '/var/www/project/public/img/favicon_custom.svg'

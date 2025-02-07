@@ -1,7 +1,8 @@
 import {issueRequest} from "./comms";
+
 window.addEventListener("load", (_e) => {
     document.querySelectorAll("form").forEach((element) => {
-        element.addEventListener("submit", (event) => {
+        element.addEventListener("submit", async (event) => {
             event.preventDefault();
 
             // Get caller. It'll hold the request information.
@@ -26,7 +27,9 @@ window.addEventListener("load", (_e) => {
             // Serialize FormData to object
             // This code is actually so shit it's not even funny
             let serializedData = {};
-            formData.forEach((formValue: FormDataEntryValue, key: string) => {
+            for (const item of formData) {
+                const key = item[0];
+                const formValue = item[1];
                 // Since HTML [name] syntax permits arrays, associative or indexed, we'll have to iterate
                 // over the string and ensure that these arrays are created. Define a regex for the syntax first.
                 const re = /(?<RootKeyArray>[^[\n]+)\[]|\[(?<KeyArray>.+?)]\[]|\[(?<Key>.+?)]|(?<RootKey>^[^[\n]+)/gm;
@@ -72,7 +75,7 @@ window.addEventListener("load", (_e) => {
                         pointer = pointer[property];
                     }
                 });
-            });
+            }
 
             issueRequest(
                 caller.getAttribute("data-request-path") + suffix,

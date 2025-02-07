@@ -1,0 +1,18 @@
+{% set hasSuffix = config("emailSuffix") is not null and config("emailSuffix") is not empty %}
+
+{% if hasSuffix %}
+    <label for="{{ id }}">Your {{ config("parentOrgAccountDescription")|default("Oranizational Account")}} <span
+                class="bi-question-square-fill px-1"
+                data-bs-toggle="popover"
+                data-bs-trigger="hover"
+                data-bs-content="A system administrator has restricted registrations to only users of a specific organization or service. External registration is prohibited."></span>
+    </label>
+    <div class="input-group">
+{% else %}
+    <label for="{{ id }}">Your Email Address</label>
+{% endif %}
+        <input class="form-control" type="email" id="{{ id }}" name="{{ name }}" value="{% block content %}{% endblock %}" {{ (disabled ?? false) ? "disabled" : "" }}/>
+{% if hasSuffix %}
+        <span class="input-group-text">{{ emailSuffix }}</span>
+    </div>
+{% endif %}

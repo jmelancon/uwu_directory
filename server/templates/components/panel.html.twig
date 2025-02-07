@@ -5,5 +5,9 @@
     role="tabpanel"
     aria-labelledby="{{ id }}_btn">
     {% if not skeleton is defined %}<h1 class="display-6">{{ heading }}</h1>{% endif %}
-    {% block content %}{% endblock %}
+    {% if template is defined %}
+        {% include template %}
+    {% else %}
+        {% block content %}{% endblock %}
+    {% endif %}
 </div>

@@ -4,8 +4,8 @@
 
 {% block cardDescription %}
 <p class="card-text">
-    To gain access to ACM-managed servers and applications, you must register
-    a UND ACM account. To request a registration link, fill out the form below
+    To gain access to servers and applications managed by {{ config("organization")|default("your organization") }}, you
+    must apply for an account. To get a registration link, fill out the form below
     to request approval for account creation.
 </p>
 {% endblock %}
@@ -15,16 +15,7 @@
         <div class="card-body border-bottom">
             <div class="row">
                 <div class="col-12">
-                    <label for="identifier">Your NDUS Identifier <span
-                                class="bi-question-square-fill px-1"
-                                data-mdb-popover-init
-                                data-mdb-trigger="hover"
-                                data-mdb-content="This is the same as your username for Blackboard, Campus Connection, or other UND/NDUS systems. This is required so we can verify your status as a UND student."></span>
-                    </label>
-                    <div class="input-group">
-                        <input class="form-control" type="text" id="identifier" name="identifier"/>
-                        <span class="input-group-text">{{ emailSuffix }}</span>
-                    </div>
+                    <twig:email_input id="email" name="email"/>
                 </div>
             </div>
             <div class="row">
@@ -41,9 +32,9 @@
                 <div class="col-12">
                     <label for="additionalInfo" class="pt-3">Additional Information <span
                                 class="bi-question-square-fill px-1"
-                                data-mdb-popover-init
-                                data-mdb-trigger="hover"
-                                data-mdb-content="If you need access to something more than traditional baseline permissions and haven't already discussed it with ACM leadership, write down what you need here."></span>
+                                data-bs-toggle="popover"
+                                data-bs-trigger="hover"
+                                data-bs-content="If you need access to something more than traditional baseline permissions and haven't already discussed it with {{ config("organization")|default("your organization's") }} leadership, write down what you need here."></span>
                     </label>
                     <textarea class="form-control" id="additionalInfo" name="additionalInfo"></textarea>
                 </div>
@@ -51,7 +42,7 @@
         </div>
         <div class="card-body">
             <button
-                    type="button"
+                    type="submit"
                     class="btn btn-primary"
                     data-mdb-ripple-init
                     data-request-method="POST"

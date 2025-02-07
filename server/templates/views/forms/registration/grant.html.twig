@@ -16,16 +16,7 @@
             <p>The following is a list of info submitted by the applicant. Please verify that all information is correct and proper.</p>
                 <div class="row">
                     <div class="col-12">
-                        <label for="identifier">Applicant's NDUS Identifier <span
-                                    class="bi-question-square-fill px-1"
-                                    data-mdb-popover-init
-                                    data-mdb-trigger="hover"
-                                    data-mdb-content="This is the same as your username for Blackboard, Campus Connection, or other UND/NDUS systems. This is required so we can verify your status as a UND student."></span>
-                        </label>
-                        <div class="input-group">
-                            <input class="form-control" type="text" id="identifier" name="identifier" value="{{ registration.identifier }}" disabled/>
-                            <span class="input-group-text">{{ emailSuffix }}</span>
-                        </div>
+                        <twig:email_input id="email" name="email" disabled>{{ registration.email }}</twig:email_input>
                     </div>
                 </div>
                 <div class="row">
@@ -42,9 +33,9 @@
                     <div class="col-12">
                         <label for="additionalInfo" class="pt-3">Additional Information <span
                                     class="bi-question-square-fill px-1"
-                                    data-mdb-popover-init
-                                    data-mdb-trigger="hover"
-                                    data-mdb-content="If you need access to something more than traditional baseline permissions and haven't already discussed it with ACM leadership, write down what you need here."></span>
+                                    data-bs-toggle="popover"
+                                    data-bs-trigger="hover"
+                                    data-bs-content="If you need access to something more than traditional baseline permissions and haven't already discussed it with {{ config("organization")|default("your organization's") }} leadership, write down what you need here."></span>
                         </label>
                         <textarea class="form-control" id="additionalInfo" name="additionalInfo" disabled>{{ registration.additionalInfo }}</textarea>
                     </div>
@@ -67,9 +58,8 @@
         </div>
         <div class="card-body">
             <button
-                    type="button"
+                    type="submit"
                     class="btn btn-primary"
-                    data-mdb-ripple-init
                     data-request-method="POST"
                     data-request-path="{{ path("grantSubmit") }}">
                 Approve Request

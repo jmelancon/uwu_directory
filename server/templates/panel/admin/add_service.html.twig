@@ -1,0 +1,22 @@
+<p>
+    Fill out the form below to add a new service. Upon service creation,
+    access credentials will be generated
+    and returned for use with the service's LDAP integration.
+</p>
+<form class="gap-2">
+    <div class="row row-gap-2 mb-2">
+        <div class="col-md-6">
+            <div class="form-floating">
+                <input class="form-control" type="text" id="name" name="name" placeholder="Service Name"/>
+                <label class="form-label" for="name">Service Name</label>
+            </div>
+        </div>
+    </div>
+    <button
+            type="submit"
+            class="btn btn-primary"
+            data-request-method="POST"
+            data-request-path="{{ path("api.v1.service.create") }}">
+        Create
+    </button>
+</form>

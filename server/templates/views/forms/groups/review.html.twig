@@ -14,16 +14,7 @@
             <div class="row">
                 <h3>Submitter Info</h3>
                 <div class="col-12">
-                    <label for="identifier">Your NDUS Identifier <span
-                                class="bi-question-square-fill px-1"
-                                data-mdb-popover-init
-                                data-mdb-trigger="hover"
-                                data-mdb-content="This is the same as your username for Blackboard, Campus Connection, or other UND/NDUS systems. This is required so we can verify your status as a UND student."></span>
-                    </label>
-                    <div class="input-group">
-                        <input class="form-control" type="text" id="identifier" disabled value="{{ groupRequest.identifier }}"/>
-                        <span class="input-group-text">{{ emailSuffix }}</span>
-                    </div>
+                    <twig:email_input id="email" name="email" disabled>{{ groupRequest.email }}</twig:email_input>
                 </div>
             </div>
             <div class="row">

@@ -5,7 +5,11 @@
         <title>{% block title %}Placeholder{% endblock %} | {{ app.request.server.get('ORGANIZATION') }}</title>
 
         <!-- Page icon. -->
-        <link rel="icon" href="{{ asset("img/acm_favicon.ico") }}"/>
+        {% if config("favicon")|default("") is not empty %}
+            <link rel="icon" href="{{ asset("img/favicon_custom.svg") }}"/>
+        {% else %}
+            <link rel="icon" href="{{ asset("img/favicon.svg") }}"/>
+        {% endif %}
 
         <!-- Some meta stuff. Viewport's especially important, makes sure scaling looks good across a variety of client DPIs. -->
         <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
