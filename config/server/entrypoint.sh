@@ -14,6 +14,7 @@ CONF_PRIVATE_KEY="${DIR_CONFIG}/private.key"
 CONF_PUBLIC_KEY="${DIR_CONFIG}/public.key"
 CONF_OAUTH_DB="${DIR_CONFIG}/oauth.db"
 CONF_SCSS="${DIR_CONFIG}/custom.scss"
+CONF_FAVICON="${DIR_CONFIG}/favicon.svg"
 
 REF_SCSS="${DIR_SERVER}/assets/styles/reference/custom.scss"
 
@@ -47,7 +48,6 @@ if [ ! -f "$CONF_FAVICON" ]; then
   rm -f $PROD_FAVICON;
 elif [ ! -f "$PROD_FAVICON" ]; then
   cp $CONF_FAVICON $PROD_FAVICON;
-  chown www-data $PROD_FAVICON;
 fi;
 
 # Compile stylesheets & js

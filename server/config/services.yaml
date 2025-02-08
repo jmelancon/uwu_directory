@@ -13,8 +13,6 @@ parameters:
     path.config.styles: "%dir.config%/custom.scss"
     path.config.favicon: "%dir.config%/favicon.svg"
 
-    path.production.favicon: "%dir.web%/public/img/favicon_custom.svg"
-
 services:
     # default configuration for services in *this* file
     _defaults:
@@ -162,4 +160,3 @@ services:
             $generalConfigPath: '%path.config.general%'
             $styleConfigPath: '%path.config.styles%'
             $faviconPath: '%path.config.favicon%'
-            $productionFaviconPath: '%path.production.favicon%'
