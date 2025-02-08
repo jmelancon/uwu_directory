@@ -30,13 +30,13 @@ class RegistrationAuthorization
         $this->grantedDns = $grantedDns;
     }
 
-    public function asUser(): User
+    public function asUser(string $email): User
     {
         return new User(
             identifier: $this->getInitialRequest()->getIdentifier(),
             firstName:  $this->getInitialRequest()->getFirstName(),
             lastName: $this->getInitialRequest()->getLastName(),
-            email: $this->getInitialRequest()->getIdentifier() . "@example.com"
+            email: $email
         );
     }
 }

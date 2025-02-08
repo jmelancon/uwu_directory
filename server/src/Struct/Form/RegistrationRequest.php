@@ -3,14 +3,28 @@ declare(strict_types=1);
 
 namespace App\Struct\Form;
 
+use App\Validator as CustomAssert;
 use Symfony\Component\Validator\Constraints as Assert;
 
 class RegistrationRequest
 {
     #[Assert\NotBlank(
-        message: "You must provide your NDUS identifier for verification purposes."
+        message: "You must provide a username or organizational identifier."
     )]
     private string $identifier;
+
+    #[CustomAssert\RegistrationRestricted]
+    private ?string $email = null;
+
+    public function getEmail(): ?string
+    {
+        return $this->email;
+    }
+
+    public function setEmail(?string $email): void
+    {
+        $this->email = $email;
+    }
 
     #[Assert\NotBlank(
         message: "You must provide a first name."

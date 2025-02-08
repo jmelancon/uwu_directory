@@ -3,6 +3,8 @@ declare(strict_types=1);
 
 namespace App\Controller;
 
+use App\Entity\User;
+use App\Security\LdapUserProvider;
 use App\Service\Condition\Exists\UserExistsCondition;
 use App\Service\CRUD\ReadEntity\ReadUserGroups;
 use App\Service\CRUD\UpdateEntity\UserGroupModifier;
@@ -28,7 +30,8 @@ class GroupController extends AbstractController
         private readonly Tokenizer           $tk,
         private readonly UserExistsCondition $userExists,
         private readonly ReadUserGroups      $userGroups,
-        private readonly UserGroupModifier   $modifier
+        private readonly UserGroupModifier   $modifier,
+        private readonly LdapUserProvider    $ldapUserProvider,
     ){}
 
     #[Route(
@@ -100,11 +103,21 @@ class GroupController extends AbstractController
         #[MapRequestPayload] GroupResponse $groupResponse,
     ): JsonResponse
     {
+        // Load the user
+        $user = $this->ldapUserProvider->loadUserByIdentifier($groupRequest->getIdentifier());
+        if (!$user instanceof User)
+            return new JsonResponse(
+                new HandledResponse(
+                    title: "Uh oh!",
+                    message: "Something's gone wrong. The user couldn't be fetched from LDAP."
+                )
+            );
+
         // Modify the groups according to admin response
         $this->modifier->batch($groupRequest->getIdentifier(), $groupResponse->getGrantedDns());
 
         $this->mailer->dispatch(
-            to: $groupRequest->getIdentifier() . $this->mailer->emailSuffix,
+            to: $user->getEmail(),
             subject: "📂 Your group request has been processed",
             template: "mail/groupsUpdated.html.twig",
             context: [

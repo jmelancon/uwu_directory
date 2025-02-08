@@ -14,11 +14,17 @@
         <div class="card-body border-bottom">
             <h3>Submitter Info</h3>
             <p>The following is a list of info submitted by the applicant. Please verify that all information is correct and proper.</p>
-                <div class="row">
-                    <div class="col-12">
-                        <twig:email_input id="email" name="email" disabled>{{ registration.email }}</twig:email_input>
-                    </div>
+            <div class="row">
+                <div class="{{ config("emailSuffix")|default("") is not empty ? "col-12" : "col-md-6" }}">
+                    <twig:identifier_input id="identifier" name="identifier" disabled>{{ registration.identifier }}</twig:identifier_input>
                 </div>
+                {% if config("emailSuffix")|default("") is empty %}
+                    <div class="col-md-6">
+                        <label for="email">Email Address</label>
+                        <input class="form-control" type="email" id="email" name="email" value="{{ registration.email ?? "" }}" disabled/>
+                    </div>
+                {% endif %}
+            </div>
                 <div class="row">
                     <div class="col-md-6">
                         <label for="firstName" class="pt-3">First Name</label>
@@ -46,7 +52,7 @@
             <h3>Group Assignments</h3>
             <p>Please choose from the groups below.</p>
             <div class="row">
-                {% for group in groups %}
+                {% for group in allGroups() %}
                     {% set cn = group.getAttribute("cn")[0] %}
                     {% set dn = group.getDn() %}
                     <div class="col-md-12">

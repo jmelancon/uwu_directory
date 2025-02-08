@@ -33,16 +33,21 @@ This ain't done, chief.
 
 ### Todo
 
-- Finish basic LDAP service integration
-- Add configuration options
-- Polish registration flow
+- ~~Finish basic LDAP service integration~~
+  - This should be working! Services and groups can be created, and services can be bound to by LDAP
+    clients. Next is to test with proper services, i.e. Mac/Windows desktops, server applications, etc.
+- ~~Add configuration options~~
+   - Done! In my testing, all options implemented persist and enforce rules throughout the application.
+- ~~Polish registration flow~~
+  - Pretty sure this is good, at least for now. Could use some stylistic tweaks as the padding on
+    the field labels ticks me off.
 - Add OAuth endpoints/configuration tabs
 - Maybe add unit tests and Github actions?
 
 ## Installation
 
-I don't really have any steps for installation at the moment. Best I can offer you
-is this:
+I don't really have any steps for installation at the moment, though this should be remedied 
+soon™️. Best I can offer you for now is this:
 
 1. Clone project to your local computer:
    ```shell

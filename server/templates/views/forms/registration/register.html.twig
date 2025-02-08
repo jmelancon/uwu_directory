@@ -14,9 +14,15 @@
     <form>
         <div class="card-body border-bottom">
             <div class="row">
-                <div class="col-12">
-                    <twig:email_input id="email" name="email"/>
+                <div class="{{ config("emailSuffix")|default("") is not empty ? "col-12" : "col-md-6" }}">
+                    <twig:identifier_input id="identifier" name="identifier"/>
                 </div>
+                {% if config("emailSuffix")|default("") is empty %}
+                    <div class="col-md-6">
+                        <label for="email">Email Address</label>
+                        <input class="form-control" type="email" id="email" name="email"/>
+                    </div>
+                {% endif %}
             </div>
             <div class="row">
                 <div class="col-md-6">

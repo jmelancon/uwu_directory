@@ -14,7 +14,7 @@
             <div class="row">
                 <h3>Submitter Info</h3>
                 <div class="col-12">
-                    <twig:email_input id="email" name="email" disabled>{{ groupRequest.email }}</twig:email_input>
+                    <twig:identifier_input id="identifier" name="identifier" disabled>{{ groupRequest.identifier }}</twig:identifier_input>
                 </div>
             </div>
             <div class="row">
@@ -50,9 +50,8 @@
         </div>
         <div class="card-body">
             <button
-                    type="button"
+                    type="submit"
                     class="btn btn-primary"
-                    data-mdb-ripple-init
                     data-request-method="POST"
                     data-request-path="{{ path("reviewGroupRequestSubmit") }}">
                 Push Changes

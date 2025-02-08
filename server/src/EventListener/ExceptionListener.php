@@ -3,6 +3,7 @@ declare(strict_types=1);
 
 namespace App\EventListener;
 
+use App\Exception\InvalidUsernameException;
 use App\Exception\PasswordRejectedException;
 use App\Exception\TokenMissingException;
 use App\Struct\Response\HandledResponse;
@@ -66,6 +67,20 @@ readonly class ExceptionListener
                         new HandledResponse(
                             title: "Uh oh!",
                             message: "The server rejected your password for an unknown reason. Please try a different password. "
+                        )
+                    )
+                );
+                return;
+            }
+
+            // CASE: User did something weird with their username such that it couldn't properly
+            //       be suffixed and turned into an email address
+            if ($exception instanceof InvalidUsernameException && $method === Request::METHOD_POST){
+                $event->setResponse(
+                    new JsonResponse(
+                        new HandledResponse(
+                            title: "Uh oh!",
+                            message: "The server rejected your username for an unknown reason. Please contact your sysadmin if this is unexpected.",
                         )
                     )
                 );

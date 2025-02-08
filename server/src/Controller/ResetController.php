@@ -28,11 +28,11 @@ use Symfony\Component\Routing\Attribute\Route;
 class ResetController extends AbstractController
 {
     public function __construct(
-        private readonly Mailer $mailer,
-        private readonly Tokenizer $tk,
-        private readonly UserExistsCondition $userExists,
-        private readonly LdapUserProvider $userProvider,
-        private readonly LoggerInterface $logger,
+        private readonly Mailer              $mailer,
+        private readonly Tokenizer           $tk,
+        private readonly LdapUserProvider    $userProvider,
+        private readonly LoggerInterface     $logger,
+        private readonly LdapUserProvider $ldapUserProvider,
     ){}
 
     #[Route(
@@ -53,16 +53,17 @@ class ResetController extends AbstractController
         #[MapRequestPayload] PasswordReset $passwordReset
     ): Response{
         try{
-            if ($this->userExists->check($passwordReset->getIdentifier())){
+            $user = $this->ldapUserProvider->loadUserByIdentifier($passwordReset->getIdentifier());
+            if ($user instanceof User){
                 $resetToken = $this->tk->encode($passwordReset);
 
                 $this->mailer->dispatch(
-                    to: $passwordReset->getIdentifier() . $this->mailer->emailSuffix,
+                    to: $user->getEmail(),
                     subject: "🔒 Your ACM@UND Password Reset Request",
                     template: "mail/resetLink.html.twig",
                     context: [
                         "token" => $resetToken,
-                        "name" => $passwordReset->getIdentifier()
+                        "name" => $user->getFirstName(),
                     ]
                 );
             }

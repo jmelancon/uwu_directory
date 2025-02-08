@@ -3,8 +3,10 @@ declare(strict_types=1);
 
 namespace App\Controller;
 
+use App\Exception\InvalidUsernameException;
 use App\Exception\PasswordRejectedException;
 use App\Service\Condition\Exists\UserExistsCondition;
+use App\Service\ConfigurationProvider;
 use App\Service\CRUD\CreateEntity\UserCreator;
 use App\Service\CRUD\DeleteEntity\UserDeleter;
 use App\Service\CRUD\UpdateEntity\UserGroupModifier;
@@ -34,8 +36,24 @@ class RegistrationController extends AbstractController
     public function __construct(
         private readonly Mailer $mailer,
         private readonly Tokenizer $tk,
-        private readonly UserExistsCondition $userExists
+        private readonly UserExistsCondition $userExists,
+        private readonly ConfigurationProvider $config,
     ){}
+
+    /**
+     * @throws InvalidUsernameException
+     */
+    private function getEmailAddress(RegistrationRequest $registration): string
+    {
+        if ($registration->getEmail())
+            return $registration->getEmail();
+
+        $suffixedUsername = $registration->getIdentifier() . $this->config->getConfig()->getEmailSuffix();
+        if (!filter_var($suffixedUsername, FILTER_VALIDATE_EMAIL))
+            throw new InvalidUsernameException();
+
+        return $suffixedUsername;
+    }
 
     #[Route(
         path: "/submit",
@@ -132,7 +150,7 @@ class RegistrationController extends AbstractController
             pattern: '/group_(\S+)/',
             replacement: '$1',
             subject: array_keys(
-                $request->request->all()["groupGrants"]
+                $request->request->all()["groupGrants"] ?? []
             )
         ));
 
@@ -142,7 +160,7 @@ class RegistrationController extends AbstractController
         // Encrypt data and shoot it off to the requester
         // We'll need to fire off mail to one of the admins with a link to the route.
         $this->mailer->dispatch(
-            to: $registration->getIdentifier() . $this->mailer->emailSuffix,
+            to: $this->getEmailAddress($registration),
             subject: "✅ Account approved!",
             template: "mail/newPassSetLink.html.twig",
             context: [
@@ -151,7 +169,12 @@ class RegistrationController extends AbstractController
             ]
         );
 
-        return new Response(null, Response::HTTP_CREATED);
+        return new JsonResponse(
+            new HandledResponse(
+                title: "Request Processed",
+                message: "The user has been approved and notified."
+            ),
+        );
     }
 
 
@@ -192,7 +215,7 @@ class RegistrationController extends AbstractController
             );
 
         // Parse out authorization to a user object
-        $user = $authorization->asUser();
+        $user = $authorization->asUser($this->getEmailAddress($authorization->getInitialRequest()));
 
         // Create the user
         $creator->create($user);
@@ -208,10 +231,12 @@ class RegistrationController extends AbstractController
         // Grant groups
         $groupModifier->batch($user->getUserIdentifier(), $authorization->getGrantedDns());
 
+        $org = $this->config->getConfig()->getOrganization() ?? 'your organization\'s';
+
         return new JsonResponse(
             new HandledResponse(
                 title: "Hooray!",
-                message: "Your account has been created. You may now use it to authenticate against ACM resources."
+                message: "Your account has been created. You may now use it to authenticate against $org resources."
             )
         );
     }

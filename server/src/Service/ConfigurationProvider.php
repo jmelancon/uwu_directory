@@ -16,7 +16,6 @@ class ConfigurationProvider
         private readonly string $generalConfigPath,
         private readonly string $styleConfigPath,
         private readonly string $faviconPath,
-        private readonly string $productionFaviconPath,
     ){
         if (!$this->has()){
             $success = $this->persist(new Config());
@@ -84,16 +83,8 @@ class ConfigurationProvider
             );
             if(!$successfulFaviconWrite)
                 return false;
-
-            $successfulProductionFaviconWrite = file_put_contents(
-                filename: $this->productionFaviconPath,
-                data: $config->getFavicon()
-            );
-            if(!$successfulProductionFaviconWrite)
-                return false;
         } else {
             exec("/usr/bin/rm -f $this->faviconPath");
-            exec("/usr/bin/rm -f $this->productionFaviconPath");
         }
 
 

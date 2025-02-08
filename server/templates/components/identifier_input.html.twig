@@ -1,7 +1,7 @@
 {% set hasSuffix = config("emailSuffix") is not null and config("emailSuffix") is not empty %}
 
 {% if hasSuffix %}
-    <label for="{{ id }}">Your {{ config("parentOrgAccountDescription")|default("Oranizational Account")}} <span
+    <label for="{{ id }}">{{ config("parentOrgAccountDescription")|default("Oranizational Account")}} <span
                 class="bi-question-square-fill px-1"
                 data-bs-toggle="popover"
                 data-bs-trigger="hover"
@@ -9,10 +9,10 @@
     </label>
     <div class="input-group">
 {% else %}
-    <label for="{{ id }}">Your Email Address</label>
+    <label for="{{ id }}">Username</label>
 {% endif %}
-        <input class="form-control" type="email" id="{{ id }}" name="{{ name }}" value="{% block content %}{% endblock %}" {{ (disabled ?? false) ? "disabled" : "" }}/>
+        <input class="form-control" type="text" id="{{ id }}" name="{{ name }}" value="{% block content %}{% endblock %}" {{ (disabled ?? false) ? "disabled" : "" }}/>
 {% if hasSuffix %}
-        <span class="input-group-text">{{ emailSuffix }}</span>
+        <span class="input-group-text">{{ config("emailSuffix") }}</span>
     </div>
 {% endif %}

@@ -5,7 +5,7 @@
 {% block cardDescription %}
     <p class="card-text">
         To request a password reset for an already registered account, fill out the form below.
-        If an account is registered to the supplied {{ config("parentOrgAccountDescription")|default("email") }}, a
+        If an account is registered to the supplied {{ config("parentOrgAccountDescription")|default("username") }}, a
         message will be dispatched to you containing a password reset link.
     </p>
 {% endblock %}
@@ -15,7 +15,7 @@
         <div class="card-body border-bottom">
             <div class="row">
                 <div class="col-12">
-                    <twig:email_input name="email" id="email"/>
+                    <twig:identifier_input id="identifier" name="identifier"/>
                 </div>
             </div>
         </div>
