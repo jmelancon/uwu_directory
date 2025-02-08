@@ -7,7 +7,7 @@
         Please set a password below. The password must be at
         least 14 characters long.
         {% if config("emailSuffix")|default("") is not empty %}
-        Please do NOT set this password to the same one as your {{ config("")}} password.
+        Please do NOT set this password to the same one as your {{ config("organization")|default("organizational account's") }} password.
         {% endif %}
     </p>
 {% endblock %}

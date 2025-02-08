@@ -15,14 +15,14 @@ RUN docker-php-ext-install ldap gmp
 COPY ../../config/server/zz-docker.conf /usr/local/etc/php-fpm.d/zz-docker.conf
 
 # Switch to WWW user
-WORKDIR /var/www/project
+WORKDIR /var/www/uwu
 USER www-data
 
 # Ensure a few environment variables
 ENV SYMFONY_ENV=dev
 ENV APP_ENV=dev
 ENV APP_DEBUG=1
-ENV DATABASE_DSN="sqlite:///var/server/app.db"
+ENV DATABASE_DSN="sqlite:///var/uwu/oauth.db"
 
 # Health check
 HEALTHCHECK CMD socat -u OPEN:/dev/null UNIX-CONNECT:/run/php8.3-fpm.sock;

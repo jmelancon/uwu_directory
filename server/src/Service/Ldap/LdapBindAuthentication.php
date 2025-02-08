@@ -10,7 +10,6 @@ readonly class LdapBindAuthentication
     public function __construct(
         private string $userDn,
         private string $connectionString,
-        private string $usernameSuffix
     )
     {
     }
@@ -29,7 +28,7 @@ readonly class LdapBindAuthentication
                 ldap_connect(
                     uri: $this->connectionString,
                 ),
-                dn: "CN=$escUser$this->usernameSuffix,$this->userDn",
+                dn: "CN=$escUser,$this->userDn",
                 password: $password
             );
         } catch (Throwable) {

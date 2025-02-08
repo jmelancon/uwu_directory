@@ -2,7 +2,7 @@
 <html lang="en">
     <!-- 2024 kb -->
     <head>
-        <title>{% block title %}Placeholder{% endblock %} | {{ app.request.server.get('ORGANIZATION') }}</title>
+        <title>{% block title %}Placeholder{% endblock %} | {{ config("organization")|default("uwu_directory") }}</title>
 
         <!-- Page icon. -->
         {% if config("favicon")|default("") is not empty %}

@@ -12,7 +12,6 @@ readonly class Mailer
     public function __construct(
         private MailerInterface $mailer,
         public string $administratorAddress,
-        public string $emailSuffix,
         private string $senderAddress
     ){}
 

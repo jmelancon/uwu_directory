@@ -3,7 +3,17 @@ parameters:
     ldap.dn.user: "CN=Users,%ldap.dn.base%"
     ldap.dn.service: "CN=Services,%ldap.dn.base%"
     ldap.dn.group: "CN=Groups,%ldap.dn.base%"
+
     ldap.filter.baseGroup: "CN=Basic Users,%ldap.dn.group%"
+
+    dir.web: "/var/www/uwu"
+    dir.config: "/var/uwu"
+
+    path.config.general: "%dir.config%/settings.json"
+    path.config.styles: "%dir.config%/custom.scss"
+    path.config.favicon: "%dir.config%/favicon.svg"
+
+    path.production.favicon: "%dir.web%/public/img/favicon_custom.svg"
 
 services:
     # default configuration for services in *this* file
@@ -100,12 +110,10 @@ services:
     App\Service\Mailer:
         arguments:
             $administratorAddress: "%env(ADMIN_EMAIL)%"
-            $emailSuffix: "%env(EMAIL_SUFFIX)%"
             $senderAddress: "%env(SENDER_EMAIL)%"
 
     App\Service\Ldap\LdapBindAuthentication:
         arguments:
-           $usernameSuffix: ''
            $connectionString: '%env(LDAP_URI)%'
            $userDn: '%ldap.dn.user%'
 
@@ -151,7 +159,7 @@ services:
 
     App\Service\ConfigurationProvider:
         arguments:
-            $generalConfigPath: '/var/server/config.json'
-            $styleConfigPath: '/var/server/custom.scss'
-            $faviconPath: '/var/server/favicon.svg'
-            $productionFaviconPath: '/var/www/project/public/img/favicon_custom.svg'
+            $generalConfigPath: '%path.config.general%'
+            $styleConfigPath: '%path.config.styles%'
+            $faviconPath: '%path.config.favicon%'
+            $productionFaviconPath: '%path.production.favicon%'

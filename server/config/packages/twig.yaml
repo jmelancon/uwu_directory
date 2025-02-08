@@ -1,7 +1,5 @@
 twig:
     file_name_pattern: '*.twig'
-    globals:
-        emailSuffix: '%env(EMAIL_SUFFIX)%'
 
 when@test:
     twig:
