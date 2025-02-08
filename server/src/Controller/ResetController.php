@@ -7,6 +7,7 @@ use App\Entity\User;
 use App\Exception\UserDoesNotExistException;
 use App\Security\LdapUserProvider;
 use App\Service\Condition\Exists\UserExistsCondition;
+use App\Service\ConfigurationProvider;
 use App\Service\CRUD\UpdateEntity\UserPasswordSetter;
 use App\Service\Mailer;
 use App\Service\Tokenizer;
@@ -33,6 +34,7 @@ class ResetController extends AbstractController
         private readonly LdapUserProvider    $userProvider,
         private readonly LoggerInterface     $logger,
         private readonly LdapUserProvider $ldapUserProvider,
+        private readonly ConfigurationProvider $config
     ){}
 
     #[Route(
@@ -57,9 +59,11 @@ class ResetController extends AbstractController
             if ($user instanceof User){
                 $resetToken = $this->tk->encode($passwordReset);
 
+                $org = $this->config->getConfig()->getOrganization() ?? 'Account';
+
                 $this->mailer->dispatch(
                     to: $user->getEmail(),
-                    subject: "🔒 Your ACM@UND Password Reset Request",
+                    subject: "🔒 Your $org Password Reset Request",
                     template: "mail/resetLink.html.twig",
                     context: [
                         "token" => $resetToken,
