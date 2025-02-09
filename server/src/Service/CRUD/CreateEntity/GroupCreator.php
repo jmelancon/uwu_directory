@@ -14,7 +14,7 @@ readonly class GroupCreator
     ){}
 
     protected function esc(string $str): string{
-        return ldap_escape($str, flags: LDAP_ESCAPE_FILTER);
+        return ldap_escape($str, flags: LDAP_ESCAPE_DN);
     }
 
     public function create(string $serviceName): void

@@ -38,7 +38,7 @@ readonly class UserGroupModifier
     public function batch(string $username, array $newGroups): void
     {
         // Make the new DN
-        $calculatedDn = "CN=" . ldap_escape($username) . "," . $this->userDn;
+        $calculatedDn = "CN=" . ldap_escape($username, flags: LDAP_ESCAPE_DN) . "," . $this->userDn;
 
         // Fetch existing group memberships and parse the new memberships
         $existing = $this->groups->fetch($username) ?? [];
@@ -64,14 +64,14 @@ readonly class UserGroupModifier
     }
 
     public function add(string $username, string $group): void{
-        $userDn = "CN=" . ldap_escape($username) . "," . $this->userDn;
-        $groupDn = "CN=" . ldap_escape($group) . "," . $this->groupDn;
+        $userDn = "CN=" . ldap_escape($username, flags: LDAP_ESCAPE_DN) . "," . $this->userDn;
+        $groupDn = "CN=" . ldap_escape($group, flags: LDAP_ESCAPE_DN) . "," . $this->groupDn;
         $this->executeAddition($userDn, $groupDn);
     }
 
     public function delete(string $username, string $group): void{
-        $userDn = "CN=" . ldap_escape($username) . "," . $this->userDn;
-        $groupDn = "CN=" . ldap_escape($group) . "," . $this->groupDn;
+        $userDn = "CN=" . ldap_escape($username, flags: LDAP_ESCAPE_DN) . "," . $this->userDn;
+        $groupDn = "CN=" . ldap_escape($group, flags: LDAP_ESCAPE_DN) . "," . $this->groupDn;
         $this->executeDeletion($userDn, $groupDn);
     }
 }

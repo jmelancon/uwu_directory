@@ -2,15 +2,15 @@ name: infra
 services:
   php:
     build:
-      dockerfile: build/server.production.Dockerfile
+      dockerfile: compose/build/server.production.Dockerfile
       context: ../
     env_file: "../environment/server/.env"
     depends_on:
       - directory
     volumes:
       - "php_socket:/var/run"
-      - "web_data:/var/www/project"
-      - "../persist/server/var/server:/var/server"
+      - "web_data:/var/www/uwu"
+      - "../persist/server/var/uwu:/var/uwu"
 
   web:
     image: nginx:latest
@@ -22,7 +22,7 @@ services:
       - php
     volumes:
       - "php_socket:/var/run"
-      - "web_data:/var/www/project"
+      - "web_data:/var/www/uwu"
       - "../config/nginx/default.conf:/etc/nginx/conf.d/default.conf"
 
   directory:

@@ -13,7 +13,7 @@ readonly class GroupDeleter
     ){}
 
     public function delete(string $group): void{
-        $escGroup = ldap_escape($group);
+        $escGroup = ldap_escape($group, flags: LDAP_ESCAPE_DN);
         ldap_delete(
             ldap: $this->ldapAggregator->getStockProvider(),
             dn: "CN=" . $escGroup . "," . $this->groupDn

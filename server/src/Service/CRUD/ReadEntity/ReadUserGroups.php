@@ -15,7 +15,7 @@ readonly class ReadUserGroups
 
     public function fetch(string $username): ?array{
         // Escape username
-        $escUser = ldap_escape($username);
+        $escUser = ldap_escape($username, flags: LDAP_ESCAPE_FILTER);
 
         // Pull user
         $query = $this->ldapAggregator->getSymfonyProvider()->query($this->userDn, "(cn=$escUser)");
@@ -25,6 +25,6 @@ readonly class ReadUserGroups
     public function has(string $username, string $group): bool{
         // Get groups
         $has = $this->fetch($username);
-        return in_array("CN=" . ldap_escape($group, flags: LDAP_ESCAPE_FILTER) . "," . $this->groupDn, $has);
+        return in_array("CN=" . ldap_escape($group, flags: LDAP_ESCAPE_DN) . "," . $this->groupDn, $has);
     }
 }

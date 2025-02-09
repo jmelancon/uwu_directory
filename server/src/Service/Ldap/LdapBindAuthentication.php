@@ -23,7 +23,7 @@ readonly class LdapBindAuthentication
      */
     public function auth(string $username, string $password): bool{
         try {
-            $escUser = ldap_escape($username);
+            $escUser = ldap_escape($username, flags: LDAP_ESCAPE_DN);
             return ldap_bind(
                 ldap_connect(
                     uri: $this->connectionString,

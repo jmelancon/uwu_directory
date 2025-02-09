@@ -13,7 +13,7 @@ readonly class UserDeleter
     ){}
 
     public function delete(string $username): void{
-        $escUser = ldap_escape($username);
+        $escUser = ldap_escape($username, flags: LDAP_ESCAPE_DN);
         ldap_delete(
             ldap: $this->ldapAggregator->getStockProvider(),
             dn: "CN=" . $escUser . "," . $this->userDn

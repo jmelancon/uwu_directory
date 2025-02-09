@@ -18,7 +18,7 @@ readonly class UserPasswordSetter
     public function set(User $user, string $password): void
     {
         // Pull out a few details to make access easier
-        $username = ldap_escape($user->getIdentifier());
+        $username = ldap_escape($user->getIdentifier(), flags: LDAP_ESCAPE_DN);
 
         // Set DN
         $calculatedDn = "CN=$username,$this->userDn";

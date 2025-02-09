@@ -15,26 +15,22 @@ RUN docker-php-ext-install ldap gmp
 COPY ../../config/server/zz-docker.conf /usr/local/etc/php-fpm.d/zz-docker.conf
 
 # Pull in project source
-COPY --chown=www-data:www-data server /var/www/project
+COPY --chown=www-data:www-data server /var/www/uwu
 RUN chown www-data:www-data /var/www
 
 # Switch to WWW user
-WORKDIR /var/www/project
+WORKDIR /var/www/uwu
 USER www-data
 
 # Ensure a few environment variables
 ENV SYMFONY_ENV=prod
 ENV APP_ENV=prod
 ENV APP_DEBUG=0
-ENV DATABASE_DSN="sqlite:///var/server/app.db"
-RUN touch /var/www/project/.env
+ENV DATABASE_DSN="sqlite:///var/uwu/app.db"
+RUN touch /var/www/uwu/.env
 
 # Pull vendor files & compile
 RUN composer install --no-dev --optimize-autoloader
-RUN npm run build
-
-# Clear any cache
-RUN php bin/console cache:pool:clear --all
 
 # Health check
 HEALTHCHECK CMD socat -u OPEN:/dev/null UNIX-CONNECT:/run/php8.3-fpm.sock;

@@ -57,4 +57,4 @@ $BIN_NPM --prefix $DIR_SERVER run build;
 chown -R www-data:www-data $DIR_CONFIG
 
 # Start server
-$BIN_PHP;
+APP_ENV=prod APP_DEBUG=0 $BIN_PHP;

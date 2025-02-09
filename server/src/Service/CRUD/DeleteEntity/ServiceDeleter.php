@@ -13,7 +13,7 @@ readonly class ServiceDeleter
     ){}
 
     public function delete(string $service): void{
-        $escService = ldap_escape($service);
+        $escService = ldap_escape($service, flags: LDAP_ESCAPE_DN);
         ldap_delete(
             ldap: $this->ldapAggregator->getStockProvider(),
             dn: "CN=" . $escService . "," . $this->serviceDn

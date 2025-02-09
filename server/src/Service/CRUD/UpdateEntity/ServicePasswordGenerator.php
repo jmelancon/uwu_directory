@@ -22,7 +22,7 @@ readonly class ServicePasswordGenerator
     public function set(string $serviceName): string
     {
         // Pull out a few details to make access easier
-        $escName = ldap_escape($serviceName);
+        $escName = ldap_escape($serviceName, flags: LDAP_ESCAPE_DN);
 
         // Set DN
         $calculatedDn = "CN=$escName,$this->serviceDn";
