@@ -25,8 +25,21 @@ PROD_FAVICON="${DIR_SERVER}/public/img/favicon_custom.svg"
 # Check for DB existence
 if [ ! -f "$CONF_OAUTH_DB" ]; then
   echo "Database not found, creating...";
-  sqlite3 $CONF_OAUTH_DB "VACUUM;";
-  sleep 2;
+  sqlite3 $CONF_OAUTH_DB "VACUUM";
+
+  # Await filesystem update
+  for i in $(seq 16);
+    do
+      if [ -f "$CONF_OAUTH_DB" ]; then
+        break;
+      elif [ "$i" -eq "16" ]; then
+        echo "Database wasn't created. Bailing.";
+        exit 1;
+      else
+        sleep 0.25;
+      fi
+    done
+
   chown www-data:www-data $CONF_OAUTH_DB;
   php $BIN_CONSOLE doctrine:database:create;
   php $BIN_CONSOLE doctrine:schema:update --dump-sql --force

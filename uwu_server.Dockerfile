@@ -42,10 +42,13 @@ USER www-data
 # Install all NPM packages
 RUN npm install
 
+USER root
+
 #
 # Production images require provisioning. Don't pull in dev dependencies.
 #
 FROM uwu_full AS prod
+USER www-data
 ENV SYMFONY_ENV=prod
 ENV APP_ENV=prod
 ENV APP_DEBUG=0
@@ -55,10 +58,13 @@ RUN touch /var/www/uwu/.env
 # Pull vendor files & compile
 RUN composer install --no-dev --optimize-autoloader
 
+USER root
+
 #
 # Test images also require provisioning. Pull in dev dependencies as we'll need phpunit.
 #
 FROM uwu_full AS test
+USER www-data
 ENV SYMFONY_ENV=test
 ENV APP_ENV=test
 ENV APP_DEBUG=1
@@ -67,6 +73,8 @@ RUN touch /var/www/uwu/.env
 
 # Pull vendor files & compile
 RUN composer install --dev --optimize-autoloader
+
+USER root
 
 #
 # I just kinda yolo stuff for dev builds

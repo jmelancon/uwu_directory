@@ -1,26 +1,9 @@
 name: uwu_stack
-services:
-  uwu_server_devel:
-    build:
-      dockerfile: uwu_server.Dockerfile
-      target: devel
-    env_file:
-      - path: ./environment/server/.env.example
-        required: true
-      - path: ./environment/server/.env
-        required: false
-    depends_on:
-      directory:
-        condition: service_healthy
-    volumes:
-      - "php_socket:/var/run"
-      - "./server:/var/www/uwu"
-      - "./persist/server/var/uwu:/var/uwu"
-    profiles: ["devel"]
 
-  uwu_server_prod:
+services:
+  server: &server
     build:
-      dockerfile: uwu_server.Dockerfile
+      dockerfile: ./uwu_server.Dockerfile
       target: prod
     env_file:
       - path: ./environment/server/.env.example
@@ -31,57 +14,49 @@ services:
       directory:
         condition: service_healthy
     volumes:
-      - "php_socket:/var/run"
-      - "web_data:/var/www/uwu"
-      - "./persist/server/var/uwu:/var/uwu"
-    profiles: ["prod"]
+      - type: volume
+        source: php_socket
+        target: /var/run
+      - type: volume
+        source: uwu_config
+        target: /var/uwu
+    develop:
+      watch:
+        - path: ./server
+          action: sync
+          target: /var/www/uwu
+          ignore:
+            - node_modules/
+            - var/
+            - vendor/
+    profiles: ["devel", "prod"]
 
-  uwu_server_test:
+  server_ci:
+    <<: *server
     build:
-      dockerfile: uwu_server.Dockerfile
+      dockerfile: ./uwu_server.Dockerfile
       target: test
-    env_file:
-      - path: ./environment/server/.env.example
-        required: true
-      - path: ./environment/server/.env
-        required: false
-    depends_on:
-      directory:
-        condition: service_healthy
-    volumes:
-      - "php_socket:/var/run"
-      - "web_data:/var/www/uwu"
+    volumes: []
     profiles: ["test"]
 
-  web_devel:
+  nginx:
     image: nginx:latest
     healthcheck:
       test: service nginx status || exit 1
+    depends_on:
+      server:
+        condition: service_healthy
     ports:
       - "8018:80"
-    depends_on:
-      uwu_server_devel:
-        condition: service_healthy
     volumes:
-      - "php_socket:/var/run"
-      - "./server:/var/www/uwu"
-      - "./config/nginx/default.conf:/etc/nginx/conf.d/default.conf"
-    profiles: ["devel"]
-
-  web_prod:
-    image: nginx:latest
-    healthcheck:
-      test: service nginx status || exit 1
-    ports:
-      - "8018:80"
-    depends_on:
-      uwu_server_prod:
-        condition: service_healthy
-    volumes:
-      - "php_socket:/var/run"
-      - "web_data:/var/www/uwu"
-      - "./config/nginx/default.conf:/etc/nginx/conf.d/default.conf"
-    profiles: ["prod"]
+      - type: volume
+        source: php_socket
+        target: /var/run
+      - type: bind
+        source: ./config/nginx/default.conf
+        target: /etc/nginx/conf.d/default.conf
+        read_only: true
+    profiles: ["prod", "devel"]
 
   directory:
     hostname: "dc1"
@@ -94,16 +69,31 @@ services:
     ports:
       - "636:636"
     volumes:
-      - "./config/smblds/entrypoint.d:/entrypoint.d"
-      - "./persist/smblds/var/lib/samba:/var/lib/samba"
-      - "./persist/smblds/etc/samba:/etc/samba"
-      - "./persist/smblds/var/log/samba:/var/log/samba"
-      - "./persist/smblds/var/cache/samba:/var/cache/samba"
+      - type: bind
+        source: ./config/smblds/entrypoint.d
+        target: /entrypoint.d
+        read_only: true
+      - type: volume
+        source: smb_var_lib
+        target: /var/lib/samba
+      - type: volume
+        source: smb_var_log
+        target: /var/log/samba
+      - type: volume
+        source: smb_var_cache
+        target: /var/cache/samba
+      - type: volume
+        source: smb_etc
+        target: /etc/samba
     profiles: ["devel", "test", "prod"]
 
 volumes:
   php_socket:
-  web_data:
+  uwu_config:
+  smb_var_lib:
+  smb_var_log:
+  smb_var_cache:
+  smb_etc:
 
 networks:
   backend:
