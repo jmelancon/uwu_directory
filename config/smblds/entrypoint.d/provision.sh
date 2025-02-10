@@ -11,7 +11,7 @@ if [ ! -f /etc/samba/provisioned ]; then
   samba &
   for i in $(seq 64);
   do
-      if lsof -i -P -n | grep -q ":636 (LISTEN)"; then
+      if /usr/local/bin/ldapwhoami; then
         break;
       elif [ "$i" -eq "64" ]; then
         echo "Samba didn't start. Bailing.";
