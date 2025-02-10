@@ -11,6 +11,7 @@ objectCategory: CN=Container,CN=Schema,CN=Configuration,%DN_HERE%
 CN: Groups
 objectClass: container
 objectClass: top
+objectGuid: %GROUP_GUID_HERE%
 
 # create base service folder
 dn: CN=Services,%DN_HERE%
@@ -20,6 +21,7 @@ objectCategory: CN=Container,CN=Schema,CN=Configuration,%DN_HERE%
 CN: Services
 objectClass: container
 objectClass: top
+objectGuid: %SERVICE_GUID_HERE%
 
 # create basic user group
 dn: CN=Basic Users,CN=Groups,%DN_HERE%
@@ -27,6 +29,7 @@ changetype: add
 CN: Basic Users
 objectClass: group
 objectClass: top
+objectGuid: %BASIC_USERS_GUID_HERE%
 
 # create sso admin group
 dn: CN=SSO Administrators,CN=Groups,%DN_HERE%
@@ -34,3 +37,4 @@ changetype: add
 CN: SSO Administrators
 objectClass: group
 objectClass: top
+objectGuid: %SSO_ADMIN_GUID_HERE%

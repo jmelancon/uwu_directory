@@ -16,3 +16,14 @@ jobs:
     - uses: actions/checkout@v4
     - name: Run PHPUnit
       run: docker compose --profile test up --abort-on-container-exit --menu=false
+    - name: Parse Commit SHA to Container Tag
+    - run: echo "CONTAINER_TAG=main_$(git log --pretty=format:'%h' -n 1)" >> $GITHUB_ENV
+    - name: Build Production Container
+      run: docker build -f uwu_server.Dockerfile --target prod -t uwu_server_prod:$CONTAINER_TAG .
+    - name: Export Container Image
+      run: docker save uwu_server_prod:main_$CONTAINER_TAG | gzip > $CONTAINER_TAG.tar.gz
+    - name: Save Container to Artifact
+      uses: actions/upload-artifact@v4
+      with:
+        name: uwu_server_prod:$CONTAINER_TAG
+        path: $CONTAINER_TAG.tar.gz
