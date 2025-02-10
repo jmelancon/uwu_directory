@@ -42,12 +42,16 @@ This ain't done, chief.
   - Pretty sure this is good, at least for now. Could use some stylistic tweaks as the padding on
     the field labels ticks me off.
 - Add OAuth endpoints/configuration tabs
-- Maybe add unit tests and Github actions?
+- Maybe add unit tests and ~~GitHub actions~~?
+  - PHPUnit has been configured, but no tests have been written
+  - GitHub actions is currently configured to spin up PHPUnit compose,
+    build production image, and save the image as an artifact. Should be
+    trivial to set this to push to docker.io in the future.
 
 ## Installation
 
-I don't really have any steps for installation at the moment, though this should be remedied 
-soon™️. Best I can offer you for now is this:
+For now, the container must be built from source as I haven't pushed off
+to docker.io yet. To build and deploy, follow these steps:
 
 1. Clone project to your local computer:
    ```shell
@@ -63,13 +67,13 @@ soon™️. Best I can offer you for now is this:
    cp server/.env.example server/.env
    nano server/.env
    ```
-3. Enter the `compose` directory and start the Docker containers.
+3. Go back to project root and start the Docker containers.
    ```shell
-   cd ../compose
-   docker compose up --build -d
+   cd ../
+   docker compose --profile prod up --build -d
    ```
-4. ???
-5. profit.
+4. Wait for containers to start.
+5. Access web interface on `0.0.0.0:8018`
 
 These steps are subject to change and may not work over the course
 of this program's initial development.

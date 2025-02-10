@@ -23,6 +23,7 @@ if [ ! -f /etc/samba/provisioned ]; then
   ldbmodify -H "/var/lib/samba/private/sam.ldb.d/$BASE_DN.ldb" /tmp/provision.ldif && \
   echo "uwu you're so provisioned swaggy :3" > /etc/samba/provisioned;
   echo "Directory is hopefully provisioned.......";
+  samba-tool user setexpiry Administrator --noexpiry
 fi
 
 exit 0;
