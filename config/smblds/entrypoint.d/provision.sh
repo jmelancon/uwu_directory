@@ -24,6 +24,7 @@ if [ ! -f /etc/samba/provisioned ]; then
   ldapmodify -x -H ldaps:// -f /tmp/provision.ldif && \
   echo "uwu you're so provisioned swaggy :3" > /etc/samba/provisioned;
   pkill samba;
+  echo "Directory is hopefully provisioned.......";
 fi
 
-
+exit 0;
