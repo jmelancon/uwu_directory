@@ -9,11 +9,11 @@ export BASE_DN=$( \
 
 if [ ! -f /etc/samba/provisioned ]; then
   samba &
-  for i in $(seq 32);
+  for i in $(seq 64);
   do
       if lsof -i -P -n | grep -q ":636 (LISTEN)"; then
         break;
-      elif [ "$i" -eq "10" ]; then
+      elif [ "$i" -eq "64" ]; then
         echo "Samba didn't start. Bailing.";
         exit 1;
       else
