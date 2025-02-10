@@ -9,7 +9,17 @@ export BASE_DN=$( \
 
 if [ ! -f /etc/samba/provisioned ]; then
   samba &
-  sleep 2;
+  for i in $(seq 32);
+  do
+      if lsof -i -P -n | grep -q ":636 (LISTEN)"; then
+        break;
+      elif [ "$i" -eq "10" ]; then
+        echo "Samba didn't start. Bailing.";
+        exit 1;
+      else
+        sleep 0.25;
+      fi
+  done
   cat /entrypoint.d/provision.ldif | sed "s/%DN_HERE%/$BASE_DN/" > /tmp/provision.ldif;
   ldapmodify -x -H ldaps:// -f /tmp/provision.ldif && \
   echo "uwu you're so provisioned swaggy :3" > /etc/samba/provisioned;
