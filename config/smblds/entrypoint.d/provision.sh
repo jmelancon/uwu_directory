@@ -2,26 +2,14 @@
 
 export BASE_DN=$( \
         echo $REALM | \
-        tr "[:upper:]" "[:lower:]" | \
+        tr "[:lower:]" "[:upper:]" | \
         sed 's:\.:,DC=:g' | \
         sed 's/^/DC=/' \
     );
 
 if [ ! -f /etc/samba/provisioned ]; then
-  samba &
-  for i in $(seq 64);
-  do
-      if /usr/local/bin/ldapwhoami; then
-        break;
-      elif [ "$i" -eq "64" ]; then
-        echo "Samba didn't start. Bailing.";
-        exit 1;
-      else
-        sleep 0.25;
-      fi
-  done
   cat /entrypoint.d/provision.ldif | sed "s/%DN_HERE%/$BASE_DN/" > /tmp/provision.ldif;
-  ldapmodify -x -H ldaps:// -f /tmp/provision.ldif && \
+  ldbmodify -H "/var/lib/samba/private/sam.ldb.d/$BASE_DN.ldb" /tmp/provision.ldif && \
   echo "uwu you're so provisioned swaggy :3" > /etc/samba/provisioned;
   echo "Directory is hopefully provisioned.......";
 fi
