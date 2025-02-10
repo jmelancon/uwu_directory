@@ -30,7 +30,7 @@ services:
     image: smblds/smblds:latest
     env_file: "../environment/smblds/.env"
     ports:
-      - "636:6636"
+      - "6636:636"
     volumes:
       - "../persist/smblds/entrypoint.d:/entrypoint.d"
       - "../persist/smblds/var/lib/samba:/var/lib/samba"

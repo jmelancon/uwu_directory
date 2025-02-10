@@ -1,12 +1,14 @@
-#!/bin/sh
+#!/bin/bash
 set -e
 
 DIR_CONFIG="/var/uwu"
 DIR_SERVER="/var/www/uwu"
 
 BIN_CONSOLE="${DIR_SERVER}/bin/console"
+BIN_PHPUNIT="${DIR_SERVER}/vendor/bin/phpunit"
 BIN_NPM="/usr/bin/npm"
-BIN_PHP="/usr/local/sbin/php-fpm"
+BIN_PHP="/usr/local/bin/php"
+BIN_PHP_FPM="/usr/local/sbin/php-fpm"
 BIN_OPENSSL="/usr/bin/openssl"
 BIN_SQLITE="/usr/bin/sqlite3"
 
@@ -57,4 +59,15 @@ $BIN_NPM --prefix $DIR_SERVER run build;
 chown -R www-data:www-data $DIR_CONFIG
 
 # Start server
-APP_ENV=prod APP_DEBUG=0 $BIN_PHP;
+environment=${APP_ENV,,:-prod}
+if [ "${environment}" = "test" ]; then
+  echo "Starting in test mode...";
+  cd $DIR_SERVER;
+  APP_ENV=test APP_DEBUG=1 $BIN_PHP $BIN_PHPUNIT;
+elif [ "${environment}" = "dev" ]; then
+  echo "Starting in development mode...";
+  APP_ENV=dev APP_DEBUG=1 $BIN_PHP_FPM;
+else
+  echo "Starting in production mode...";
+  APP_ENV=prod APP_DEBUG=0 $BIN_PHP_FPM;
+fi
