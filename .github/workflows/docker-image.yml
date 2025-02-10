@@ -16,7 +16,9 @@ jobs:
     - uses: actions/checkout@v4
     - name: Build the Docker image
       run: docker build . --file ./compose/build/server.production.Dockerfile --tag uwu_directory:$(date +%s)
-    - name: Create Test Environment
+    - name: Create Server Test Environment
       run: echo "APP_ENV=test" >> ./environment/server/.env
+    - name: Create smblds Test Enviroment
+      run: cp ./environment/smblds/.env.example ./environment/smblds/.env
     - name: Run PHPUnit
       run: docker compose -f ./compose/docker-compose.devel.yml up --abort-on-container-exit --menu=false
