@@ -39,6 +39,9 @@ RUN chown www-data:www-data /var/www
 WORKDIR /var/www/uwu
 USER www-data
 
+# Install all NPM packages
+RUN npm install
+
 #
 # Production images require provisioning. Don't pull in dev dependencies.
 #
