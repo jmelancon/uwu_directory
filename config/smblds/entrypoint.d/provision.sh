@@ -24,6 +24,7 @@ if [ ! -f /etc/samba/provisioned ]; then
   echo "uwu you're so provisioned swaggy :3" > /etc/samba/provisioned;
   echo "Directory is hopefully provisioned.......";
   samba-tool user setexpiry Administrator --noexpiry
+  samba-tool domain passwordsettings set --max-pwd-age=0
 fi
 
 exit 0;
