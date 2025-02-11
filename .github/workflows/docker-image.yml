@@ -18,16 +18,17 @@ jobs:
     needs: phpunit
     if: ${{ github.event_name == 'push' }}
     steps:
-    - name: Parse Commit SHA to Container Tag
-      run: echo "CONTAINER_TAG=main_$(git log --pretty=format:'%h' -n 1)" >> $GITHUB_ENV
-    - name: Build Container
-      run: docker build
-            -f uwu_server.Dockerfile
-            --target prod
-            -t ghcr.io/jmelancon/uwu_server:${{ env.CONTAINER_TAG }}
-            -t ghcr.io/jmelancon/uwu_server:latest
-            .
-    - name: Log In to Registry
-      run: echo "${{ secrets.GITHUB_TOKEN }}" | docker login ghcr.io -u ${{ github.actor }} --password-stdin
-    - name: Publish Image
-      run: docker push --all-tags ghcr.io/jmelancon/uwu_server
+      - uses: actions/checkout@v4
+      - name: Parse Commit SHA to Container Tag
+        run: echo "CONTAINER_TAG=main_$(git log --pretty=format:'%h' -n 1)" >> $GITHUB_ENV
+      - name: Build Container
+        run: docker build
+              -f uwu_server.Dockerfile
+              --target prod
+              -t ghcr.io/jmelancon/uwu_server:${{ env.CONTAINER_TAG }}
+              -t ghcr.io/jmelancon/uwu_server:latest
+              .
+      - name: Log In to Registry
+        run: echo "${{ secrets.GITHUB_TOKEN }}" | docker login ghcr.io -u ${{ github.actor }} --password-stdin
+      - name: Publish Image
+        run: docker push --all-tags ghcr.io/jmelancon/uwu_server
