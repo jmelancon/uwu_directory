@@ -1,8 +1,8 @@
 parameters:
     ldap.dn.base: "%env(LDAP_DN_BASE)%"
     ldap.dn.user: "CN=Users,%ldap.dn.base%"
-    ldap.dn.service: "CN=Services,%ldap.dn.base%"
-    ldap.dn.group: "CN=Groups,%ldap.dn.base%"
+    ldap.dn.service: "OU=Services,%ldap.dn.base%"
+    ldap.dn.group: "OU=Groups,%ldap.dn.base%"
 
     ldap.filter.baseGroup: "CN=Basic Users,%ldap.dn.group%"
 
