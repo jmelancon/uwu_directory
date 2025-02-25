@@ -10,10 +10,10 @@ let rootUrl: string;
  * The constructed URL.
  */
 export function parseUrl(relative: string): string {
-    return (rootUrl ?? "") + relative;
+    return rootUrl + relative;
 }
 window.addEventListener("load",(_e) => {
     // We need the root URL of the site so our stuff works when behind a reverse proxy. A reference
     // to the URL is hidden in the site's <header>.
-    rootUrl = document.getElementById("root_url")?.href;
+    rootUrl = document.getElementById("root_url")?.getAttribute("href") ?? "";
 });
