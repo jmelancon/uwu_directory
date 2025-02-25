@@ -9,6 +9,18 @@ import {fetchMembers} from "./membership_editor";
 import {prepDataTable} from "./datatables";
 
 window.addEventListener("load",(_e) => {
+    // We need the root URL of the site so our stuff works when behind a reverse proxy. A reference
+    // to the URL is hidden in the site's <header>.
+    let rootUrl: string;
+    const headerLink = document.getElementById("root_url");
+
+    if (headerLink instanceof HTMLLinkElement) {
+        rootUrl = headerLink.href;
+    } else {
+        console.log("uh ohhhhhh, it's broken :(");
+        return;
+    }
+
     window.editButtonProxy = (caller: HTMLElement) => {
         // Grab the aria-label on the button. This is how we'll identify the action.
         const ariaLabel: string|null = caller.getAttribute("aria-label");
@@ -32,7 +44,7 @@ window.addEventListener("load",(_e) => {
                         fetchUser(argument);
                     else if (ariaLabel === "Delete"){
                         resetModal();
-                        populateModalConfirm(deleteRequest, "/api/v1/user/" + argument);
+                        populateModalConfirm(deleteRequest, new URL("/api/v1/user/", rootUrl).href + argument);
                         showModal("Delete User?", "Are you sure you want to delete this user?");
                     }
                     break;
@@ -41,26 +53,26 @@ window.addEventListener("load",(_e) => {
                         fetchMembers(argument);
                     else if (ariaLabel === "Delete"){
                         resetModal();
-                        populateModalConfirm(deleteRequest, "/api/v1/group/" + argument);
+                        populateModalConfirm(deleteRequest, new URL("/api/v1/group/", rootUrl).href + argument);
                         showModal("Delete Group?", "Are you sure you want to delete this group?");
                     }
                     break;
                 case "view_services_datatable":
                     if (ariaLabel === "Reset Password"){
                         resetModal();
-                        populateModalConfirm(postRequest, `/api/v1/service/${argument}/password`)
+                        populateModalConfirm(postRequest, new URL(`/api/v1/service/${argument}/password`, rootUrl).href )
                         showModal("Reset Service Credentials?", "Are you sure you want to reset this service's credentials? This will disconnect the service until its configuration is updated.")
                     }
                     else if (ariaLabel === "Delete"){
                         resetModal();
-                        populateModalConfirm(deleteRequest, `/api/v1/service/${argument}`)
+                        populateModalConfirm(deleteRequest, new URL(`/api/v1/service/${argument}`, rootUrl).href )
                         showModal("Delete Service?", "Are you sure you want to delete this service?")
                     }
                     break;
                 case "edit_members_datatable":
                     if (ariaLabel === "Revoke"){
                         resetModal();
-                        populateModalConfirm(deleteRequest, `/api/v1/user/${argument}/membership/${context}`)
+                        populateModalConfirm(deleteRequest, new URL(`/api/v1/user/${argument}/membership/${context}`, rootUrl).href )
                         showModal("Revoke Membership?", "Are you sure you want to revoke this user's membership?")
                     }
             }
@@ -85,7 +97,7 @@ window.addEventListener("load",(_e) => {
             ],
             serverSide: true,
             ajax: {
-                url: '/api/v1/table/user',
+                url: new URL('/api/v1/table/user', rootUrl).href ,
                 type: "POST"
             },
         }
@@ -107,7 +119,7 @@ window.addEventListener("load",(_e) => {
             ],
             serverSide: true,
             ajax: {
-                url: '/api/v1/table/group',
+                url: new URL('/api/v1/table/group', rootUrl).href,
                 type: "POST"
             },
         }
@@ -129,7 +141,7 @@ window.addEventListener("load",(_e) => {
             ],
             serverSide: true,
             ajax: {
-                url: '/api/v1/table/service',
+                url: new URL('/api/v1/table/service', rootUrl).href,
                 type: "POST"
             },
         }

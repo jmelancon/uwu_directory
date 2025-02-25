@@ -1,7 +1,7 @@
 <header class="fixed-top shadow">
     <nav class="navbar navbar-expand bg-body-tertiary" style="max-height: 56px;">
         <div class="container-fluid">
-            <a href="{{ path('root') }}">
+            <a id="root_url" href="{{ url('root') }}">
                 <div class="navbar-brand align-items-center d-inline-flex gap-2">
                     <span class="pe-1 d-block" aria-description="Site Logo" id="site_logo"></span>
                     {{ config("service")|default("uwu_directory") }}
