@@ -1,5 +1,7 @@
 import $ from 'jquery';
 import {prepDataTable} from "./datatables";
+import {parseUrl} from "../url_parser";
+
 export function fetchMembers(group: string){
     // Spawn a new datatable for the group
     const memberEditFlavorText: JQuery = $("#edit_members > p");
@@ -29,7 +31,7 @@ export function fetchMembers(group: string){
             ],
             serverSide: true,
             ajax: {
-                url: '/api/v1/table/group/' + encodeURI(group),
+                url: parseUrl('/api/v1/table/group/') + encodeURI(group),
                 type: "POST"
             },
         }

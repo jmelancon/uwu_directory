@@ -1,5 +1,7 @@
 import {resetModal, showModal} from '../modal';
 import $ from 'jquery';
+import {parseUrl} from "../url_parser";
+
 export function fetchUser(username: string){
     // Interact with web API to attempt user fetch
     const landingDiv: JQuery = $("#edit_user_landing");
@@ -14,7 +16,7 @@ export function fetchUser(username: string){
     landingDiv.addClass("visually-hidden");
 
     const options: JQuery.AjaxSettings = {
-        url: `/api/v1/user/${username}`,
+        url: parseUrl(`/api/v1/user/${username}`),
         method: "GET",
         success: (data: User) => {
             // Populate fields
@@ -30,7 +32,7 @@ export function fetchUser(username: string){
                     checkbox.checked = true;
             })
 
-            editorDiv.find("button[data-request-path]").attr("data-request-path", `/api/v1/user/${data.identifier}`);
+            editorDiv.find("button[data-request-path]").attr("data-request-path", parseUrl(`/api/v1/user/${data.identifier}`));
 
             skeletonDiv.addClass("visually-hidden");
             editorDiv.removeClass("visually-hidden");
