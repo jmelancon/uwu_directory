@@ -1,0 +1,28 @@
+{
+  "dependencies": {
+    "@types/bootstrap": "^5.2.10",
+    "@types/jquery": "^3.5.32",
+    "bootstrap": "^5.3.3",
+    "bootstrap-icons": "^1.11.3",
+    "core-js": "^3.40.0",
+    "datatables.net": "^2.2.1",
+    "datatables.net-bs5": "^2.2.1",
+    "datatables.net-rowgroup-bs5": "^1.5.1",
+    "npm": "^11.0.0",
+    "@fontsource/roboto": "^5.1.1"
+  },
+  "devDependencies": {
+    "@symfony/webpack-encore": "^5.0.1",
+    "sass": "^1.83.4",
+    "sass-loader": "^16.0.4",
+    "ts-loader": "^9.5.2",
+    "typescript": "^5.7.3",
+    "webpack-notifier": "^1.15.0"
+  },
+  "scripts": {
+    "dev-server": "encore dev-server",
+    "dev": "encore dev",
+    "watch": "encore dev --watch",
+    "build": "encore production --progress"
+  }
+}

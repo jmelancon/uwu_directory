@@ -1,0 +1,162 @@
+parameters:
+    ldap.dn.base: "%env(LDAP_DN_BASE)%"
+    ldap.dn.user: "CN=Users,%ldap.dn.base%"
+    ldap.dn.service: "OU=Services,%ldap.dn.base%"
+    ldap.dn.group: "OU=Groups,%ldap.dn.base%"
+
+    ldap.filter.baseGroup: "CN=Basic Users,%ldap.dn.group%"
+
+    dir.web: "/var/www/uwu"
+    dir.config: "/etc/uwu"
+
+    path.config.general: "%dir.config%/settings.json"
+    path.config.styles: "%dir.config%/custom.scss"
+    path.config.favicon: "%dir.config%/favicon.svg"
+
+services:
+    # default configuration for services in *this* file
+    _defaults:
+        autowire: true      # Automatically injects dependencies in your services.
+        autoconfigure: true # Automatically registers your services as commands, event subscribers, etc.
+
+    # makes classes in src/ available to be used as services
+    # this creates a service per class whose id is the fully-qualified class name
+    App\:
+        resource: '../src/'
+        exclude:
+            - '../src/DependencyInjection/'
+            - '../src/Entity/'
+            - '../src/Kernel.php'
+
+    # add more service definitions when explicit configuration is needed
+    # please note that last definitions always *replace* previous ones
+    App\Service\Tokenizer:
+        arguments:
+            $secret: '%env(APP_SECRET)%'
+
+    Symfony\Component\Ldap\Ldap:
+        arguments: ['@Symfony\Component\Ldap\Adapter\ExtLdap\Adapter']
+        tags:
+            - ldap
+
+    Symfony\Component\Ldap\Adapter\ExtLdap\Adapter:
+        arguments:
+            -   connection_string: '%env(LDAP_URI)%'
+                options:
+                    protocol_version: 3
+                    referrals: false
+                    x_tls_require_cert: false
+
+    App\Service\CRUD\ReadEntity\ReadGroups:
+        arguments:
+            $baseDn: '%ldap.dn.group%'
+
+    App\Service\CRUD\CreateEntity\UserCreator:
+        arguments:
+            $userDn: '%ldap.dn.user%'
+            $baseDn: '%ldap.dn.base%'
+            $principalSuffix: '%env(PRINCIPAL_SUFFIX)%'
+            $baseGroup: '%ldap.filter.baseGroup%'
+
+    App\Service\CRUD\CreateEntity\ServiceCreator:
+        arguments:
+            $baseDn: '%ldap.dn.base%'
+            $serviceDn: '%ldap.dn.service%'
+
+    App\Service\CRUD\CreateEntity\GroupCreator:
+        arguments:
+            $baseDn: '%ldap.dn.base%'
+            $groupDn: '%ldap.dn.group%'
+
+    App\Service\CRUD\UpdateEntity\UserPasswordSetter:
+        arguments:
+            $userDn: '%ldap.dn.user%'
+
+    App\Service\CRUD\UpdateEntity\ServicePasswordGenerator:
+        arguments:
+            $serviceDn: '%ldap.dn.service%'
+
+    App\Service\Ldap\LdapAggregator:
+        arguments:
+            $uri: "%env(LDAP_URI)%"
+            $username: "%env(LDAP_USERNAME)%"
+            $password: "%env(LDAP_PASSWORD)%"
+
+    App\Service\Condition\Exists\UserExistsCondition:
+        arguments:
+            $userDn: '%ldap.dn.user%'
+            $baseGroup: '%ldap.filter.baseGroup%'
+
+    App\Service\Condition\Exists\GroupExistsCondition:
+        arguments:
+            $groupDn: '%ldap.dn.group%'
+
+    App\Service\Condition\Exists\ServiceExistsCondition:
+        arguments:
+            $serviceDn: '%ldap.dn.service%'
+
+    App\Service\CRUD\ReadEntity\ReadUserGroups:
+        arguments:
+            $userDn: '%ldap.dn.user%'
+            $groupDn: '%ldap.dn.group%'
+
+    App\Service\CRUD\UpdateEntity\UserGroupModifier:
+        arguments:
+            $userDn: '%ldap.dn.user%'
+            $groupDn: '%ldap.dn.group%'
+
+    App\Service\Mailer:
+        arguments:
+            $administratorAddress: "%env(ADMIN_EMAIL)%"
+            $senderAddress: "%env(SENDER_EMAIL)%"
+
+    App\Service\Ldap\LdapBindAuthentication:
+        arguments:
+           $connectionString: '%env(LDAP_URI)%'
+           $userDn: '%ldap.dn.user%'
+
+    App\Security\LdapUserProvider:
+        arguments:
+            $userDn: '%ldap.dn.user%'
+
+    App\Service\DataTableSource\UserDataTableProvider:
+        arguments:
+            $userDn: '%ldap.dn.user%'
+            $baseGroup: '%ldap.filter.baseGroup%'
+
+    App\Service\DataTableSource\MemberDataTableProvider:
+        arguments:
+            $userDn: '%ldap.dn.user%'
+            $groupDn: '%ldap.dn.group%'
+            $baseGroup: '%ldap.filter.baseGroup%'
+
+    App\Service\DataTableSource\GroupDataTableProvider:
+        arguments:
+            $groupDn: '%ldap.dn.group%'
+
+    App\Service\DataTableSource\ServiceDataTableProvider:
+        arguments:
+            $serviceDn: '%ldap.dn.service%'
+
+    App\Service\CRUD\DeleteEntity\UserDeleter:
+        arguments:
+            $userDn: '%ldap.dn.user%'
+
+    App\Service\CRUD\DeleteEntity\GroupDeleter:
+        arguments:
+            $groupDn: '%ldap.dn.group%'
+
+    App\Service\CRUD\DeleteEntity\ServiceDeleter:
+        arguments:
+            $serviceDn: '%ldap.dn.service%'
+
+    App\Service\CRUD\UpdateEntity\UserUpdater:
+        arguments:
+            $userDn: '%ldap.dn.user%'
+            $principalSuffix: '%env(PRINCIPAL_SUFFIX)%'
+
+    App\Service\ConfigurationProvider:
+        arguments:
+            $generalConfigPath: '%path.config.general%'
+            $styleConfigPath: '%path.config.styles%'
+            $faviconPath: '%path.config.favicon%'

@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en">
+    <!-- 2024 kb -->
+    <head>
+        <title>{% block title %}Placeholder{% endblock %} | {{ config("organization")|default("uwu_directory") }}</title>
+
+        <!-- Page icon. -->
+        {% if config("favicon")|default("") is not empty %}
+            <link rel="icon" href="data:image/svg+xml,{{ config("favicon")|url_encode }}"/>
+        {% else %}
+            <link rel="icon" href="{{ asset("img/favicon.svg") }}"/>
+        {% endif %}
+
+        <!-- Some meta stuff. Viewport's especially important, makes sure scaling looks good across a variety of client DPIs. -->
+        <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+        <meta charset="UTF-8"/>
+
+        <!-- Styles. Dynamically populated by AssetMapper. -->
+        {% block stylesheets %}
+            {{ encore_entry_link_tags('styles') }}
+            {% if config("accentColor")|default("") is not empty %}
+                <style>
+                    :root{
+                        --uwu-primary: {{ config("accentColor") }};
+                    }
+                </style>
+            {% endif %}
+        {% endblock %}
+
+        <!-- Flashbag handling. -->
+        <script>
+            window.flashes = [
+                    {% for label, messages in app.flashes %}{% for message in messages %}{
+                    "type": "{{ label }}",
+                    "message": "{{ message }}"
+                },{% endfor %}{% endfor %}
+            ]
+        </script>
+
+        <!-- JS, once again populated by AssetMapper. -->
+        {% block javascripts %}
+            {{ encore_entry_script_tags('app') }}
+        {% endblock %}
+    </head>
+
+    <body class="mh-100 h-100 overflow-hidden">
+        <!-- Common alert modal - used by all error/success messages -->
+        <twig:modal/>
+
+        <!-- Page header -->
+        <twig:header/>
+
+        <!-- Page body -->
+        {% block extendedBody %}
+        <div class="container-fluid overflow-y-scroll pt-5 pb-3 vh-100">
+            <div class="mb-4"></div>
+            {% block body %}{% endblock %}
+        </div>
+        {% endblock %}
+    </body>
+</html>

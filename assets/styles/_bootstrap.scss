@@ -1,0 +1,17 @@
+// Customize some of the variables for our base
+
+// Branding: Logo and Color
+$primary: #c950a7 !default;
+
+// Square off corners on UI elements
+$border-radius: 0 !default;
+$border-radius-sm: 0 !default;
+$border-radius-lg: 0 !default;
+$card-border-radius: 0 !default;
+$form-notch-leading-border-radius: 0 !default;
+
+// Apply Roboto as default font
+$font-family-base: "Roboto", sans !default;
+
+// Pull in bootstrap
+@import "../../node_modules/bootstrap/scss/bootstrap";

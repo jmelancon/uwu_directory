@@ -1,0 +1,124 @@
+@import "./_bootstrap-icons";
+@import "./_bootstrap";
+
+body {
+    background-repeat: no-repeat;
+    background-size: cover;
+    width: 100vw;
+}
+
+#site_logo{
+    width: 32px;
+    height: 32px;
+    background-repeat: no-repeat;
+    background-size: 32px 32px;
+}
+
+.btn.btn-primary[disabled] {
+    background-color: #444444;
+    border: 1px solid #444444;
+    box-shadow: none;
+}
+
+.nav.flex-column{
+    & > a{
+        height: 48px;
+        width: 48px;
+        &.active{
+            @extend .shadow;
+            background-color: var(--bs-primary);
+        };
+        &:hover{
+            @extend .shadow;
+        };
+        &[data-sidenav-parent], &.child-selected{
+            background-color: var(--bs-primary-bg-subtle);
+            @media (prefers-color-scheme: dark) {
+                background-color: var(--bs-primary-bg-subtle);
+            }
+            &.active{
+                background-color: var(--bs-primary);
+            }
+        };
+        & > span {
+            width: 48px;
+            height: 48px;
+            line-height: 48px;
+            text-align: center;
+        }
+    };
+}
+
+div.dt-container div.dt-length select {
+    width: 100% !important;
+}
+
+.dataTable tr .btn {
+    font-size: 15px;
+    padding: 0 4px;
+    margin: 0;
+}
+
+:root {
+    --uwu-primary: #{$primary};
+    --uwu-primary-hover: color-mix(in srgb, var(--uwu-primary) 50%, white 70%);
+    --uwu-primary-held: color-mix(in srgb, var(--uwu-primary) 60%, black 20%);
+    --uwu-selected-shadow: 0 0 0 .25rem color-mix(in srgb, var(--uwu-primary) 25%, transparent);
+}
+
+@media (prefers-color-scheme: dark) {
+    :root{
+        --uwu-primary-hover: color-mix(in srgb, var(--uwu-primary) 70%, black 30%);
+        --uwu-primary-held: color-mix(in srgb, var(--uwu-primary) 60%, white 20%);
+    }
+}
+
+:root{
+    --bs-primary: var(--uwu-primary);
+    --bs-link-color: var(--uwu-primary);
+    --bs-primary-bg-subtle: var(--uwu-primary-hover);
+}
+a{
+    color: var(--uwu-primary);
+}
+a:hover{
+    color: var(--uwu-primary-held);
+}
+.btn-primary {
+    --bs-btn-bg: var(--uwu-primary);
+    --bs-btn-border-color: var(--uwu-primary);
+}
+
+.btn-primary:hover, .btn-primary:focus-visible {
+    --bs-btn-hover-border-color: var(--uwu-primary-hover);
+    --bs-btn-hover-bg: var(--uwu-primary-hover);
+}
+
+.btn-primary:active {
+    --bs-btn-active-bg: var(--uwu-primary-held);
+    --bs-btn-active-border-color: var(--uwu-primary-held);
+}
+
+.form-control:focus, .form-select:focus {
+    border-color: var(--uwu-primary);
+    box-shadow: var(--uwu-selected-shadow);
+}
+
+.form-check-input:checked{
+    background-color: var(--uwu-primary);
+    border-color: var(--uwu-primary);
+}
+
+.form-check-input:focus{
+    box-shadow: var(--uwu-selected-shadow);
+}
+
+.nav-link:focus-visible, .btn-primary:focus-visible{
+    box-shadow: var(--uwu-selected-shadow);
+}
+
+.page-link {
+    --bs-pagination-active-bg: var(--uwu-primary);
+    --bs-pagination-active-border-color: var(--uwu-primary);
+    --bs-pagination-focus-box-shadow: var(--uwu-selected-shadow);
+}
