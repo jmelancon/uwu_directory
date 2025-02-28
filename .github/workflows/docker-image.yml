@@ -23,7 +23,7 @@ jobs:
     steps:
       - uses: actions/checkout@v4
       - name: Build container
-        run: docker buildx build -f Dockerfile . -t ghcr.io/jmelancon/uwu_directory:latest -t ghcr.io/jmelancon/uwu_directory:${{ needs.tag.outputs.tag }}
+        run: docker buildx build -f uwu_server.Dockerfile . -t ghcr.io/jmelancon/uwu_directory:latest -t ghcr.io/jmelancon/uwu_directory:${{ needs.tag.outputs.tag }}
       - name: Export container
         run: docker save ghcr.io/jmelancon/uwu_directory:latest | gzip - > ${{ needs.tag.outputs.tag }}.tar.gz
       - uses: actions/upload-artifact@v4
