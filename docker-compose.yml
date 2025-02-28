@@ -2,6 +2,7 @@ name: uwu_stack
 
 services:
   server:
+    image: ghcr.io/jmelancon/uwu_server:latest
     build:
       dockerfile: ./uwu_server.Dockerfile
       target: uwu_server
