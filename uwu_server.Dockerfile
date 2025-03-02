@@ -113,7 +113,7 @@ opcache.max_wasted_percentage=10
 opcache.interned_strings_buffer=16
 opcache.fast_shutdown=1
 EOF
-COPY <<EOF /etc/nginx/sites-enabled/default.conf
+COPY <<EOF /etc/nginx/sites-enabled/default
 server {
     server_name localhost;
     root /var/www/uwu/public;
