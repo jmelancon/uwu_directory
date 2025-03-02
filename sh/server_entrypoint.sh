@@ -62,6 +62,9 @@ elif [ "${environment}" = "dev" ]; then
   echo "Starting in development mode...";
   APP_ENV=dev APP_DEBUG=1 $BIN_PHP_FPM;
 else
+  echo "Warming cache..."
+  APP_ENV=prod APP_DEBUG=0 $BIN_PHP $BIN_CONSOLE cache:warmup;
+  chown -R www-data:www-data $DIR_SERVER/var/cache
   echo "Starting in production mode...";
   APP_ENV=prod APP_DEBUG=0 $BIN_PHP_FPM;
 fi

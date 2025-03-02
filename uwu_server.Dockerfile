@@ -1,8 +1,9 @@
 # syntax=docker/dockerfile:1-labs
 FROM php:8.3-fpm AS private_install_pkgs
 RUN apt-get update
-RUN apt-get install libldap-dev libgmp-dev git unzip socat sqlite3 nginx -y
-RUN docker-php-ext-install ldap gmp
+RUN apt-get install libldap-dev libgmp-dev git unzip socat sqlite3 nginx libicu-dev -y
+RUN docker-php-ext-configure intl
+RUN docker-php-ext-install ldap gmp intl
 
 FROM private_install_pkgs AS private_uwu_skeleton
 RUN <<EOF
@@ -93,6 +94,24 @@ user = www-data
 group = www-data
 listen = /var/run/uwu/php8.3-fpm.sock
 listen.mode = 0666
+EOF
+COPY <<EOF /usr/local/etc/php/php.ini
+zend_extension=opcache.so
+opcache.enable=1
+opcache.enable_cli=1
+opcache.jit_buffer_size=500000000
+opcache.jit=1235
+EOF
+COPY <<EOF /usr/local/etc/php/conf.d/opcache.ini
+[opcache]
+opcache.enable=1
+opcache.revalidate_freq=0
+opcache.validate_timestamps=1
+opcache.max_accelerated_files=10000
+opcache.memory_consumption=192
+opcache.max_wasted_percentage=10
+opcache.interned_strings_buffer=16
+opcache.fast_shutdown=1
 EOF
 COPY <<EOF /etc/nginx/sites-enabled/default.conf
 server {
