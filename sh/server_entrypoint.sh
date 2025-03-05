@@ -14,9 +14,6 @@ BIN_SQLITE="/usr/bin/sqlite3"
 CONF_PRIVATE_KEY="${DIR_CONFIG}/private.key"
 CONF_PUBLIC_KEY="${DIR_CONFIG}/public.key"
 CONF_OAUTH_DB="${DIR_CONFIG}/oauth.db"
-CONF_FAVICON="${DIR_CONFIG}/favicon.svg"
-
-PROD_FAVICON="${DIR_SERVER}/public/img/favicon_custom.svg"
 
 # Check for DB existence
 if [ ! -f "$CONF_OAUTH_DB" ]; then

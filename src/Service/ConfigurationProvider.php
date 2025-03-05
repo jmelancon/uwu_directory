@@ -5,7 +5,6 @@ namespace App\Service;
 
 use App\Entity\Config;
 use RuntimeException;
-use Symfony\Component\Serializer\Normalizer\AbstractNormalizer;
 use Symfony\Component\Serializer\SerializerInterface;
 
 class ConfigurationProvider
@@ -14,8 +13,6 @@ class ConfigurationProvider
     public function __construct(
         private readonly SerializerInterface $serializer,
         private readonly string $generalConfigPath,
-        private readonly string $styleConfigPath,
-        private readonly string $faviconPath,
     ){
         if (!$this->has()){
             $success = $this->persist(new Config());
@@ -50,24 +47,12 @@ class ConfigurationProvider
         if (!$successfulGeneralWrite)
             return false;
 
-        if (!empty($config->getFavicon())){
-            $successfulFaviconWrite = file_put_contents(
-                filename: $this->faviconPath,
-                data: $config->getFavicon()
-            );
-            if(!$successfulFaviconWrite)
-                return false;
-        } else {
-            exec("/usr/bin/rm -f $this->faviconPath");
-        }
-
-
         $this->config = $config;
         return true;
     }
 
     private function has(): bool{
-        return file_exists($this->generalConfigPath) && file_exists($this->styleConfigPath);
+        return file_exists($this->generalConfigPath);
     }
 
     public function getConfig(): Config{

@@ -10,8 +10,6 @@ parameters:
     dir.config: "/etc/uwu"
 
     path.config.general: "%dir.config%/settings.json"
-    path.config.styles: "%dir.config%/custom.scss"
-    path.config.favicon: "%dir.config%/favicon.svg"
 
 services:
     # default configuration for services in *this* file
@@ -158,5 +156,3 @@ services:
     App\Service\ConfigurationProvider:
         arguments:
             $generalConfigPath: '%path.config.general%'
-            $styleConfigPath: '%path.config.styles%'
-            $faviconPath: '%path.config.favicon%'
