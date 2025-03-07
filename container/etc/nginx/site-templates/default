@@ -1,0 +1,28 @@
+server {
+    server_name ${{ UWU_HOST }};
+    root /var/www/uwu/public;
+
+    location ${{ UWU_BASE }} {
+	    rewrite ^${{= UWU_BASE }}/(.*)$ /$1 break;
+        try_files $uri @uwu;
+    }
+
+    location @uwu {
+        fastcgi_pass unix:/var/run/uwu/php8.3-fpm.sock;
+
+        include fastcgi_params;
+        fastcgi_param SCRIPT_FILENAME /var/www/uwu/public/index.php;
+	    fastcgi_param SCRIPT_NAME ${{= UWU_BASE }}/index.php;
+	    fastcgi_param REQUEST_URI ${{= UWU_BASE }}$uri$is_args$args;
+        fastcgi_param HTTP_HOST ${{ UWU_HOST }};
+
+        internal;
+    }
+
+    location ~ \.php$ {
+        return 404;
+    }
+
+    error_log /var/log/nginx/uwu_error.log;
+    access_log /var/log/nginx/uwu_access.log;
+}

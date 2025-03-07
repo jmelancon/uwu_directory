@@ -1,7 +1,7 @@
 # syntax=docker/dockerfile:1-labs
 FROM php:8.3-fpm AS private_install_pkgs
 RUN apt-get update
-RUN apt-get install libldap-dev libgmp-dev git unzip socat sqlite3 nginx libicu-dev -y
+RUN apt-get install libldap-dev libgmp-dev git unzip socat sqlite3 nginx libicu-dev python3 -y
 RUN docker-php-ext-configure intl
 RUN docker-php-ext-install ldap gmp intl
 
@@ -83,69 +83,23 @@ COPY --from=private_src_and_vendor /var/www/uwu /var/www/uwu
 COPY --from=private_src_assets_compiled /var/www/uwu/public/build /var/www/uwu/public/build
 COPY --from=private_src_tests /var/www/uwu /var/www/uwu
 
-FROM private_all_src AS uwu_server
+FROM private_all_src AS private_copy_config
 COPY --chmod=755 sh/server_entrypoint.sh /entrypoint.sh
-COPY <<EOF /usr/local/etc/php-fpm.d/zz-docker.conf
-[global]
-daemonize = no
+COPY container /
 
-[www]
-user = www-data
-group = www-data
-listen = /var/run/uwu/php8.3-fpm.sock
-listen.mode = 0666
+FROM private_copy_config AS private_generalize
+RUN <<EOF
+sed -E "s/(['\"])\/build/\1\$\{\{= UWU_BASE \}\}\/build/g" \
+        /var/www/uwu/public/build/entrypoints.json > /var/www/uwu/public/build/entrypoints.json.template;
+rm /var/www/uwu/public/build/entrypoints.json;
+
+export STYLE_PATH=$(find /var/www/uwu/public/build -name "styles.*.css")
+sed -E "s/(url\([\"']?)\/build/\1\$\{\{= UWU_BASE \}\}\/build/g" $STYLE_PATH > $STYLE_PATH.template
+rm $STYLE_PATH
+echo "$STYLE_PATH" > /var/www/uwu/style_location
 EOF
-COPY <<EOF /usr/local/etc/php/php.ini
-zend_extension=opcache.so
-opcache.enable=1
-opcache.enable_cli=1
-opcache.jit_buffer_size=500000000
-opcache.jit=1235
-EOF
-COPY <<EOF /usr/local/etc/php/conf.d/opcache.ini
-[opcache]
-opcache.enable=1
-opcache.revalidate_freq=0
-opcache.validate_timestamps=1
-opcache.max_accelerated_files=10000
-opcache.memory_consumption=192
-opcache.max_wasted_percentage=10
-opcache.interned_strings_buffer=16
-opcache.fast_shutdown=1
-EOF
-COPY <<EOF /etc/nginx/sites-enabled/default
-server {
-    server_name localhost;
-    root /var/www/uwu/public;
 
-    location / {
-        # try to serve file directly, fallback to index.php
-        try_files \$uri /index.php\$is_args\$args;
-    }
-
-    location ~ ^/index\.php(/|$) {
-        fastcgi_pass unix:/var/run/uwu/php8.3-fpm.sock;
-        fastcgi_split_path_info ^(.+\.php)(/.*)$;
-        include fastcgi_params;
-
-        fastcgi_param SCRIPT_FILENAME \$document_root\$fastcgi_script_name;
-        fastcgi_param DOCUMENT_ROOT \$document_root;
-        # Prevents URIs that include the front controller. This will 404:
-        # http://example.com/index.php/some-path
-        # Remove the internal directive to allow URIs like this
-        internal;
-    }
-
-    # return 404 for all other php files not matching the front controller
-    # this prevents access to other php files you don't want to be accessible.
-    location ~ \.php$ {
-        return 404;
-    }
-
-    error_log /var/log/nginx/project_error.log;
-    access_log /var/log/nginx/project_access.log;
-}
-EOF
+FROM private_generalize AS uwu_server
 HEALTHCHECK CMD socat -u OPEN:/dev/null UNIX-CONNECT:/var/run/uwu/php8.3-fpm.sock;
 ENTRYPOINT ["/entrypoint.sh"]
 USER root

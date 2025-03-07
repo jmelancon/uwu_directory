@@ -10,6 +10,8 @@ BIN_PHP="/usr/local/bin/php"
 BIN_PHP_FPM="/usr/local/sbin/php-fpm"
 BIN_OPENSSL="/usr/bin/openssl"
 BIN_SQLITE="/usr/bin/sqlite3"
+BIN_PYTHON="/usr/bin/python3"
+BIN_INSTALLPY="/usr/bin/install.py"
 
 CONF_PRIVATE_KEY="${DIR_CONFIG}/private.key"
 CONF_PUBLIC_KEY="${DIR_CONFIG}/public.key"
@@ -47,6 +49,17 @@ fi
 
 # Assert ownership over config root
 chown -R www-data:www-data $DIR_CONFIG
+
+# Install entrypoint, stylesheet, and nginx config from templates
+DIR_BUILD="$DIR_SERVER/public/build"
+CONF_STYLESHEET="$(cat $DIR_SERVER/style_location)"
+$BIN_PYTHON $BIN_INSTALLPY /etc/nginx/site-templates/default /etc/nginx/sites-enabled/default 'UWU_HOST?localhost' 'UWU_BASE?/';
+$BIN_PYTHON $BIN_INSTALLPY $DIR_BUILD/entrypoints.json.template $DIR_BUILD/entrypoints.json 'UWU_BASE?/';
+$BIN_PYTHON $BIN_INSTALLPY $CONF_STYLESHEET.template $CONF_STYLESHEET 'UWU_BASE?/';
+chown www-data:www-data $DIR_BUILD
+
+cat $DIR_BUILD/entrypoints.json.template;
+cat $DIR_BUILD/entrypoints.json;
 
 # Start server
 service nginx start
