@@ -58,9 +58,6 @@ $BIN_PYTHON $BIN_INSTALLPY $DIR_BUILD/entrypoints.json.template $DIR_BUILD/entry
 $BIN_PYTHON $BIN_INSTALLPY $CONF_STYLESHEET.template $CONF_STYLESHEET 'UWU_BASE?/';
 chown www-data:www-data $DIR_BUILD
 
-cat $DIR_BUILD/entrypoints.json.template;
-cat $DIR_BUILD/entrypoints.json;
-
 # Start server
 service nginx start
 environment=${APP_ENV,,:-prod}

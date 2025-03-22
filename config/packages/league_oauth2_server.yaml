@@ -3,7 +3,7 @@ league_oauth2_server:
 
     # Full path to the private key file.
     # How to generate a private key: https://oauth2.thephpleague.com/installation/#generating-public-and-private-keys
-    private_key:          /var/oauth/private.key # Required, Example: /var/oauth/private.key
+    private_key:          /etc/uwu/private.key # Required, Example: /var/oauth/private.key
 
     # Passphrase of the private key, if any
     private_key_passphrase: null
@@ -45,11 +45,13 @@ league_oauth2_server:
     # Whether to enable access token saving to persistence layer (default to true)
     persist_access_token: true
 
+    response_type_class: 'OpenIDConnectServer\IdTokenResponse'
+
   resource_server:      # Required
 
     # Full path to the public key file
     # How to generate a public key: https://oauth2.thephpleague.com/installation/#generating-public-and-private-keys
-    public_key:           /var/oauth/public.key # Required, Example: /var/oauth/public.key
+    public_key:           /etc/uwu/public.key # Required, Example: /var/oauth/public.key
 
   scopes:
     # Scopes that you wish to utilize in your application.

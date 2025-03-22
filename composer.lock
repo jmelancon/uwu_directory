@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "3b213c432118478212a830bdbfd8a55b",
+    "content-hash": "af8e4ca9975aad4c6fa4f62f9567c534",
     "packages": [
         {
             "name": "defuse/php-encryption",
@@ -1244,15 +1244,6 @@
                 "source": "https://github.com/genkgo/php-asn1/tree/v2.7.0"
             },
             "time": "2024-04-29T17:35:51+00:00"
-        },
-        {
-            "name": "googlefonts/roboto-2",
-            "version": "1.0.0",
-            "dist": {
-                "type": "zip",
-                "url": "https://github.com/googlefonts/roboto-2/releases/latest/download/roboto-android.zip"
-            },
-            "type": "library"
         },
         {
             "name": "lcobucci/clock",
@@ -3175,6 +3166,52 @@
                 "source": "https://github.com/php-fig/log/tree/3.0.2"
             },
             "time": "2024-09-11T13:17:53+00:00"
+        },
+        {
+            "name": "steverhoades/oauth2-openid-connect-server",
+            "version": "v3.0.1",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/steverhoades/oauth2-openid-connect-server.git",
+                "reference": "f20665aeeeec78fb336c1bc89e8152b4b2380221"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/steverhoades/oauth2-openid-connect-server/zipball/f20665aeeeec78fb336c1bc89e8152b4b2380221",
+                "reference": "f20665aeeeec78fb336c1bc89e8152b4b2380221",
+                "shasum": ""
+            },
+            "require": {
+                "lcobucci/jwt": "4.1.5|^4.2|^4.3|^5.0",
+                "league/oauth2-server": "^8.4.2|^9.0",
+                "php": ">=7.4"
+            },
+            "require-dev": {
+                "laminas/laminas-diactoros": "^1.3.2 || ^3.3",
+                "phpunit/phpunit": "^5.0|^9.5"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-4": {
+                    "OpenIDConnectServer\\": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Steve Rhoades",
+                    "email": "sedonami@gmail.com"
+                }
+            ],
+            "description": "An OpenID Connect Server that sites on The PHP League's OAuth2 Server",
+            "support": {
+                "issues": "https://github.com/steverhoades/oauth2-openid-connect-server/issues",
+                "source": "https://github.com/steverhoades/oauth2-openid-connect-server/tree/v3.0.1"
+            },
+            "time": "2024-09-26T16:19:13+00:00"
         },
         {
             "name": "symfony/asset",
@@ -10394,7 +10431,7 @@
     ],
     "aliases": [],
     "minimum-stability": "stable",
-    "stability-flags": {},
+    "stability-flags": [],
     "prefer-stable": true,
     "prefer-lowest": false,
     "platform": {
@@ -10403,6 +10440,6 @@
         "ext-iconv": "*",
         "ext-ldap": "*"
     },
-    "platform-dev": {},
+    "platform-dev": [],
     "plugin-api-version": "2.6.0"
 }

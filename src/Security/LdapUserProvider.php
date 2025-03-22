@@ -6,10 +6,13 @@ namespace App\Security;
 use App\Entity\User;
 use App\Exception\InvalidCredentialsException;
 use App\Service\Ldap\LdapAggregator;
+use League\OAuth2\Server\Entities\UserEntityInterface;
+use OpenIDConnectServer\Entities\ClaimSetInterface;
+use OpenIDConnectServer\Repositories\IdentityProviderInterface;
 use Symfony\Component\Security\Core\User\UserInterface;
 use Symfony\Component\Security\Core\User\UserProviderInterface;
 
-readonly class LdapUserProvider implements UserProviderInterface
+readonly class LdapUserProvider implements UserProviderInterface, IdentityProviderInterface
 {
     public function __construct(
         private LdapAggregator $ldap,
@@ -46,5 +49,14 @@ readonly class LdapUserProvider implements UserProviderInterface
             email: $ldapAttrs["mail"][0] ?? "",
             roleDNs: $ldapAttrs["memberOf"] ?? []
         );
+    }
+
+    /**
+     * @return UserEntityInterface&ClaimSetInterface
+     */
+    public function getUserEntityByIdentifier($identifier): ClaimSetInterface&UserEntityInterface
+    {
+        /** @var UserEntityInterface&ClaimSetInterface */
+        return $this->loadUserByIdentifier($identifier);
     }
 }

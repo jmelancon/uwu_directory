@@ -3,10 +3,12 @@ declare(strict_types=1);
 
 namespace App\Entity;
 
+use League\OAuth2\Server\Entities\UserEntityInterface;
+use OpenIDConnectServer\Entities\ClaimSetInterface;
 use Symfony\Component\Security\Core\User\UserInterface;
 use Symfony\Component\Serializer\Attribute\Ignore;
 
-class User implements UserInterface
+class User implements UserInterface, ClaimSetInterface, UserEntityInterface
 {
     public function __construct(
         private string $identifier,
@@ -108,5 +110,18 @@ class User implements UserInterface
     public function getUserIdentifier(): string
     {
         return $this->identifier;
+    }
+
+    public function getClaims(): array
+    {
+        return [
+            'name' => "$this->firstName $this->lastName",
+            'family_name' => $this->lastName,
+            'given_name' => $this->firstName,
+            'preferred_username' => $this->identifier,
+            'locale' => 'US',
+            'email' => $this->email,
+            'email_verified' => true,
+        ];
     }
 }
