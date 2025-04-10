@@ -20,8 +20,7 @@ readonly class LdapUserProvider implements UserProviderInterface, IdentityProvid
     ){}
     public function refreshUser(UserInterface $user): UserInterface
     {
-        // TODO: Implement refreshUser() method.
-        return $user;
+        return $this->loadUserByIdentifier($user->getUserIdentifier());
     }
 
     public function supportsClass(string $class): bool
