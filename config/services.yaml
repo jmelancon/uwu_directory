@@ -29,6 +29,9 @@ services:
     OpenIDConnectServer\:
         resource: '../vendor/steverhoades/oauth2-openid-connect-server/src/'
 
+    App\Repository\ScopeRepository:
+        decorates: League\OAuth2\Server\Repositories\ScopeRepositoryInterface
+
     # add more service definitions when explicit configuration is needed
     # please note that last definitions always *replace* previous ones
     App\Service\Tokenizer:
@@ -159,3 +162,9 @@ services:
     App\Service\ConfigurationProvider:
         arguments:
             $generalConfigPath: '%path.config.general%'
+
+    App\Controller\API\WellKnownController:
+        arguments:
+            $publicKeyPath: '/etc/uwu/public.key'
+            $issuer: '%env(JWKS_ISSUER)%'
+

@@ -21,6 +21,7 @@ interface ListResponse extends HandledResponse{
  */
 interface RedirectResponse extends HandledResponse{
     url: string;
+    paramRedirectOK: boolean;
 }
 
 /**

@@ -18,7 +18,12 @@ function handleResponse(data: any, hasSucceeded: boolean, statusCode: number){
         if (isListResponse(data)){
             populateModalList(data.listContents);
         } else if (isRedirectResponse(data)){
-            redirectOnModalClose(data.url)
+            const params = new URLSearchParams(window.location.search);
+            console.log(params);
+            if (data.paramRedirectOK && params.has('next'))
+                redirectOnModalClose(params.get('next') ?? data.url);
+            else
+                redirectOnModalClose(data.url);
         } else if (isSecretResponse(data)){
             populateModalSecret(data.secret);
         }

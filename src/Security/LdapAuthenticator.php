@@ -77,8 +77,9 @@ class LdapAuthenticator extends AbstractAuthenticator
         return new JsonResponse(
             new RedirectResponse(
                 "Success!",
-                "You have successfully authenticated. You will now be redirected to the home page.",
-                $this->urlGenerator->generate("root")
+                "You have successfully authenticated. You will now be redirected.",
+                $this->urlGenerator->generate("root"),
+                true
             )
         );
     }
