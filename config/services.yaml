@@ -11,6 +11,8 @@ parameters:
 
     path.config.general: "%dir.config%/settings.json"
 
+    openid.auth_code_ttl: PT10M
+
 services:
     # default configuration for services in *this* file
     _defaults:
@@ -167,4 +169,8 @@ services:
         arguments:
             $publicKeyPath: '/etc/uwu/public.key'
             $issuer: '%env(JWKS_ISSUER)%'
+
+    App\Decorator\OpenIDAuthCodeGrant:
+        arguments:
+            $authCodeTTL: '%openid.auth_code_ttl%'
 

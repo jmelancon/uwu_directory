@@ -22,7 +22,7 @@ league_oauth2_server:
 
     # How long the issued auth code should be valid for.
     # The value should be a valid interval: http://php.net/manual/en/dateinterval.construct.php#refsect1-dateinterval.construct-parameters
-    auth_code_ttl:        PT10M
+    auth_code_ttl:        '%openid.auth_code_ttl%'
 
     # Whether to enable the client credentials grant
     enable_client_credentials_grant: false
@@ -53,7 +53,7 @@ league_oauth2_server:
   scopes:
     # Scopes that you wish to utilize in your application.
     # This should be a simple array of strings.
-    available:               ["SCOPE_EMAIL", "SCOPE_OPENID", "SCOPE_PROFILE"]
+    available:               ["SCOPE_EMAIL", "SCOPE_IDENTIFIER", "SCOPE_FIRST_NAME", "SCOPE_LAST_NAME", "SCOPE_OPENID", "SCOPE_PROFILE"]
 
     # Scopes that will be assigned when no scope given.
     # This should be a simple array of strings.
