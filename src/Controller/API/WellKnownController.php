@@ -3,7 +3,6 @@ declare(strict_types=1);
 
 namespace App\Controller\API;
 
-use OpenSSLAsymmetricKey;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Response;
@@ -19,12 +18,32 @@ use Symfony\Component\Security\Http\Attribute\IsGranted;
 #[IsGranted('PUBLIC_ACCESS')]
 class WellKnownController extends AbstractController
 {
-    private OpenSSLAsymmetricKey $pubkey;
+    private array $pubkey;
     public function __construct(
         string $publicKeyPath,
         private readonly string $issuer
     ){
-        $this->pubkey = openssl_pkey_get_public(public_key: "file://$publicKeyPath");
+        $keyDetails = openssl_pkey_get_details(
+            openssl_pkey_get_public(
+                public_key: "file://$publicKeyPath"
+            )
+        );
+
+        $kid = sha1($keyDetails["key"]);
+        $n = sodium_bin2base64(
+            $keyDetails['rsa']['n'],
+            SODIUM_BASE64_VARIANT_URLSAFE_NO_PADDING
+        );
+        $e = base64_encode($keyDetails['rsa']['e']);
+
+        $this->pubkey = [
+            'kty' => 'RSA',
+            'kid' => $kid,
+            'use' => 'sig',
+            'alg' => 'RS256',
+            'n' => $n,
+            'e' => $e,
+        ];
     }
 
     #[Route(
@@ -86,32 +105,13 @@ class WellKnownController extends AbstractController
         name: '.jwks',
     )]
     public function jwks(): JsonResponse{
-        $keyDetails = openssl_pkey_get_details($this->pubkey);
-        $kid = sha1($keyDetails['key']);
-        $n = base64_encode($keyDetails['rsa']['n']);
-        $e = base64_encode($keyDetails['rsa']['e']);
-
-        if ($kid && $n && $e){
-            return new JsonResponse(
-                data: [
-                    'keys' => [
-                        [
-                            'kid' => $kid,
-                            'kty' => 'RSA',
-                            'alg' => 'RS256',
-                            'use' => 'sig',
-                            'n' => $n,
-                            'e' => $e,
-                        ]
-                    ]
-                ],
-                status: Response::HTTP_OK
-            );
-        } else {
-            return new JsonResponse(
-                data: [],
-                status: Response::HTTP_INTERNAL_SERVER_ERROR
-            );
-        }
+        return new JsonResponse(
+            data: [
+                'keys' => [
+                    $this->pubkey
+                ]
+            ],
+            status: Response::HTTP_OK
+        );
     }
 }
